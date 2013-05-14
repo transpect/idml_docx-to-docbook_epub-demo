@@ -1,0 +1,22 @@
+<?xml version="1.0"?> 
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"> 
+  
+  <!-- mandatory entry --> 
+  <rewriteURI uriStartString="http://customers.le-tex.de/generic/book-conversion/" rewritePrefix="../"/> 
+  
+  <nextCatalog catalog="../xproc-util/store-debug/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../xproc-util/xml-model/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../xproc-util/xslt-mode/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../hub2html/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../pubcoach/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../schema/hub/xmlcatalog/catalog.xml"/> 
+  
+  <!-- content-repo.catalog.xml is unversioned. 
+    Use this single-entry catalog for local configuration, like this: 
+  <rewriteURI uriStartString="http://cms.publisher.com/Books/" rewritePrefix="file:///c:/cygwin/home/user/Publisher/BookWorkflow/content/"/> 
+    where http://cms.publisher.com/Books/ is a placeholder for what is actually in /publisher-conf/@content-base-uri 
+  --> 
+  <nextCatalog catalog="content-repo.catalog.xml"/> 
+  
+</catalog>
