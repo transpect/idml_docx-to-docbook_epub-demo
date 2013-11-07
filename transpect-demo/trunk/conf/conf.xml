@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<publisher-conf content-base-uri="http://www.le-tex.de/transpect-demo/content/">
+ 
+  <publishers>
+    <publisher xml:id="p_transpect-demo" name="Transpect-Demo" doi-prefix="xxx" file-name-component="transpect-demo"
+      filesystem-path-component="transpect-demo"/>
+  </publishers>
+ 
+</publisher-conf>
