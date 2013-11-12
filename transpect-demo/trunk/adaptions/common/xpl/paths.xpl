@@ -27,14 +27,9 @@
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/paths.xpl"/>
   
-  <p:documentation>
-    A delivery package filename is named after the "unique-delivery-id".
-    
-  </p:documentation>
-  
   <p:identity name="import-paths-xsl">
     <p:input port="source">
-      <p:document href="../xsl/paths.xsl"></p:document>
+      <p:document href="../xsl/paths.xsl"/>
     </p:input>
   </p:identity>
   
