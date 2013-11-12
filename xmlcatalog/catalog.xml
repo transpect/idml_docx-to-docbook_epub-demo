@@ -10,7 +10,8 @@
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../hub2html/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../pubcoach/xmlcatalog/catalog.xml"/> 
-  <nextCatalog catalog="../schema/hub/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../schema/hub/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../schema/xhtml1/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../docx2hub/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../hub2html/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../evolve-hub/xmlcatalog/catalog.xml"/>
@@ -22,7 +23,8 @@
   <nextCatalog catalog="../css-generate/xmlcatalog/catalog.xml"/>  
   <nextCatalog catalog="../epubtools/xmlcatalog/catalog.xml"/>    
   <nextCatalog catalog="../fontlib/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/>    
+  <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../xslt-util/mime-type/xmlcatalog/catalog.xml"/>
   
   <!-- content-repo.catalog.xml is unversioned. 
     Use this single-entry catalog for local configuration, like this: 
