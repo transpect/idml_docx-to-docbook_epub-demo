@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+  xmlns="http://purl.oclc.org/dsdl/schematron" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:dbk="http://docbook.org/ns/docbook"
+  xmlns:css="http://www.w3.org/1996/css"
+  xmlns:c="http://www.w3.org/ns/xproc-step"
+  queryBinding="xslt2">
+  
+  <ns prefix="c"      uri="http://www.w3.org/ns/xproc-step" />
+  <ns prefix="xlink"  uri="http://www.w3.org/1999/xlink"/>
+  <ns prefix="dbk"    uri="http://docbook.org/ns/docbook" />
+  <ns prefix="css"    uri="http://www.w3.org/1996/css" />
+  
+  <let name="base-dir" value="/*/dbk:info/dbk:keywordset/dbk:keyword[@role eq 'source-dir-uri']"/>
+  <let name="names" value="/*/dbk:info/css:rules"/>
+
+  <phase id="strict">
+    <active pattern="figures"/>
+  </phase>
+  
+  <pattern id="figures">
+    <rule context="dbk:figure/dbk:title">
+      <assert test="false()" id="figure-title" role="Message">
+        <span class="srcpath">
+          <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/>
+        </span>
+        <span>Title found. That is good.</span>
+      </assert>
+    </rule>
+  </pattern>
+
+</schema>
