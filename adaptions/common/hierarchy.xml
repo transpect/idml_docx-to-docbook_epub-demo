@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hierarchy media-type="application/xhtml+xml" max-population="40" max-text-length="200000">
+  <unconditional-split elt="h1" />
+  <heading elt="h1" />
+  <heading elt="h2" />
+  <heading elt="h3" />
+</hierarchy>
