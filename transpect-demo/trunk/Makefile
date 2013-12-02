@@ -66,7 +66,6 @@ docx2epub: mkdirs
 		local-css=$(LOCALCSS) \
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG) \
-	cp $(MAKEFILEDIR)/htmlreports/js/jquery.min.js $(call out_base,$(IN_FILE))/report
 
 test:
 	@echo =$(call win_path,$(IN_FILE))
