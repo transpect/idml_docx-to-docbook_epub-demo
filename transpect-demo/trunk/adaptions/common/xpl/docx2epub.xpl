@@ -143,7 +143,7 @@
     </p:input>
   </letex:validate-with-rng-PI>
   
-  <letex:store-debug pipeline-step="rngvalid/docx2epub/with-PIs">
+  <letex:store-debug pipeline-step="rngvalid/with-PIs">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </letex:store-debug>
@@ -185,7 +185,10 @@
     <p:input port="params">
       <p:pipe port="result" step="paths"/>
     </p:input>
-    <p:with-option name="severity-default-name" select="'Warning'"/>
+    <p:with-option name="severity-default-name" select="'Warning'"/>    
+    <p:with-option name="report-title" select="/c:param-set/c:param[@name eq 'work-basename']/@value">
+      <p:pipe port="result" step="paths"/>
+    </p:with-option>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </transpect:patch-svrl>
