@@ -48,6 +48,14 @@
     | Beschriftung
     )$'" />
   
+  <xsl:variable name="hub:table-title-role-regex-x"  as="xs:string"
+    select="'^(
+    Table_?title
+    | tablelegend
+    | Table_Legend
+    | Beschriftung
+    )$'" />
+  
   <xsl:function name="hub:is-empty-para" as="xs:boolean">
     <xsl:param name="elt" as="element(*)"/>
     <xsl:sequence select="matches($elt, '^[\s\p{Zs}]*$')"/>
