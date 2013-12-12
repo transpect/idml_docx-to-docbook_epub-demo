@@ -21,7 +21,7 @@
     
     <rule context="*[count($template-style-names) gt count($default-style-names)][@role][not(self::dbk:keywordset or self::dbk:keyword or self::dbk:tab)]">
       <let name="base-role" value="replace(@role, '(_-_|[~&#x2dc;]).+$', '')" />
-      <assert test="$base-role = $template-style-names" role="warning" id="sch_styles_undefined" diagnostics="sch_styles_undefined_de">
+      <assert test="$base-role = $template-style-names" id="sch_styles_undefined" diagnostics="sch_styles_undefined_de">
         <span class="srcpath"><xsl:value-of select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
         Style '<value-of select="$base-role"/>' not found in allowed templates catalog 
         '<value-of select="string-join(tokenize(base-uri($template-styles[1]), '/')[position() ge last() - 4],'/')"/>'.</assert>
