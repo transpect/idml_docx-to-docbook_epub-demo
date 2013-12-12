@@ -5,28 +5,46 @@
   xmlns:dbk="http://docbook.org/ns/docbook"
   xmlns:css="http://www.w3.org/1996/css"
   xmlns:c="http://www.w3.org/ns/xproc-step"
+  xmlns:mml="http://www.w3.org/1998/Math/MathML"
   queryBinding="xslt2">
   
   <ns prefix="c"      uri="http://www.w3.org/ns/xproc-step" />
   <ns prefix="xlink"  uri="http://www.w3.org/1999/xlink"/>
   <ns prefix="dbk"    uri="http://docbook.org/ns/docbook" />
   <ns prefix="css"    uri="http://www.w3.org/1996/css" />
+  <ns prefix="mml"    uri="http://www.w3.org/1998/Math/MathML" />
   
   <let name="base-dir" value="/*/dbk:info/dbk:keywordset/dbk:keyword[@role eq 'source-dir-uri']"/>
   <let name="names" value="/*/dbk:info/css:rules"/>
 
   <phase id="strict">
-    <active pattern="figures"/>
+    <active pattern="images"/>
   </phase>
   
-  <pattern id="figures">
-    <rule context="dbk:figure/dbk:title">
-      <assert test="false()" id="figure-title" role="Message">
-        <span class="srcpath">
-          <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/>
-        </span>
-        <span>Title found. That is good.</span>
+  <pattern id="images">
+    <rule context="dbk:mediaobject|dbk:inlinemediaobject">
+      <let name="fileref" value="dbk:imageobject/dbk:imagedata/@fileref"/>
+      <let name="file-extension" value="replace($fileref, '^.+/.+\.([a-z]+)$', '$1', 'i')"/>
+      <assert test="matches($file-extension, '^[jpg|jpeg|png|svg]$', 'i')" id="image-format">
+        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
+        <span>The file extension '</span><value-of select="$file-extension"/><span>' indicate an image format that is not compatible to EPUB.</span>
+      </assert>
+      <assert test="matches($fileref, '^container:')" id="external-image">
+        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
+        <span>Images referenced externally are not supported in the demo. Please embed your images in Word.</span>
+      </assert>
+    </rule>
+  </pattern>
+  
+  <pattern id="equations">
+    <rule context="dbk:equation|dbk:inlineequation">
+      <assert test="mml:math" id="old-word-equation">
+        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
+        <span>Word equations from Word 2003 and earlier are not supported in the demo.</span>
+      </assert>
+      <assert test="not(mml:math)" id="word-equation">
+        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
+        <span>Word equations from Word 2007 and later are converted to MathML. Please note that the MathML equation is rendered via MathJax. Native rendering of MathML equations is not supported by most browsers and EPUB readers.</span>
       </assert>
     </rule>
   </pattern>
