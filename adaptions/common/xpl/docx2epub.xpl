@@ -22,7 +22,10 @@
     <p:pipe port="result" step="evolve-hub-dyn"/>
   </p:output>
   <p:output port="html" primary="false">
-    <p:pipe port="result" step="hub2htm"/>
+    <p:pipe port="result" step="remove-srcpath-from-html"/>
+  </p:output>
+  <p:output port="schematron" primary="false">
+    <p:pipe port="result" step="errorPI2svrl"/>
   </p:output>
   <p:output port="htmlreport" primary="false">
     <p:pipe port="result" step="htmlreport"/>
@@ -177,8 +180,13 @@
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </hub2htm:convert>
-    
+  
+  <p:delete match="@srcpath" name="remove-srcpath-from-html"/>
+  
   <transpect:patch-svrl name="htmlreport">
+    <p:input port="source">
+      <p:pipe port="result" step="hub2htm"/>
+    </p:input>
     <p:input port="svrl">
       <p:pipe step="errorPI2svrl" port="report"/>
     </p:input>
@@ -198,7 +206,7 @@
       <p:pipe port="result" step="paths"/>
     </p:input>
     <p:input port="source">
-      <p:pipe port="result" step="hub2htm"/>
+      <p:pipe port="result" step="remove-srcpath-from-html"/>
     </p:input>
     <p:input port="report-in">
       <p:pipe port="report" step="validate-business-rules"/>
