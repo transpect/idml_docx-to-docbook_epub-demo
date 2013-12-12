@@ -14,7 +14,7 @@ endif
 # Modified Cygwin/Windows-Java-compatible input file path:
 out_path = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\/$$2\.$(3)/')
 out_base = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\//')
-
+out_dir  = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\//')
 
 LOCALCSS = true
 CHECK = yes
@@ -22,10 +22,12 @@ CALABASH = $(MAKEFILEDIR)/calabash/calabash.sh
 DEBUG = no
 HEAP = 1024m
 
+OUT_DIR    = $(call out_dir,$(IN_FILE),output)
+SCHREPORT = $(call out_path,$(IN_FILE),report,sch.xml)
 HTMLREPORT = $(call out_path,$(IN_FILE),report,xhtml)
 HTML       = $(call out_path,$(IN_FILE),epub,xhtml)
 HUB        = $(call out_path,$(IN_FILE),hub,xml)
-EPUB       = $(call out_path,$(IN_FILE),epub,epub)
+EPUB       = $(call out_path,$(IN_FILE),,epub)
 DEBUG_DIR  = $(call uri,$(call out_base,$(IN_FILE),debug))
 
 export
@@ -40,10 +42,10 @@ ifeq ($(IN_FILE),)
 endif
 
 mkdirs:
-	-mkdir $(dir $(call out_path,$(IN_FILE),report,xhtml) $(call out_path,$(IN_FILE),hub,xml) $(call out_path,$(IN_FILE),epub,html))
-
+	-mkdir -p -v $(dir $(call out_path,$(IN_FILE),report,xhtml) $(call out_path,$(IN_FILE),hub,xml) $(call out_path,$(IN_FILE),epub,html), $(OUT_DIR))
 
 conversion: check_input
+	@echo "OUTPUT DIR = "$(OUT_DIR)
 	@echo "DEBUG = "$(DEBUG)
 	@echo "DEBUG-DIR = "$(DEBUG_DIR)
 ifeq ($(suffix $(IN_FILE)),.docx)
@@ -60,12 +62,16 @@ docx2epub: mkdirs
 		-o hub=$(HUB) \
 		-o html=$(HTML) \
 		-o htmlreport=$(HTMLREPORT) \
+		-o schematron=$(SCHREPORT) \
 		$(call uri,adaptions/common/xpl/docx2epub.xpl) \
 		docxfile=$(call win_path,$(IN_FILE)) \
 		check=$(CHECK) \
 		local-css=$(LOCALCSS) \
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG) \
+	cp -v $(HTMLREPORT) $(OUT_DIR)
+	cp -v $(EPUB) $(OUT_DIR)
+	cp -v $(HUB) $(OUT_DIR)
 
 test:
 	@echo =$(call win_path,$(IN_FILE))
