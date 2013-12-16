@@ -1,8 +1,5 @@
 MAKEFILEDIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 
-export
-unexport win_path uri out_path out_base
-
 ifeq ($(shell uname -o),Cygwin)
 win_path = $(shell cygpath -ma "$(1)")
 uri = $(shell echo file:///$(call win_path,$(1))  | perl -pe 's/ /%20/g')
@@ -29,9 +26,10 @@ HTML       = $(call out_path,$(IN_FILE),epub,xhtml)
 HUB        = $(call out_path,$(IN_FILE),hub,xml)
 EPUB       = $(call out_path,$(IN_FILE),,epub)
 DEBUG_DIR  = $(call uri,$(call out_base,$(IN_FILE),debug))
+DEVNULL    = $(call win_path,/dev/null)
 
 export
-unexport out_base out_path win_path uri
+unexport out_dir out_base out_path win_path uri
 
 default: usage
 
@@ -63,6 +61,7 @@ docx2epub: mkdirs
 		-o html=$(HTML) \
 		-o htmlreport=$(HTMLREPORT) \
 		-o schematron=$(SCHREPORT) \
+		-o result=$(DEVNULL) \
 		$(call uri,adaptions/common/xpl/docx2epub.xpl) \
 		docxfile=$(call win_path,$(IN_FILE)) \
 		check=$(CHECK) \
