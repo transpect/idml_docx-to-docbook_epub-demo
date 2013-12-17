@@ -170,7 +170,6 @@
       <p:inline>
         <c:param-set>
           <c:param name="overwrite-image-paths" value="no"/>
-          <c:param name="css-location" value="stylesheet.css"/>
         </c:param-set>
       </p:inline>
     </p:input>
