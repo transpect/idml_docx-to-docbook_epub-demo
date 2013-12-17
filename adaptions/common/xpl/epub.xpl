@@ -100,7 +100,7 @@
     </p:input>
   </p:add-attribute>
     
-  <letex:store-debug pipeline-step="docx2epub/epub/pre-epubconvert">
+  <letex:store-debug pipeline-step="epubtools/pre-epubconvert">
     <p:with-option name="active" select="$debug" />
     <p:with-option name="base-uri" select="$debug-dir-uri" />
   </letex:store-debug>
