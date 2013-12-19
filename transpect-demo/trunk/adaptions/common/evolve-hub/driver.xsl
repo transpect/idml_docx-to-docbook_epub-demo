@@ -19,21 +19,32 @@
   <!-- append path to images -->
   
   
-  <!-- Roles for hierarchizing (in hierarchy-by-role.xsl): -->
+  <!-- hierarchy by role (overwrite $hub:hierarchy-role-regexes-x) -->
 
   <xsl:variable name="hub:hierarchy-role-regexes-x" as="xs:string+"
     select="(
-    '(   Buchtitel ) (_-_.+)?$',
-    '(   Titel ) (_-_.+)?$',    
-    '(   berschrift1 ) (_-_.+)?$',
-    '( berschrift2 ) (_-_.+)?$',
-    '( berschrift3 ) (_-_.+)?$',
-    '( berschrift4 ) (_-_.+)?$',
-    '( berschrift5 ) (_-_.+)?$',
-    '( berschrift6 ) (_-_.+)?$',
-    '( berschrift7 ) (_-_.+)?$',
-    '( berschrift8 ) (_-_.+)?$',
-    '( berschrift9 ) (_-_.+)?$'
+    '(  BookTitle
+        | Buchtitel ) (_-_.+)?$',
+    '(  Title
+        | Titel ) (_-_.+)?$',    
+    '(  heading1
+        | berschrift1 ) (_-_.+)?$',
+    '(  heading2
+        | berschrift2 ) (_-_.+)?$',
+    '(  heading3
+        | berschrift3 ) (_-_.+)?$',
+    '(  heading4
+        | berschrift4 ) (_-_.+)?$',
+    '(  heading5
+        | berschrift5 ) (_-_.+)?$',
+    '(  heading6
+        | berschrift6 ) (_-_.+)?$',
+    '(  heading7
+        | berschrift7 ) (_-_.+)?$',
+    '(  heading8
+        | berschrift8 ) (_-_.+)?$',
+    '(  heading9
+        | berschrift9 ) (_-_.+)?$'
     )" />
     
   <xsl:variable name="hub:hierarchy-title-roles" as="xs:boolean" select="true()"/>  
@@ -46,6 +57,7 @@
     | figlegend
     | Figure_Legend
     | Beschriftung
+    | caption
     )$'" />
   
   <xsl:variable name="hub:table-title-role-regex-x"  as="xs:string"
@@ -54,6 +66,7 @@
     | tablelegend
     | Table_Legend
     | Beschriftung
+    | caption
     )$'" />
   
   <xsl:function name="hub:is-empty-para" as="xs:boolean">
