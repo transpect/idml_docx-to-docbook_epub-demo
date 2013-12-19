@@ -221,4 +221,7 @@
   <css:rule  name="hub:identifier"/>
   <css:rule  name="hub:caption-text"/>
   <css:rule  name="hub:caption-number"/>
+  <css:rule  name="endnote"/>
+  <css:rule  name="Endnotenzeichen"/>
+  <css:rule  name="Endnotentext"/>
 </css:rules>
