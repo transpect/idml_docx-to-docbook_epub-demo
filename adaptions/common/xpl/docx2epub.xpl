@@ -170,6 +170,8 @@
       <p:inline>
         <c:param-set>
           <c:param name="overwrite-image-paths" value="no"/>
+          <c:param name="generate-toc" value="yes"/>
+          <c:param name="generate-index" value="yes"/>
         </c:param-set>
       </p:inline>
     </p:input>
