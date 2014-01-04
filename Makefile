@@ -11,7 +11,7 @@ endif
 # Modified Cygwin/Windows-Java-compatible input file path:
 out_path = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\/$$2\.$(3)/')
 out_base = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\//')
-out_dir  = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\//')
+#out_dir  = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\//')
 
 LOCALCSS = true
 CHECK = yes
@@ -19,14 +19,15 @@ CALABASH = $(MAKEFILEDIR)/calabash/calabash.sh
 DEBUG = no
 HEAP = 1024m
 
-OUT_DIR    = $(call out_dir,$(IN_FILE),output)
-SCHREPORT = $(call out_path,$(IN_FILE),report,sch.xml)
-HTMLREPORT = $(call out_path,$(IN_FILE),report,xhtml)
-HTML       = $(call out_path,$(IN_FILE),epub,xhtml)
-HUB        = $(call out_path,$(IN_FILE),hub,xml)
-EPUB       = $(call out_path,$(IN_FILE),,epub)
-DEBUG_DIR  = $(call uri,$(call out_base,$(IN_FILE),debug))
-DEVNULL    = $(call win_path,/dev/null)
+OUT_DIR     = $(call out_base,$(IN_FILE),output)
+SCHREPORT   = $(call out_path,$(IN_FILE),report,sch.xml)
+HTMLREPORT  = $(call out_path,$(IN_FILE),report,xhtml)
+HTML        = $(call out_path,$(IN_FILE),epub,xhtml)
+HUB         = $(call out_path,$(IN_FILE),hub,xml)
+EPUB        = $(call out_path,$(IN_FILE),,epub)
+DEBUG_DIR   = $(call uri,$(call out_base,$(IN_FILE),debug))
+PROGRESSDIR = $(DEBUG_DIR)/status
+DEVNULL     = $(call win_path,/dev/null)
 
 export
 unexport out_dir out_base out_path win_path uri
@@ -76,6 +77,10 @@ test:
 	@echo =$(call win_path,$(IN_FILE))
 	@echo $(call out_path,$(IN_FILE))
 	@echo $(HUB)
+
+progress:
+	@echo $(PROGRESSDIR)
+	@ls -1rt "$(PROGRESSDIR)"/*.txt
 
 usage:
 	@echo "Usage:"
