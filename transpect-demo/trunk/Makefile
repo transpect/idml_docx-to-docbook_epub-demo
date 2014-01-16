@@ -20,12 +20,13 @@ DEBUG = no
 HEAP = 1024m
 
 OUT_DIR     = $(call out_base,$(IN_FILE),output)
-SCHREPORT   = $(call out_path,$(IN_FILE),report,sch.xml)
-HTMLREPORT  = $(call out_path,$(IN_FILE),report,xhtml)
-HTML        = $(call out_path,$(IN_FILE),epub,xhtml)
-HUB         = $(call out_path,$(IN_FILE),hub,xml)
-EPUB        = $(call out_path,$(IN_FILE),,epub)
-DEBUG_DIR   = $(call uri,$(call out_base,$(IN_FILE),debug))
+IN_FILE_COPY = $(OUT_DIR)/$(notdir $(IN_FILE))
+SCHREPORT   = $(call out_path,$(IN_FILE_COPY),report,sch.xml)
+HTMLREPORT  = $(call out_path,$(IN_FILE_COPY),report,xhtml)
+HTML        = $(call out_path,$(IN_FILE_COPY),epub,xhtml)
+HUB         = $(call out_path,$(IN_FILE_COPY),hub,xml)
+EPUB        = $(call out_path,$(IN_FILE_COPY),epub,epub)
+DEBUG_DIR   = $(call uri,$(call out_base,$(IN_FILE_COPY),debug))
 PROGRESSDIR = $(DEBUG_DIR)/status
 DEVNULL     = $(call win_path,/dev/null)
 
@@ -35,22 +36,24 @@ unexport out_dir out_base out_path win_path uri
 default: usage
 
 check_input:
-ifeq ($(IN_FILE),)
+ifeq ($(IN_FILE_COPY),)
 	@echo Please specifiy IN_FILE
 	@exit 1
 endif
 
 mkdirs:
-	-mkdir -p -v $(dir $(call out_path,$(IN_FILE),report,xhtml) $(call out_path,$(IN_FILE),hub,xml) $(call out_path,$(IN_FILE),epub,html), $(OUT_DIR))
+	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),epub,html), $(OUT_DIR))
 
 conversion: check_input
 	@echo "OUTPUT DIR = "$(OUT_DIR)
 	@echo "DEBUG = "$(DEBUG)
 	@echo "DEBUG-DIR = "$(DEBUG_DIR)
-ifeq ($(suffix $(IN_FILE)),.docx)
+	cp $(IN_FILE) $(IN_FILE_COPY)
+	chmod 664 $(IN_FILE_COPY)
+ifeq ($(suffix $(IN_FILE_COPY)),.docx)
 	$(MAKE) docx2epub
 else
-ifeq ($(suffix $(IN_FILE)),.idml)
+ifeq ($(suffix $(IN_FILE_COPY)),.idml)
 	$(MAKE) check_input
 endif
 endif
@@ -64,7 +67,7 @@ docx2epub: mkdirs
 		-o schematron=$(SCHREPORT) \
 		-o result=$(DEVNULL) \
 		$(call uri,adaptions/common/xpl/docx2epub.xpl) \
-		docxfile=$(call win_path,$(IN_FILE)) \
+		docxfile=$(call win_path,$(IN_FILE_COPY)) \
 		check=$(CHECK) \
 		local-css=$(LOCALCSS) \
 		debug-dir-uri=$(DEBUG_DIR)
@@ -74,8 +77,8 @@ docx2epub: mkdirs
 	cp -v $(HUB) $(OUT_DIR)
 
 test:
-	@echo =$(call win_path,$(IN_FILE))
-	@echo $(call out_path,$(IN_FILE))
+	@echo =$(call win_path,$(IN_FILE_COPY))
+	@echo $(call out_path,$(IN_FILE_COPY))
 	@echo $(HUB)
 
 progress:
