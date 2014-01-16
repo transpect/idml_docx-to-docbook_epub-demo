@@ -28,6 +28,7 @@ HUB         = $(call out_path,$(IN_FILE_COPY),hub,xml)
 EPUB        = $(call out_path,$(IN_FILE_COPY),,epub)
 DEBUG_DIR   = $(call uri,$(call out_base,$(IN_FILE_COPY),debug))
 PROGRESSDIR = $(DEBUG_DIR)/status
+ACTIONLOG  = $(PROGRESSDIR)/action.log
 DEVNULL     = $(call win_path,/dev/null)
 
 export
@@ -75,6 +76,10 @@ docx2epub: mkdirs
 	cp -v $(HTMLREPORT) $(OUT_DIR)
 	cp -v $(HUB) $(OUT_DIR)
 
+clean:
+	-cd $(OUT_DIR) && rm -rf debug.zip $(HTMLREPORT) $(SCHREPORT) $(HTML) $(HUB) $(IN_FILE_COPY).tmp 
+	
+
 test:
 	@echo =$(call win_path,$(IN_FILE_COPY))
 	@echo $(call out_path,$(IN_FILE_COPY))
@@ -83,7 +88,7 @@ test:
 progress:
 	@echo $(PROGRESSDIR)
 	@ls -1rt "$(PROGRESSDIR)"/*.txt
-
+	
 usage:
 	@echo "Usage:"
 	@echo "  make conversion IN_FILE=myfile.docx"
