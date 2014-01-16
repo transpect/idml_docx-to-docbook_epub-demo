@@ -25,7 +25,7 @@ SCHREPORT   = $(call out_path,$(IN_FILE_COPY),report,sch.xml)
 HTMLREPORT  = $(call out_path,$(IN_FILE_COPY),report,xhtml)
 HTML        = $(call out_path,$(IN_FILE_COPY),epub,xhtml)
 HUB         = $(call out_path,$(IN_FILE_COPY),hub,xml)
-EPUB        = $(call out_path,$(IN_FILE_COPY),epub,epub)
+EPUB        = $(call out_path,$(IN_FILE_COPY),,epub)
 DEBUG_DIR   = $(call uri,$(call out_base,$(IN_FILE_COPY),debug))
 PROGRESSDIR = $(DEBUG_DIR)/status
 DEVNULL     = $(call win_path,/dev/null)
@@ -73,7 +73,6 @@ docx2epub: mkdirs
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG) \
 	cp -v $(HTMLREPORT) $(OUT_DIR)
-	cp -v $(EPUB) $(OUT_DIR)
 	cp -v $(HUB) $(OUT_DIR)
 
 test:
