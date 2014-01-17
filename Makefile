@@ -5,7 +5,7 @@ win_path = $(shell cygpath -ma "$(1)")
 uri = $(shell echo file:///$(call win_path,$(1))  | perl -pe 's/ /%20/g')
 else
 win_path = $(shell readlink -f "$(1)")
-uri = $(shell echo file:$(abspath $(1))  | perl -pe 's/ /%20/g')
+uri = $(shell echo $(abspath $(1))  | perl -pe 's/ /%20/g')
 endif
 
 # Modified Cygwin/Windows-Java-compatible input file path:
@@ -16,7 +16,7 @@ out_base = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$
 LOCALCSS = true
 CHECK = yes
 CALABASH = $(MAKEFILEDIR)/calabash/calabash.sh
-DEBUG = no
+DEBUG = yes
 HEAP = 1024m
 
 OUT_DIR     = $(call out_base,$(IN_FILE),output)
@@ -26,7 +26,7 @@ HTMLREPORT  = $(call out_path,$(IN_FILE_COPY),report,xhtml)
 HTML        = $(call out_path,$(IN_FILE_COPY),epub,xhtml)
 HUB         = $(call out_path,$(IN_FILE_COPY),hub,xml)
 EPUB        = $(call out_path,$(IN_FILE_COPY),,epub)
-DEBUG_DIR   = $(call uri,$(call out_base,$(IN_FILE_COPY),debug))
+DEBUG_DIR   = $(OUT_DIR)/debug
 PROGRESSDIR = $(DEBUG_DIR)/status
 ACTIONLOG  = $(PROGRESSDIR)/action.log
 DEVNULL     = $(call win_path,/dev/null)
@@ -78,7 +78,7 @@ docx2epub: mkdirs
 
 clean:
 	-cd $(OUT_DIR) && rm -rf debug.zip $(HTMLREPORT) $(SCHREPORT) $(HTML) $(HUB) $(IN_FILE_COPY).tmp 
-	
+
 
 test:
 	@echo =$(call win_path,$(IN_FILE_COPY))
@@ -86,9 +86,10 @@ test:
 	@echo $(HUB)
 
 progress:
-	@echo $(PROGRESSDIR)
-	@ls -1rt "$(PROGRESSDIR)"/*.txt
-	
+#	@ls -lrt "$(PROGRESSDIR)/*.txt" | xargs -d'\n' cat
+#	@$(shell ls -lrt $(PROGRESSDIR)/*.txt | xargs -d'\n' cat)
+	@ls -1rt $(PROGRESSDIR)/*.txt | xargs -d'\n' -I § sh -c 'date "+%H:%M:%S " -r § | tr -d [:cntrl:]; cat §'
+
 usage:
 	@echo "Usage:"
 	@echo "  make conversion IN_FILE=myfile.docx"
