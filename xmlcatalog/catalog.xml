@@ -25,6 +25,8 @@
   <nextCatalog catalog="../fontlib/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xslt-util/mime-type/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../xslt-util/resolve-uri/xmlcatalog/catalog.xml"/>
+
   
   <!-- content-repo.catalog.xml is unversioned. 
     Use this single-entry catalog for local configuration, like this: 
