@@ -44,3 +44,5 @@ table, img {max-width:100%}
 
 /* endnotes */
 dt.endnote{margin-bottom:-2em}
+
+a, a:visited, a:focus{text-decoration:none}
