@@ -11,16 +11,17 @@
   version="1.0">
   
   <p:input port="conf" primary="true">
-    <p:document href="../../../conf/conf.xml"/>
+    <p:document href="http://customers.le-tex.de/generic/book-conversion/conf/conf.xml"/>
   </p:input>
   <p:input port="schema" primary="false">
     <p:documentation>Excepts the Hub RelaxNG XML schema</p:documentation>
-    <p:document href="../../common/../../schema/Hub/hub.rng"/>
+    <p:document href="http://www.le-tex.de/resource/schema/hub/1.1/hub.rng"/>
   </p:input>
   
   <p:output port="hub" primary="false">
-    <p:pipe port="result" step="evolve-hub-dyn"/>
+    <p:pipe port="result" step="delete-srcpath-inhierarchized-hub"/>
   </p:output>
+  <p:serialization port="hub" omit-xml-declaration="false"/>
   <p:output port="html" primary="false">
     <p:pipe port="result" step="remove-srcpath-from-html"/>
   </p:output>
@@ -37,9 +38,9 @@
   <p:option name="docxfile" required="true"/>
   <p:option name="hub-version" select="'1.1'"/>
   
-  <p:option name="series" select="''"/> 
-  <p:option name="work" select="''"/> 
-  <p:option name="publisher" select="''"/>
+  <p:option name="series" select="''" required="false"/> 
+  <p:option name="work" select="''" required="false"/> 
+  <p:option name="publisher" select="''" required="false"/>
   
   <p:option name="debug" select="'yes'"/> 
   <p:option name="debug-dir-uri" select="'debug'"/>
@@ -91,7 +92,9 @@
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </bc:evolve-hub>
-  
+
+  <p:delete match="@srcpath" name="delete-srcpath-inhierarchized-hub"/>
+
   <p:sink/>
   
   <bc:empty-report name="create-empty-report">
@@ -112,7 +115,7 @@
     </p:input>
     <p:input port="parameters">
       <p:pipe port="result" step="paths"/>
-    </p:input>  
+    </p:input>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="active" select="$check"/>
