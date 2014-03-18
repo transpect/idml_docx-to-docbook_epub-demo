@@ -37,27 +37,42 @@ unexport out_dir out_base out_path win_path uri
 default: usage
 
 check_input:
-ifeq ($(IN_FILE_COPY),)
+ifeq ($(IN_FILE),)
 	@echo Please specifiy IN_FILE
+	@echo Call 'make usage' for more help.
 	@exit 1
 endif
 
 mkdirs:
-	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),epub,html), $(OUT_DIR))
+	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),epub,html))
+
+transpect-prerequisite:
+	-mkdir -p -v $(OUT_DIR)
+	cp $(IN_FILE) $(IN_FILE_COPY)
+	chmod 664 $(IN_FILE_COPY)
 
 conversion: check_input
 	@echo "OUTPUT DIR = "$(OUT_DIR)
 	@echo "DEBUG = "$(DEBUG)
 	@echo "DEBUG-DIR = "$(DEBUG_DIR)
-	cp $(IN_FILE) $(IN_FILE_COPY)
-	chmod 664 $(IN_FILE_COPY)
+	$(MAKE) transpect-prerequisite
 ifeq ($(suffix $(IN_FILE_COPY)),.docx)
 	$(MAKE) docx2epub
 else
 ifeq ($(suffix $(IN_FILE_COPY)),.idml)
-	$(MAKE) check_input
+	$(MAKE) usage
 endif
 endif
+
+docx2idml: check_input
+	HEAP=$(HEAP) $(CALABASH) -D \
+		-i conf=$(call uri,conf/conf.xml) \
+		-o hub=$(HUB) \
+		-o result=$(DEVNULL) \
+		$(call uri,adaptions/common/xpl/docx2idml.xpl) \
+		docxfile=$(call win_path,$(IN_FILE_COPY)) \
+		debug-dir-uri=$(DEBUG_DIR)
+		debug=$(DEBUG)
 
 docx2epub: mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
@@ -93,4 +108,5 @@ progress:
 usage:
 	@echo "Usage:"
 	@echo "  make conversion IN_FILE=myfile.docx"
+	@echo "  make docx2idml IN_FILE=myfile.docx"
 	@echo "  make doc rr=rr="
