@@ -8,6 +8,8 @@
   <nextCatalog catalog="../xproc-util/xml-model/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/xslt-mode/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../idml2xml/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../xml2idml/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../hub2html/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../pubcoach/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../schema/hub/xmlcatalog/catalog.xml"/>
@@ -26,6 +28,8 @@
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xslt-util/mime-type/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xslt-util/resolve-uri/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../html-tables/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../idmlval/xmlcatalog/catalog.xml"/>
 
   
   <!-- content-repo.catalog.xml is unversioned. 
