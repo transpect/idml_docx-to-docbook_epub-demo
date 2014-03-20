@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mapping-instructions 
+  xmlns="http://www.le-tex.de/namespace/xml2idml"
+  xmlns:xml2idml="http://www.le-tex.de/namespace/xml2idml"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:htmltable="http://www.le-tex.de/namespace/htmltable"
+  xpath-default-namespace="http://www.w3.org/1999/xhtml"
+  retain-tagging="false">
+
+  <import href="http://transpect.le-tex.de/html-tables/xsl/html-tables.xsl" />
+
+  <xslt-pipeline>
+    <step mode="htmltable:tables-add-atts"/>
+  </xslt-pipeline>
+
+  <Discard>
+    
+    <mapping-instruction>
+      <path>*[@css:display eq 'none']</path>
+    </mapping-instruction>
+
+    <mapping-instruction>
+      <path>hub/info</path>
+    </mapping-instruction>
+
+  </Discard>
+
+  <Stories keep-xml-space-preserve="true">
+
+    <mapping-instruction>
+      <path>hub</path>
+      <name>main</name>
+    </mapping-instruction>
+
+  </Stories>
+
+  <ParaStyles>
+<!--
+    <mapping-instruction>
+      <path priority="-3">para</path>
+      <format/>
+    </mapping-instruction>-->
+
+    <mapping-instruction>
+      <path>para[@role eq 'berschrift1']</path>
+      <format>Überschrift 1</format>
+    </mapping-instruction>
+
+    <mapping-instruction>
+      <path>para[@role eq 'berschrift2']</path>
+      <format>Überschrift 2</format>
+    </mapping-instruction>
+
+    <mapping-instruction>
+      <path>para[@role eq 'berschrift3']</path>
+      <format>Überschrift 3</format>
+    </mapping-instruction>
+
+  </ParaStyles>
+
+  <InlineStyles>
+<!--
+    <mapping-instruction>
+      <path>phrase</path>
+      <format/>
+    </mapping-instruction>-->
+
+  </InlineStyles>
+
+</mapping-instructions>
