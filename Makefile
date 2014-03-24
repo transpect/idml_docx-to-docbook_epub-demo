@@ -20,11 +20,12 @@ DEBUG = yes
 HEAP = 1024m
 
 OUT_DIR     = $(call out_base,$(IN_FILE),output)
-IN_FILE_COPY = $(OUT_DIR)/$(notdir $(IN_FILE))
+IN_FILE_COPY = $(OUT_DIR)$(notdir $(IN_FILE))
 SCHREPORT   = $(call out_path,$(IN_FILE_COPY),report,sch.xml)
 HTMLREPORT  = $(call out_path,$(IN_FILE_COPY),report,xhtml)
 HTML        = $(call out_path,$(IN_FILE_COPY),epub,xhtml)
 HUB         = $(call out_path,$(IN_FILE_COPY),hub,xml)
+IDML        = $(call out_path,$(IN_FILE_COPY),,idml)
 EPUB        = $(call out_path,$(IN_FILE_COPY),,epub)
 DEBUG_DIR   = $(call uri,$(OUT_DIR)/debug)
 PROGRESSDIR = $(DEBUG_DIR)/status
@@ -46,15 +47,15 @@ endif
 mkdirs:
 	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),epub,html))
 
-transpect-prerequisite: check_input
+transpect-prerequisite:
 	-mkdir -p -v $(OUT_DIR)
 	cp $(IN_FILE) $(IN_FILE_COPY)
 	chmod 664 $(IN_FILE_COPY)
 
-conversion: check_input
-	@echo "OUTPUT DIR = "$(OUT_DIR)
-	@echo "DEBUG = "$(DEBUG)
-	@echo "DEBUG-DIR = "$(DEBUG_DIR)
+conversion: check_input transpect-prerequisite
+	@echo "OUTPUT DIR = $(OUT_DIR)"
+	@echo "DEBUG = $(DEBUG)"
+	@echo "DEBUG-DIR = $(DEBUG_DIR)"
 ifeq ($(suffix $(IN_FILE_COPY)),.docx)
 	$(MAKE) docx2epub_and_docx2idml
 else
@@ -63,10 +64,10 @@ ifeq ($(suffix $(IN_FILE_COPY)),.idml)
 endif
 endif
 
-docx2epub_and_docx2idml: mkdirs
-	$(MAKE) transpect-prerequisite
+docx2epub_and_docx2idml: check_input transpect-prerequisite mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
 		-i conf=$(call uri,conf/conf.xml) \
+		-o hub=$(HUB) \
 		-o html=$(HTML) \
 		-o htmlreport=$(HTMLREPORT) \
 		-o schematron=$(SCHREPORT) \
@@ -80,8 +81,7 @@ docx2epub_and_docx2idml: mkdirs
 	cp -v $(HTMLREPORT) $(OUT_DIR)
 	cp -v $(HUB) $(OUT_DIR)
 
-docx2idml:
-	$(MAKE) transpect-prerequisite
+docx2idml: check_input transpect-prerequisite mkdirs
 	HEAP=$(HEAP) $(CALABASH) -D \
 		-i conf=$(call uri,conf/conf.xml) \
 		-o hub=$(HUB) \
@@ -91,8 +91,7 @@ docx2idml:
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG)
 
-docx2epub: mkdirs
-	$(MAKE) transpect-prerequisite
+docx2epub: check_input transpect-prerequisite mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
 		-i conf=$(call uri,conf/conf.xml) \
 		-o hub=$(HUB) \
@@ -128,4 +127,6 @@ usage:
 	@echo "  make conversion IN_FILE=myfile.docx"
 	@echo "  make docx2idml IN_FILE=myfile.docx"
 	@echo "  make docx2epub IN_FILE=myfile.docx"
-	@echo "  make doc rr=rr="
+	@echo ""
+	@echo "  Sample file invocation:"
+	@echo "  make conversion IN_FILE=../content/le-tex/whitepaper/de/transpect_wp_de.docx DEBUG=yes"
