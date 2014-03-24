@@ -18,6 +18,9 @@
     <p:document href="http://www.le-tex.de/resource/schema/hub/1.1/hub.rng"/>
   </p:input>
 
+  <p:output port="hub">
+    <p:pipe port="hub" step="docx2epub"/>
+  </p:output>
   <p:output port="htmlreport">
     <p:pipe port="htmlreport" step="docx2epub"/>
   </p:output>
