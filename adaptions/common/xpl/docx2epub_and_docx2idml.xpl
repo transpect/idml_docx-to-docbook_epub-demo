@@ -32,13 +32,15 @@
   </p:output>
   
   <p:option name="docxfile" required="true"/>
+  <p:option name="idml-target-uri" required="true"/>
   <p:option name="hub-version" select="'1.1'"/>
   
   <p:option name="publisher" select="''" required="false"/>
   <p:option name="series" select="''" required="false"/> 
   <p:option name="work" select="''" required="false"/> 
   
-  <p:option name="debug" select="'yes'"/> 
+  <p:option name="progress" select="'yes'"/>
+  <p:option name="debug" select="'yes'"/>
   <p:option name="debug-dir-uri" select="'debug'"/>
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />
@@ -63,7 +65,8 @@
 
   <!-- first main step: convert docx to epub-->
   <transpect:docx2epub name="docx2epub">
-    <p:with-option name="docxfile" select="$docxfile"/> 
+    <p:with-option name="docxfile" select="$docxfile"/>
+    <p:with-option name="progress" select="$progress"/>
     <p:input port="conf">
       <p:pipe port="conf" step="docx2epub_and_docx2idml"/>
     </p:input>
@@ -78,6 +81,7 @@
     <!--<p:with-option name="idml-target-uri" select="$idml-target-uri"/>-->
     <p:with-option name="debug" select="$debug" />
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri" />
+    <p:with-option name="idml-target-uri" select="$idml-target-uri" />
     <p:input port="source">
       <p:pipe port="flat-hub" step="docx2epub"/>
     </p:input>
