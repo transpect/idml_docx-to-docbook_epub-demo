@@ -15,12 +15,13 @@ out_base = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$
 
 LOCALCSS = true
 CHECK = yes
+PROGRESS = yes
 CALABASH = $(MAKEFILEDIR)/calabash/calabash.sh
 DEBUG = yes
 HEAP = 1024m
 
 OUT_DIR     = $(call out_base,$(IN_FILE),output)
-IN_FILE_COPY = $(OUT_DIR)$(notdir $(IN_FILE))
+IN_FILE_COPY = $(OUT_DIR)/$(notdir $(IN_FILE))
 SCHREPORT   = $(call out_path,$(IN_FILE_COPY),report,sch.xml)
 HTMLREPORT  = $(call out_path,$(IN_FILE_COPY),report,xhtml)
 HTML        = $(call out_path,$(IN_FILE_COPY),epub,xhtml)
@@ -74,7 +75,9 @@ docx2epub_and_docx2idml: check_input transpect-prerequisite mkdirs
 		-o result=$(DEVNULL) \
 		$(call uri,adaptions/common/xpl/docx2epub_and_docx2idml.xpl) \
 		docxfile=$(call win_path,$(IN_FILE_COPY)) \
+		idml-target-uri=$(IDML) \
 		check=$(CHECK) \
+		progress=$(PROGRESS) \
 		local-css=$(LOCALCSS) \
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG) \
@@ -88,6 +91,7 @@ docx2idml: check_input transpect-prerequisite mkdirs
 		-o result=$(DEVNULL) \
 		$(call uri,adaptions/common/xpl/docx2idml.xpl) \
 		docxfile=$(call win_path,$(IN_FILE_COPY)) \
+		idml-target-uri=$(IDML) \
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG)
 
