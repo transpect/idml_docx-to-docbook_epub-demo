@@ -46,7 +46,7 @@ endif
 mkdirs:
 	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),epub,html))
 
-transpect-prerequisite:
+transpect-prerequisite: check_input
 	-mkdir -p -v $(OUT_DIR)
 	cp $(IN_FILE) $(IN_FILE_COPY)
 	chmod 664 $(IN_FILE_COPY)
@@ -55,16 +55,33 @@ conversion: check_input
 	@echo "OUTPUT DIR = "$(OUT_DIR)
 	@echo "DEBUG = "$(DEBUG)
 	@echo "DEBUG-DIR = "$(DEBUG_DIR)
-	$(MAKE) transpect-prerequisite
 ifeq ($(suffix $(IN_FILE_COPY)),.docx)
-	$(MAKE) docx2epub
+	$(MAKE) docx2epub_and_docx2idml
 else
 ifeq ($(suffix $(IN_FILE_COPY)),.idml)
 	$(MAKE) usage
 endif
 endif
 
-docx2idml: check_input
+docx2epub_and_docx2idml: mkdirs
+	$(MAKE) transpect-prerequisite
+	HEAP=$(HEAP) $(CALABASH) -D \
+		-i conf=$(call uri,conf/conf.xml) \
+		-o html=$(HTML) \
+		-o htmlreport=$(HTMLREPORT) \
+		-o schematron=$(SCHREPORT) \
+		-o result=$(DEVNULL) \
+		$(call uri,adaptions/common/xpl/docx2epub_and_docx2idml.xpl) \
+		docxfile=$(call win_path,$(IN_FILE_COPY)) \
+		check=$(CHECK) \
+		local-css=$(LOCALCSS) \
+		debug-dir-uri=$(DEBUG_DIR)
+		debug=$(DEBUG) \
+	cp -v $(HTMLREPORT) $(OUT_DIR)
+	cp -v $(HUB) $(OUT_DIR)
+
+docx2idml:
+	$(MAKE) transpect-prerequisite
 	HEAP=$(HEAP) $(CALABASH) -D \
 		-i conf=$(call uri,conf/conf.xml) \
 		-o hub=$(HUB) \
@@ -74,7 +91,8 @@ docx2idml: check_input
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG)
 
-docx2epub: mkdirs 
+docx2epub: mkdirs
+	$(MAKE) transpect-prerequisite
 	HEAP=$(HEAP) $(CALABASH) -D \
 		-i conf=$(call uri,conf/conf.xml) \
 		-o hub=$(HUB) \
@@ -109,4 +127,5 @@ usage:
 	@echo "Usage:"
 	@echo "  make conversion IN_FILE=myfile.docx"
 	@echo "  make docx2idml IN_FILE=myfile.docx"
+	@echo "  make docx2epub IN_FILE=myfile.docx"
 	@echo "  make doc rr=rr="

@@ -14,6 +14,7 @@
   <nextCatalog catalog="../pubcoach/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../schema/hub/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../schema/xhtml1/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../schema/iso-schematron/catalog.xml"/>
   <nextCatalog catalog="../docx2hub/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../hub2html/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../evolve-hub/xmlcatalog/catalog.xml"/>
