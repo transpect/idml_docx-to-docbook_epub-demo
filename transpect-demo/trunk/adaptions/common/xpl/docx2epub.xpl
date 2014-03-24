@@ -8,6 +8,7 @@
   xmlns:transpect="http://www.le-tex.de/namespace/transpect"
   xmlns:letex="http://www.le-tex.de/namespace"
   name="docx2epub"
+  type="transpect:docx2epub"
   version="1.0">
   
   <p:input port="conf" primary="true">
@@ -22,6 +23,9 @@
     <p:pipe port="result" step="delete-srcpath-inhierarchized-hub"/>
   </p:output>
   <p:serialization port="hub" omit-xml-declaration="false"/>
+  <p:output port="flat-hub" primary="false">
+    <p:pipe port="result" step="docx2hub"/>
+  </p:output>
   <p:output port="html" primary="false">
     <p:pipe port="result" step="remove-srcpath-from-html"/>
   </p:output>
