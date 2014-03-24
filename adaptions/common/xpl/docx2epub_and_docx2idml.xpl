@@ -54,6 +54,7 @@
     <p:with-option name="series" select="$series"/> 
     <p:with-option name="work" select="$work"/> 
     <p:with-option name="file" select="$docxfile"/> 
+    <p:with-option name="progress" select="$progress"/> 
     <p:with-option name="debug" select="$debug"/> 
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/> 
     <p:input port="conf"> 
@@ -67,6 +68,7 @@
   <transpect:docx2epub name="docx2epub">
     <p:with-option name="docxfile" select="$docxfile"/>
     <p:with-option name="progress" select="$progress"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:input port="conf">
       <p:pipe port="conf" step="docx2epub_and_docx2idml"/>
     </p:input>
@@ -78,7 +80,6 @@
   <bc:xml2idml name="hub2idml">
     <p:with-option name="template" select="'hub2idml/template.idml'" />
     <p:with-option name="mapping" select="'hub2idml/mapping.xml'"/>
-    <!--<p:with-option name="idml-target-uri" select="$idml-target-uri"/>-->
     <p:with-option name="debug" select="$debug" />
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri" />
     <p:with-option name="idml-target-uri" select="$idml-target-uri" />

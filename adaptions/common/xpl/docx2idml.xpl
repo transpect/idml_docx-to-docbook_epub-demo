@@ -26,6 +26,7 @@
   <p:option name="series" select="''" required="false"/> 
   <p:option name="work" select="''" required="false"/> 
   
+  <p:option name="progress" required="false" select="'yes'"/>
   <p:option name="debug" select="'yes'"/> 
   <p:option name="debug-dir-uri" select="'debug'"/>
   
@@ -42,6 +43,7 @@
     <p:with-option name="series" select="$series"/> 
     <p:with-option name="work" select="$work"/> 
     <p:with-option name="file" select="$docxfile"/> 
+    <p:with-option name="progress" select="$progress"/> 
     <p:with-option name="debug" select="$debug"/> 
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/> 
     <p:input port="conf"> 
