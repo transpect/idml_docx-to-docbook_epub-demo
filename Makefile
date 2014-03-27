@@ -127,10 +127,13 @@ progress:
 	@ls -1rt $(PROGRESSDIR)/*.txt | xargs -d'\n' -I § sh -c 'date "+%H:%M:%S " -r § | tr -d [:cntrl:]; cat §'
 
 usage:
-	@echo "Usage:"
+	@echo "Usage (one of):"
 	@echo "  make conversion IN_FILE=myfile.docx"
 	@echo "  make docx2idml IN_FILE=myfile.docx"
 	@echo "  make docx2epub IN_FILE=myfile.docx"
 	@echo ""
-	@echo "  Sample file invocation:"
+	@echo "  Sample file invocations:"
 	@echo "  make conversion IN_FILE=../content/le-tex/whitepaper/de/transpect_wp_de.docx DEBUG=yes"
+	@echo ""
+	@echo "  - Campus sample (hub output is preferred):"
+	@echo "    make conversion IN_FILE=../content/campus/sample/transpect_wp_de.docx"
