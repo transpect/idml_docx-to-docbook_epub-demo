@@ -10,6 +10,9 @@
   <xsl:variable name="file-regex" select="'^([-a-zA-Z0-9\.]+)_([-a-zA-Z0-9\.]+)_([-a-zA-Z0-9\.]+)(_[-a-zA-Z0-9\.]+)?'" as="xs:string"/>
   <!-- for example publishername_seriesname_workname_whatever -->
   
+  <xsl:variable name="campus-file-regex" as="xs:string"
+    select="'^campus_(0*\d+)_(.*)$'" />
+
   <xsl:function name="bc:components-from-filename" as="xs:string+">
     <xsl:param name="filename" as="xs:string"/>
     <xsl:param name="conf" as="element(publisher-conf)"/>
@@ -17,7 +20,15 @@
     <xsl:variable name="work-basename" select="bc:work-basename-from-filename($filename)"/>
     
     <xsl:choose>
-      <!-- filename matches article-regex -->
+      <xsl:when test="matches($work-basename, $campus-file-regex)">
+        <xsl:analyze-string select="$work-basename" regex="{$campus-file-regex}">
+          <xsl:matching-substring>
+            <xsl:sequence select="'campus'"/>
+            <xsl:sequence select="regex-group(1)"/>
+            <xsl:sequence select="regex-group(2)"/>
+          </xsl:matching-substring>
+        </xsl:analyze-string>
+      </xsl:when>
       <xsl:when test="matches($work-basename, $file-regex)">
         <xsl:analyze-string select="$work-basename" regex="{$file-regex}">
           <xsl:matching-substring>
