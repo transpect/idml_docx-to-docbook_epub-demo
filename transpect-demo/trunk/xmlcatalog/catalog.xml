@@ -31,6 +31,8 @@
   <nextCatalog catalog="../xslt-util/resolve-uri/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../html-tables/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../idmlval/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../hub2tei/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../tei2html/xmlcatalog/catalog.xml"/> 
 
   
   <!-- content-repo.catalog.xml is unversioned. 
