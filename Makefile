@@ -153,7 +153,7 @@ idml2epub_tei_onix: check_input transpect-prerequisite mkdirs
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG) \
 	cp -v $(HUB) $(OUT_DIR)
-#	cp -v $(TEI) $(OUT_DIR)
+	cp -v $(TEI) $(OUT_DIR)
 #	cp -v $(HTML) $(OUT_DIR)
 #	cp -v $(HTMLREPORT) $(OUT_DIR)
 
