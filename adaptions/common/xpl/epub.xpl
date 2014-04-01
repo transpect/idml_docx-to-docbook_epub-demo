@@ -92,7 +92,7 @@
 
   <p:add-attribute name="add-base-uri" match="/*" attribute-name="xml:base">
     <p:with-option name="attribute-value"
-      select="replace(replace(/c:param-set/c:param[@name eq 'file-uri']/@value, '/(docx|xml|hub)/', '/epub/'), '\.(docx|xml|hub)$', '.html')">
+      select="replace(replace(/c:param-set/c:param[@name eq 'file-uri']/@value, '/(docx|xml|hub|idml)/', '/epub/'), '\.(docx|xml|hub|idml)$', '.html')">
       <p:pipe port="result" step="params"/>
     </p:with-option>
     <p:input port="source">
