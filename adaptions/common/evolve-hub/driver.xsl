@@ -28,23 +28,32 @@
     '(  Title
         | Titel ) (_-_.+)?$',    
     '(  heading1
-        | berschrift1 ) (_-_.+)?$',
+        | berschrift1 
+        | H1 ) (_-_.+)?$',
     '(  heading2
-        | berschrift2 ) (_-_.+)?$',
+        | berschrift2
+        | H2 ) (_-_.+)?$',
     '(  heading3
-        | berschrift3 ) (_-_.+)?$',
+        | berschrift3 
+        | H3 ) (_-_.+)?$',
     '(  heading4
-        | berschrift4 ) (_-_.+)?$',
+        | berschrift4
+        | H4 ) (_-_.+)?$',
     '(  heading5
-        | berschrift5 ) (_-_.+)?$',
+        | berschrift5
+        | H5 ) (_-_.+)?$',
     '(  heading6
-        | berschrift6 ) (_-_.+)?$',
+        | berschrift6
+        | H6 ) (_-_.+)?$',
     '(  heading7
-        | berschrift7 ) (_-_.+)?$',
+        | berschrift7
+        | H7 ) (_-_.+)?$',
     '(  heading8
-        | berschrift8 ) (_-_.+)?$',
+        | berschrift8
+        | H8 ) (_-_.+)?$',
     '(  heading9
-        | berschrift9 ) (_-_.+)?$'
+        | berschrift9
+        | H9 ) (_-_.+)?$'
     )" />
     
   <xsl:variable name="hub:hierarchy-title-roles" as="xs:boolean" select="true()"/>  
