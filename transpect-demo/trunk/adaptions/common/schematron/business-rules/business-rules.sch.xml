@@ -13,6 +13,7 @@
   <ns prefix="dbk"    uri="http://docbook.org/ns/docbook" />
   <ns prefix="css"    uri="http://www.w3.org/1996/css" />
   <ns prefix="mml"    uri="http://www.w3.org/1998/Math/MathML" />
+  <ns prefix="oodraw" uri="http://schemas.openxmlformats.org/drawingml/2006/main"/>
   
   <let name="base-dir" value="/*/dbk:info/dbk:keywordset/dbk:keyword[@role eq 'source-dir-uri']"/>
   <let name="names" value="/*/dbk:info/css:rules"/>
@@ -32,6 +33,13 @@
       <assert test="matches($fileref, '^container:')" id="external-image">
         <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
         <span>Images referenced externally are not supported in the demo. Please embed your images in Word.</span>
+      </assert>
+    </rule>
+    <!-- check for office open drawingml -->
+    <rule context="*[namespace-uri() eq 'http://schemas.openxmlformats.org/drawingml/2006/main']">
+      <assert test="false()">
+        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
+        <span>Word DrawingML graphic found. Drawing ML objects cannot be converted. Please replace your Drawing ML object with a PNG (for example a screenshot of your DrawingML graphic).</span>
       </assert>
     </rule>
   </pattern>
