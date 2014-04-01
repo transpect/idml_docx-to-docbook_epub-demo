@@ -28,6 +28,7 @@ HTMLREPORT  = $(call out_path,$(IN_FILE_COPY),report,xhtml)
 HTML        = $(call out_path,$(IN_FILE_COPY),epub,xhtml)
 HUB         = $(call out_path,$(IN_FILE_COPY),hub,xml)
 HUBEVOLVED  = $(call out_path,$(IN_FILE_COPY),hub,evolved.xml)
+TEI         = $(call out_path,$(IN_FILE_COPY),tei,xml)
 IDML        = $(call out_path,$(IN_FILE_COPY),,idml)
 EPUB        = $(call out_path,$(IN_FILE_COPY),,epub)
 DEBUG_DIR   = $(call uri,$(OUT_DIR)/debug)
@@ -48,7 +49,7 @@ ifeq ($(IN_FILE),)
 endif
 
 mkdirs:
-	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),epub,html))
+	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),tei,xml) $(call out_path,$(IN_FILE_COPY),epub,html))
 
 transpect-prerequisite:
 	-mkdir -p -v $(OUT_DIR)
@@ -135,6 +136,26 @@ idml2epub_hub: check_input transpect-prerequisite mkdirs
 	cp -v $(HTML) $(OUT_DIR)
 	cp -v $(HTMLREPORT) $(OUT_DIR)
 
+idml2epub_tei_onix: check_input transpect-prerequisite mkdirs 
+	HEAP=$(HEAP) $(CALABASH) -D \
+		-i conf=$(call uri,conf/conf.xml) \
+		-o hub=$(HUB) \
+		-o tei=$(TEI) \
+		-o html=$(HTML) \
+		-o htmlreport=$(HTMLREPORT) \
+		-o schematron=$(SCHREPORT) \
+		-o result=$(DEVNULL) \
+		$(call uri,adaptions/common/xpl/idml2epub_tei_onix.xpl) \
+		idmlfile=$(call win_path,$(IN_FILE_COPY)) \
+		idml-target-uri=$(IDML) \
+		check=$(CHECK) \
+		local-css=$(LOCALCSS) \
+		debug-dir-uri=$(DEBUG_DIR)
+		debug=$(DEBUG) \
+	cp -v $(HUB) $(OUT_DIR)
+#	cp -v $(TEI) $(OUT_DIR)
+#	cp -v $(HTML) $(OUT_DIR)
+#	cp -v $(HTMLREPORT) $(OUT_DIR)
 
 clean:
 	-cd $(OUT_DIR) && rm -rf debug.zip $(HTMLREPORT) $(SCHREPORT) $(HTML) $(HUB) $(IN_FILE_COPY).tmp 
@@ -158,6 +179,7 @@ usage:
 	@echo "  make docx2idml IN_FILE=myfile.docx"
 	@echo "  make docx2epub IN_FILE=myfile.docx"
 	@echo "  make idml2epub_hub IN_FILE=myfile.idml"
+	@echo "  make idml2epub_tei_onix IN_FILE=myfile.idml"
 	@echo ""
 	@echo "  Sample file invocations:"
 	@echo "  make conversion IN_FILE=../content/le-tex/whitepaper/de/transpect_wp_de.docx DEBUG=yes"
