@@ -9,9 +9,10 @@ uri = $(shell echo $(abspath $(1))  | perl -pe 's/ /%20/g')
 endif
 
 # Modified Cygwin/Windows-Java-compatible input file path:
-out_path = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\/$$2\.$(3)/')
-out_base = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\//')
+out_path = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.(docx|idml)/$$1\/$(2)\/$$2\.$(3)/')
+out_base = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.(docx|idml)/$$1\/$(2)\//')
 #out_dir  = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\//')
+
 
 LOCALCSS = true
 CHECK = yes
@@ -26,6 +27,7 @@ SCHREPORT   = $(call out_path,$(IN_FILE_COPY),report,sch.xml)
 HTMLREPORT  = $(call out_path,$(IN_FILE_COPY),report,xhtml)
 HTML        = $(call out_path,$(IN_FILE_COPY),epub,xhtml)
 HUB         = $(call out_path,$(IN_FILE_COPY),hub,xml)
+HUBEVOLVED  = $(call out_path,$(IN_FILE_COPY),hub,evolved.xml)
 IDML        = $(call out_path,$(IN_FILE_COPY),,idml)
 EPUB        = $(call out_path,$(IN_FILE_COPY),,epub)
 DEBUG_DIR   = $(call uri,$(OUT_DIR)/debug)
@@ -112,6 +114,28 @@ docx2epub: check_input transpect-prerequisite mkdirs
 	cp -v $(HTMLREPORT) $(OUT_DIR)
 	cp -v $(HUB) $(OUT_DIR)
 
+idml2epub_hub: check_input transpect-prerequisite mkdirs 
+	HEAP=$(HEAP) $(CALABASH) -D \
+		-i conf=$(call uri,conf/conf.xml) \
+		-o hub=$(HUB) \
+		-o hubevolved=$(HUBEVOLVED) \
+		-o html=$(HTML) \
+		-o htmlreport=$(HTMLREPORT) \
+		-o schematron=$(SCHREPORT) \
+		-o result=$(DEVNULL) \
+		$(call uri,adaptions/common/xpl/idml2epub_hub.xpl) \
+		idmlfile=$(call win_path,$(IN_FILE_COPY)) \
+		idml-target-uri=$(IDML) \
+		check=$(CHECK) \
+		local-css=$(LOCALCSS) \
+		debug-dir-uri=$(DEBUG_DIR)
+		debug=$(DEBUG) \
+	cp -v $(HUB) $(OUT_DIR)
+	cp -v $(HUBEVOLVED) $(OUT_DIR)
+	cp -v $(HTML) $(OUT_DIR)
+	cp -v $(HTMLREPORT) $(OUT_DIR)
+
+
 clean:
 	-cd $(OUT_DIR) && rm -rf debug.zip $(HTMLREPORT) $(SCHREPORT) $(HTML) $(HUB) $(IN_FILE_COPY).tmp 
 
@@ -120,6 +144,8 @@ test:
 	@echo =$(call win_path,$(IN_FILE_COPY))
 	@echo $(call out_path,$(IN_FILE_COPY))
 	@echo $(HUB)
+	@echo $(HUBEVOLVED)
+
 
 progress:
 #	@ls -lrt "$(PROGRESSDIR)/*.txt" | xargs -d'\n' cat
@@ -131,6 +157,7 @@ usage:
 	@echo "  make conversion IN_FILE=myfile.docx"
 	@echo "  make docx2idml IN_FILE=myfile.docx"
 	@echo "  make docx2epub IN_FILE=myfile.docx"
+	@echo "  make idml2epub_hub IN_FILE=myfile.idml"
 	@echo ""
 	@echo "  Sample file invocations:"
 	@echo "  make conversion IN_FILE=../content/le-tex/whitepaper/de/transpect_wp_de.docx DEBUG=yes"
