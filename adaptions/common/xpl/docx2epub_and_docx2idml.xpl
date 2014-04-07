@@ -111,6 +111,9 @@
 
   <!-- zip output and binaries -->
   <letex:store-zip name="zip-images-and-binaries" cx:depends-on="save-hub-output-for-store-zip">
+    <p:input port="source">
+      <p:pipe port="flat-hub" step="docx2epub"/>
+    </p:input>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="target-zip-uri" select="$final-zip-target-uri"/>
