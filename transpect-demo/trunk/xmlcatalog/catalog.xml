@@ -5,6 +5,7 @@
   <rewriteURI uriStartString="http://customers.le-tex.de/generic/book-conversion/" rewritePrefix="../"/> 
   
   <nextCatalog catalog="../xproc-util/store-debug/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../xproc-util/store-zip/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xproc-util/xml-model/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/xslt-mode/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/> 

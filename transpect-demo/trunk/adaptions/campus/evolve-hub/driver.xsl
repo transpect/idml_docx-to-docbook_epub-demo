@@ -5,7 +5,6 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:css="http://www.w3.org/1996/css"
   xmlns:hub="http://www.le-tex.de/namespace/hub"
-  xmlns:docx2hub="http://www.le-tex.de/namespace/docx2hub"
   xpath-default-namespace="http://docbook.org/ns/docbook"
   xmlns="http://docbook.org/ns/docbook"
   exclude-result-prefixes="xs xlink hub"
@@ -13,6 +12,9 @@
 
   <xsl:import href="http://customers.le-tex.de/generic/book-conversion/adaptions/common/evolve-hub/driver.xsl"/>
   
+
+  <!-- variable overrides -->
+
   <xsl:variable name="hub:hierarchy-role-regexes-x" as="xs:string+"
     select="( '^cUeberschrift1$',
               '^cUeberschrift2$',
@@ -36,4 +38,12 @@
 
   <xsl:variable name="hub:figure-note-role-regex"  as="xs:string" select="'^cAbbLegende$'" />
   
+
+  <!-- template overrides/additions -->
+
+  <!-- remove unecessary markup and output rng/schematron messages only once for this foreign markup -->
+  <!--<xsl:template match="phrase[@role eq 'hub:foreign']/*" mode="hub:preprocess-hierarchy">
+    <xsl:copy/>
+  </xsl:template>-->
+
 </xsl:stylesheet>

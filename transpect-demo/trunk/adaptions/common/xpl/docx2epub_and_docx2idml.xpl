@@ -18,7 +18,10 @@
     <p:document href="http://www.le-tex.de/resource/schema/hub/1.1/hub.rng"/>
   </p:input>
 
-  <p:output port="hub">
+  <p:output port="flat-hub">
+    <p:pipe port="flat-hub" step="docx2epub"/>
+  </p:output>
+  <p:output port="evolved-hub">
     <p:pipe port="hub" step="docx2epub"/>
   </p:output>
   <p:output port="htmlreport">
@@ -33,6 +36,9 @@
   
   <p:option name="docxfile" required="true"/>
   <p:option name="idml-target-uri" required="true"/>
+  <p:option name="epub-target-uri" required="true"/>
+  <p:option name="hub-target-uri" required="true"/>
+  <p:option name="final-zip-target-uri" required="true"/>
   <p:option name="hub-version" select="'1.1'"/>
   
   <p:option name="publisher" select="''" required="false"/>
@@ -47,6 +53,7 @@
   <p:import href="paths.xpl"/>
   <p:import href="docx2epub.xpl"/>
   <p:import href="http://transpect.le-tex.de/xml2idml/xpl/xml2idml.xpl" />
+  <p:import href="http://transpect.le-tex.de/xproc-util/store-zip/xpl/store-zip.xpl"/>
   
   <transpect:paths name="paths"> 
     <p:with-option name="pipeline" select="'docx2epub_and_docx2idml.xpl'"/> 
@@ -90,6 +97,28 @@
       <p:pipe port="result" step="paths"/>
     </p:input>
   </bc:xml2idml>
+
+  <p:sink/>
+
+  <p:store name="save-hub-output-for-store-zip"
+    method="xml" encoding="UTF-8" omit-xml-declaration="false">
+    <p:input port="source">
+      <p:pipe port="hub" step="docx2epub"/>
+    </p:input>
+    <p:with-option name="href" select="concat('file:', $hub-target-uri)"/>
+  </p:store>
+
+  <!-- zip output and binaries -->
+  <letex:store-zip name="zip-images-and-binaries">
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="target-zip-uri" select="$final-zip-target-uri"/>
+    <p:with-option name="additional-file-uris-to-zip-root" 
+      select="string-join(
+                ($idml-target-uri, $docxfile, $epub-target-uri, $hub-target-uri), 
+                ' file:'
+              )"/>
+  </letex:store-zip>
 
   <p:sink/>
 

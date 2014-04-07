@@ -31,6 +31,7 @@ HUBEVOLVED  = $(call out_path,$(IN_FILE_COPY),hub,evolved.xml)
 TEI         = $(call out_path,$(IN_FILE_COPY),tei,xml)
 IDML        = $(call out_path,$(IN_FILE_COPY),,idml)
 EPUB        = $(call out_path,$(IN_FILE_COPY),,epub)
+ZIP         = $(call out_path,$(IN_FILE_COPY),,zip)
 DEBUG_DIR   = $(call uri,$(OUT_DIR)/debug)
 PROGRESSDIR = $(DEBUG_DIR)/status
 ACTIONLOG  = $(PROGRESSDIR)/action.log
@@ -71,7 +72,8 @@ endif
 docx2epub_and_docx2idml: check_input transpect-prerequisite mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
 		-i conf=$(call uri,conf/conf.xml) \
-		-o hub=$(HUB) \
+		-o flat-hub=$(HUB) \
+		-o evolved-hub=$(HUBEVOLVED) \
 		-o html=$(HTML) \
 		-o htmlreport=$(HTMLREPORT) \
 		-o schematron=$(SCHREPORT) \
@@ -79,11 +81,14 @@ docx2epub_and_docx2idml: check_input transpect-prerequisite mkdirs
 		$(call uri,adaptions/common/xpl/docx2epub_and_docx2idml.xpl) \
 		docxfile=$(call win_path,$(IN_FILE_COPY)) \
 		idml-target-uri=$(IDML) \
+		epub-target-uri=$(EPUB) \
+		hub-target-uri=$(HUB) \
+		final-zip-target-uri=file:$(ZIP) \
 		check=$(CHECK) \
 		progress=$(PROGRESS) \
 		local-css=$(LOCALCSS) \
-		debug-dir-uri=$(DEBUG_DIR)
-		debug=$(DEBUG) \
+		debug-dir-uri=$(DEBUG_DIR) \
+		debug=$(DEBUG)
 	cp -v $(HTMLREPORT) $(OUT_DIR)
 	cp -v $(HUB) $(OUT_DIR)
 
