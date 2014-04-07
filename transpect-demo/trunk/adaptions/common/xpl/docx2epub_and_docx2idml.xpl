@@ -2,6 +2,7 @@
 <p:declare-step 
   xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:c="http://www.w3.org/ns/xproc-step"
+  xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:bc="http://transpect.le-tex.de/book-conversion"
   xmlns:docx2hub = "http://www.le-tex.de/namespace/docx2hub"
   xmlns:transpect="http://www.le-tex.de/namespace/transpect"
@@ -100,7 +101,7 @@
 
   <p:sink/>
 
-  <p:store name="save-hub-output-for-store-zip"
+  <p:store name="save-hub-output-for-store-zip" cx:depends-on="hub2idml"
     method="xml" encoding="UTF-8" omit-xml-declaration="false">
     <p:input port="source">
       <p:pipe port="hub" step="docx2epub"/>
@@ -109,7 +110,7 @@
   </p:store>
 
   <!-- zip output and binaries -->
-  <letex:store-zip name="zip-images-and-binaries">
+  <letex:store-zip name="zip-images-and-binaries" cx:depends-on="save-hub-output-for-store-zip">
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="target-zip-uri" select="$final-zip-target-uri"/>
