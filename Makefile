@@ -84,6 +84,7 @@ docx2epub_and_docx2idml: check_input transpect-prerequisite mkdirs
 		epub-target-uri=$(EPUB) \
 		hub-target-uri=$(HUB) \
 		final-zip-target-uri=file:$(ZIP) \
+		out-dir-uri=file:$(OUT_DIR) \
 		check=$(CHECK) \
 		progress=$(PROGRESS) \
 		local-css=$(LOCALCSS) \

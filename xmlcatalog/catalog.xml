@@ -8,6 +8,7 @@
   <nextCatalog catalog="../xproc-util/store-zip/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xproc-util/xml-model/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/xslt-mode/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../xproc-util/copy-files/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../idml2xml/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xml2idml/xmlcatalog/catalog.xml"/>

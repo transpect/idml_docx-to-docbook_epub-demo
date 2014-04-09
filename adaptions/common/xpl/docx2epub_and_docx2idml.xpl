@@ -40,6 +40,7 @@
   <p:option name="epub-target-uri" required="true"/>
   <p:option name="hub-target-uri" required="true"/>
   <p:option name="final-zip-target-uri" required="true"/>
+  <p:option name="out-dir-uri" required="true"/>
   <p:option name="hub-version" select="'1.1'"/>
   
   <p:option name="publisher" select="''" required="false"/>
@@ -55,7 +56,8 @@
   <p:import href="docx2epub.xpl"/>
   <p:import href="http://transpect.le-tex.de/xml2idml/xpl/xml2idml.xpl" />
   <p:import href="http://transpect.le-tex.de/xproc-util/store-zip/xpl/store-zip.xpl"/>
-  
+  <p:import href="http://transpect.le-tex.de/xproc-util/copy-files/xpl/copy-files.xpl"/>
+
   <transpect:paths name="paths"> 
     <p:with-option name="pipeline" select="'docx2epub_and_docx2idml.xpl'"/> 
     <p:with-option name="publisher" select="$publisher"/> 
@@ -101,16 +103,40 @@
 
   <p:sink/>
 
-  <p:store name="save-hub-output-for-store-zip" cx:depends-on="hub2idml"
-    method="xml" encoding="UTF-8" omit-xml-declaration="false">
+  <p:load name="copy-xsl" href="http://transpect.le-tex.de/xproc-util/copy-files/xsl/copy-files.xsl"/>
+
+  <letex:copy-files name="copy-images" cx:depends-on="hub2idml">
     <p:input port="source">
       <p:pipe port="hub" step="docx2epub"/>
     </p:input>
+    <p:with-option name="target-dir-uri" select="concat($out-dir-uri, '/media/')"/>
+    <p:with-option name="change-uri" select="'yes'"/>
+    <p:with-option name="change-uri-new-subpath" select="'media'"/>
+  </letex:copy-files>
+
+  <p:store name="save-hub-output-for-store-zip" cx:depends-on="copy-images" 
+    method="xml" encoding="UTF-8" omit-xml-declaration="false">
     <p:with-option name="href" select="concat('file:', $hub-target-uri)"/>
   </p:store>
 
+  <p:xslt initial-mode="change-uri">
+    <p:with-param name="fileref-attribute-name-regex" select="'^src$'"/>
+    <p:with-param name="fileref-hosting-element-name-regex" select="'^img$'"/>
+    <p:with-param name="change-uri-new-subpath" select="'media'"/>
+    <p:input port="source">
+      <p:pipe port="htmlreport" step="docx2epub"/>
+    </p:input>
+    <p:input port="stylesheet">
+      <p:pipe port="result" step="copy-xsl"/>
+    </p:input>
+  </p:xslt>
+  <p:store name="store-xhtml-report-for-store-zip"
+    method="xml" encoding="UTF-8" omit-xml-declaration="false">
+    <p:with-option name="href" select="concat('file:', replace($hub-target-uri, '\.xml', '.report.xhtml'))"/>
+  </p:store>
+
   <!-- zip output and binaries -->
-  <letex:store-zip name="zip-images-and-binaries" cx:depends-on="save-hub-output-for-store-zip">
+  <letex:store-zip name="zip-images-and-binaries" cx:depends-on="copy-images">
     <p:input port="source">
       <p:pipe port="flat-hub" step="docx2epub"/>
     </p:input>
@@ -119,7 +145,13 @@
     <p:with-option name="target-zip-uri" select="$final-zip-target-uri"/>
     <p:with-option name="additional-file-uris-to-zip-root" 
       select="string-join(
-                ($idml-target-uri, $docxfile, $epub-target-uri, $hub-target-uri), 
+                (
+                  $idml-target-uri, 
+                  $docxfile, 
+                  $epub-target-uri, 
+                  $hub-target-uri, 
+                  replace($hub-target-uri, '\.xml', '.report.xhtml')
+                ), 
                 ' file:'
               )"/>
   </letex:store-zip>
