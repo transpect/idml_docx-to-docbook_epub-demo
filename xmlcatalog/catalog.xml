@@ -31,6 +31,7 @@
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xslt-util/mime-type/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xslt-util/resolve-uri/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../xslt-util/xslt-based-catalog-resolver/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../html-tables/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../idmlval/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../hub2tei/xmlcatalog/catalog.xml"/> 
