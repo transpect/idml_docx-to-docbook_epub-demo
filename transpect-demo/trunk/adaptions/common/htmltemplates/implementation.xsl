@@ -104,19 +104,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template name="cover">
-   <xsl:param name="_content" as="item()*"/>
-   <xsl:variable name="cover-image-url" as="element(*)?"
-     select="($webtitle/e_cover_url_big, $webtitle/printcover_url_big, $mastertitle/e_cover_url_big, $mastertitle/printcover_url_big)[not(. = '?')][1]"/>
-   <xsl:choose>
-     <xsl:when test="not($cover-image-url)">
-       <p class="prelim">[Kein Cover gefunden!]</p>
-     </xsl:when>
-     <xsl:otherwise>
-         <img src="{string($cover-image-url)}" alt="Cover"/>
-     </xsl:otherwise>
-   </xsl:choose>
-   </xsl:template> 
+
   
    <xsl:variable name="people" as="element(person_record)*">
      <xsl:for-each-group select="$metadata/*/role_dump/role_record[title_id = $webtitle/title_id]" group-by="pers_id">
@@ -139,21 +127,7 @@
   <xsl:variable name="translators" select="$people[matches(role_record/role_name, 'Übersetzung')]" as="element(person_record)*"/>
   <xsl:variable name="illustrators" select="$people[matches(role_record/role_name, 'Illustration')]" as="element(person_record)*"/>
 
-  <xsl:template name="bio-iteration">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:param name="role-name" as="xs:string" tunnel="yes"/>
-    <xsl:variable name="category-contribs" select="uv:contribs-for-role($people, $role-name)" as="element(person_record)*"/>
-    <xsl:if test="exists($category-contribs)">
-      <xsl:call-template name="_heading">
-        <xsl:with-param name="content" select="$_content"/>
-        <xsl:with-param name="class" select="'contrib-group'"/>
-        <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-      </xsl:call-template>
-      <xsl:for-each select="$category-contribs">
-        <a rel="transclude" href="#bio-iteration-item" class="block"/>
-      </xsl:for-each>
-    </xsl:if>
-  </xsl:template>
+
 
   <xsl:function name="uv:contribs-for-role">
     <xsl:param name="all-contribs" as="element(person_record)*"/>
@@ -161,278 +135,6 @@
     <xsl:sequence select="$all-contribs[matches(role_record/role_name, $role-name)]"/>
   </xsl:function>
 
-  <xsl:template name="role">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:param name="role-name" as="xs:string" tunnel="yes"/>
-    <xsl:variable name="category-contribs" select="uv:contribs-for-role($people, $role-name)" as="element(person_record)*"/>
-    <xsl:variable name="sexes" select="distinct-values($category-contribs/gender_type)" as="xs:string*"/>
-    <xsl:choose>
-      <xsl:when test="$role-name = 'Autor'">
-        <xsl:choose>
-          <xsl:when test="count($category-contribs) eq 1">
-            <xsl:choose>
-              <xsl:when test="$sexes = 'M'"><xsl:sequence select="$role-author-m-s"/></xsl:when>
-              <xsl:when test="$sexes = 'F'"><xsl:sequence select="$role-author-f-s"/></xsl:when>
-              <xsl:otherwise><xsl:sequence select="'das kleine pelzige Schreibwesen von Alpha Centauri'"/></xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-          <xsl:when test="count($category-contribs) gt 1">
-            <xsl:choose>
-              <xsl:when test="$sexes = 'M' and $sexes = 'F'"><xsl:sequence select="$role-author-fm-p"/></xsl:when>
-              <xsl:when test="$sexes = 'M'"><xsl:sequence select="$role-author-m-p"/></xsl:when>
-              <xsl:when test="$sexes = 'F'"><xsl:sequence select="$role-author-f-p"/></xsl:when>
-              <xsl:otherwise><xsl:sequence select="'die kleinen pelzigen Schreibwesen von Alpha Centauri'"/></xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:when test="$role-name = 'Herausgeber'">
-        <xsl:choose>
-          <xsl:when test="count($category-contribs) eq 1">
-            <xsl:choose>
-              <xsl:when test="$sexes = 'M'"><xsl:sequence select="$role-editor-m-s"/></xsl:when>
-              <xsl:when test="$sexes = 'F'"><xsl:sequence select="$role-editor-f-s"/></xsl:when>
-              <xsl:otherwise><xsl:sequence select="'das kleine pelzige Herausgebwesen von Alpha Centauri'"/></xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-          <xsl:when test="count($category-contribs) gt 1">
-            <xsl:choose>
-              <xsl:when test="$sexes = 'M' and $sexes = 'F'"><xsl:sequence select="$role-editor-fm-p"/></xsl:when>
-              <xsl:when test="$sexes = 'M'"><xsl:sequence select="$role-editor-m-p"/></xsl:when>
-              <xsl:when test="$sexes = 'F'"><xsl:sequence select="$role-editor-f-p"/></xsl:when>
-              <xsl:otherwise><xsl:sequence select="'die kleinen pelzigen Herausgebwesen von Alpha Centauri'"/></xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:when test="$role-name = 'Übersetzung'">
-        <xsl:choose>
-          <xsl:when test="count($category-contribs) eq 1">
-            <xsl:choose>
-              <xsl:when test="$sexes = 'M'"><xsl:sequence select="$role-translator-m-s"/></xsl:when>
-              <xsl:when test="$sexes = 'F'"><xsl:sequence select="$role-translator-f-s"/></xsl:when>
-              <xsl:otherwise><xsl:sequence select="'das kleine pelzige Übersetzwesen von Alpha Centauri'"/></xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-          <xsl:when test="count($category-contribs) gt 1">
-            <xsl:choose>
-              <xsl:when test="$sexes = 'M' and $sexes = 'F'"><xsl:sequence select="$role-translator-fm-p"/></xsl:when>
-              <xsl:when test="$sexes = 'M'"><xsl:sequence select="$role-translator-m-p"/></xsl:when>
-              <xsl:when test="$sexes = 'F'"><xsl:sequence select="$role-translator-f-p"/></xsl:when>
-              <xsl:otherwise><xsl:sequence select="'die kleinen pelzigen Übersetzwesen von Alpha Centauri'"/></xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:when test="$role-name = 'Illustration'">
-        <xsl:choose>
-          <xsl:when test="count($category-contribs) eq 1">
-            <xsl:choose>
-              <xsl:when test="$sexes = 'M'"><xsl:sequence select="$role-illustrator-m-s"/></xsl:when>
-              <xsl:when test="$sexes = 'F'"><xsl:sequence select="$role-illustrator-f-s"/></xsl:when>
-              <xsl:otherwise><xsl:sequence select="'das kleine pelzige Illustrierwesen von Alpha Centauri'"/></xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-          <xsl:when test="count($category-contribs) gt 1">
-            <xsl:choose>
-              <xsl:when test="$sexes = 'M' and $sexes = 'F'"><xsl:sequence select="$role-illustrator-fm-p"/></xsl:when>
-              <xsl:when test="$sexes = 'M'"><xsl:sequence select="$role-illustrator-m-p"/></xsl:when>
-              <xsl:when test="$sexes = 'F'"><xsl:sequence select="$role-illustrator-f-p"/></xsl:when>
-              <xsl:otherwise><xsl:sequence select="'die kleinen pelzigen Illustrierwesen von Alpha Centauri'"/></xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise><xsl:sequence select="'niemand'"/></xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="author-pic">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:if test="picture_field/child::node()">
-    <img src="{picture_url_normal}" >
-      <xsl:attribute name="alt">
-        <xsl:apply-templates select="."/><!-- is a person_record -->
-      </xsl:attribute>
-    </img>
-    <xsl:if test="./picture_caption/node()">
-      <p class="caption"><small><xsl:value-of select="./picture_caption"/></small></p>
-    </xsl:if>
-    </xsl:if>
-  </xsl:template>
-  
-  <xsl:template name="weburl-person">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:variable name="contrib-name" as="xs:string">
-      <xsl:apply-templates select="."/><!-- is a person_record -->
-    </xsl:variable>
-    <a href="http://www.unionsverlag.com/info/person.asp?pers_id={pers_id}">
-      <xsl:value-of select="$contrib-name"/>
-    </a>
-  </xsl:template>
-  
-  <xsl:template name="short-bio">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:if test="bio">
-      <xsl:call-template name="_heading">
-        <xsl:with-param name="content" select="$_content"/>
-        <xsl:with-param name="class" select="'bio'"/>
-        <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-      </xsl:call-template>
-      <xsl:apply-templates select="bio"/>
-    </xsl:if>
-  </xsl:template>
-  
-  <xsl:template name="reading-atlas">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:if test="static_map">
-      <xsl:call-template name="_heading">
-        <xsl:with-param name="content" select="$_content"/>
-        <xsl:with-param name="class" select="'readin-atlas'"/>
-        <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-      </xsl:call-template>
-      <xsl:apply-templates select="static_map"/>
-    </xsl:if>
-  </xsl:template>
-  
-  <xsl:template match="static_map">
-    <img>
-      <xsl:attribute name="src" select="escape-html-uri(.)"/>
-      <xsl:attribute name="alt" select="'Leseatlas'"/>
-    </img>
-  </xsl:template>
-  
-  <xsl:template name="author-quotes">
-    <xsl:param name="_content"/>
-    <xsl:variable name="author-quotes" as="element(quote_record)*">
-      <xsl:perform-sort select="$metadata/*/quote_dump/quote_record[xs:string(pers_id) = xs:string(current()/pers_id)][position() = (1 to xs:integer($max-quotes-author))]">
-        <xsl:sort select="number(sort)"/>
-      </xsl:perform-sort>
-    </xsl:variable> 
-    <xsl:apply-templates select="$author-quotes[position() != $quote-random]"/>
-  </xsl:template>
-
-  <xsl:template name="author-bio-long">
-  <xsl:param name="_content"/>
-  <xsl:if test="./additional_text/node()">
-    <xsl:call-template name="_heading">
-      <xsl:with-param name="content" select="$_content"/>
-      <xsl:with-param name="class" select="'bio'"/>
-      <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-    </xsl:call-template>
-    <xsl:apply-templates select="./additional_text"/>
-  </xsl:if> 
-  </xsl:template>
-  
-  <xsl:template match="additional_text">
-    <xsl:choose>
-      <xsl:when test="*:p">
-        <xsl:apply-templates select="*" mode="#current"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <p class="long-bio">
-          <xsl:apply-templates mode="#current"/>
-        </p>
-      </xsl:otherwise>
-    </xsl:choose> 
-  </xsl:template>
-  
-  <xsl:template name="author-bio-iteration-long">
-    <xsl:param name="_content" as="item()*"/>
-      <xsl:call-template name="_heading">
-        <xsl:with-param name="content" select="$_content"/>
-        <xsl:with-param name="class" select="'contributor-bio-long'"/>
-        <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-      </xsl:call-template>
-      <xsl:for-each select="$people">
-        <a rel="transclude" href="#author-bio-iteration-long-item" class="block"/>
-      </xsl:for-each>
-  </xsl:template>
-  
-  <xsl:template name="person-name">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:apply-templates select="."/>
-  </xsl:template>
-  
-  <xsl:template name="other-books-iteration">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:call-template name="_heading">
-      <xsl:with-param name="content" select="$_content"/>
-      <xsl:with-param name="class" select="'other-books'"/>
-      <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-    </xsl:call-template>
-    <xsl:for-each select="$people">
-      <xsl:sort select="last_name" order="ascending"/>
-      <xsl:sort select="first_name" order="ascending"/>
-      <xsl:variable name="other-books" as="element(title_record)*">
-        <xsl:sequence select="$metadata/*/title_dump/title_record[(title_id = $metadata/*/role_dump/role_record[pers_id = current()/pers_id]/title_id) and
-                              title ne ($webtitle, $mastertitle)[1]/title]"/>
-      </xsl:variable>
-      <xsl:variable name="other-available-books" as="element(title_record)*">
-        <xsl:sequence select="$other-books[status_id = '1']
-          [availability_id = $metadata/*/availability_dump/availability_record
-          [xs:integer(availability_code) gt 0]/availability_id
-          ]"/>
-        <!--sortieren nach Verkaufzahlen, Buchname/Datum-->
-      </xsl:variable>
-   
-      <xsl:if test="$other-available-books">
-        <a rel="transclude" href="#heading-other-books"/>
-        <xsl:for-each select="$other-available-books[position() = 1 to
-          xs:integer($max-other-books-by-author)]">
-          <a rel="transclude" href="#other-books-iteration-item" class="block"/>  
-        </xsl:for-each>
-      </xsl:if>
-    </xsl:for-each>
-   </xsl:template>
-  
-   <xsl:template name="other-books-title">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:apply-templates select="current()/title"/>
-  </xsl:template>
-  
-  <xsl:template name="other-book-cover">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:variable name="cover-image-url" as="element(*)?"
-      select="(e_cover_url_normal, printcover_url_normal, 
-               $metadata/*/title_dump/title_record[current()/mastertitle_id = title_id]/e_cover_url_normal, 
-               $metadata/*/title_dump/title_record[current()/mastertitle_id = title_id]/printcover_url_normal)[not(. = '?')][1]"/>
-    <xsl:choose>
-      <xsl:when test="not($cover-image-url)">
-        <p class="prelim">[Kein Cover gefunden!]</p>
-        <div class="other-cover-image"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <div class="other-cover-image">
-          <img src="{string($cover-image-url)}" alt="Cover"/>
-        </div>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
-  <xsl:template name="short-description">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:apply-templates select="current()/info_body"/>
-  </xsl:template>
-  
-  <xsl:template name="long-description">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:apply-templates select="current()/info_additional"/>
-  </xsl:template>
-  
-  <xsl:template name="isbn">
-    <xsl:param name="_content" as="item()*"/>
-    <p class="isbn">
-      <xsl:value-of select="$_content"/>
-      <xsl:apply-templates select="current()/isbn_13"/>
-    </p>  
-  </xsl:template>
-  
-  <xsl:template match="isbn_13">
-    <span class="isbn">
-      <xsl:value-of select="."/>
-    </span>  
-  </xsl:template>
   
   <xsl:template name="keywords">
     <xsl:param name="_content" as="item()*"/>
@@ -459,13 +161,7 @@
       </span>
    </xsl:template>
   
-  <xsl:template name="weburl-other-title">
-    <xsl:param name="_content" as="item()*"/>
-    <a href="http://www.unionsverlag.com/info/title.asp?title_id={./title_id}">
-      <xsl:value-of select="$_content"/>
-    </a>
-  </xsl:template>
-  
+
   <xsl:template name="toc">
     <xsl:param name="_content"/>
     <xsl:param name="depth" tunnel="yes"/>
@@ -577,84 +273,14 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template name="book-quotes-front">
-    <xsl:param name="_content"/>
-    <xsl:variable name="quotes-front" select="xs:integer($max-quotes-front)" as="xs:integer"/>
-    <xsl:if test="((count($webtitle-quotes) ge 1) or (count($mastertitle-quotes) ge 1)) and not(matches($_content, '^\s*$'))">
-      <xsl:call-template name="_heading">
-        <xsl:with-param name="content" select="$_content"/>
-        <xsl:with-param name="class" select="'quotes'"/>
-        <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-      </xsl:call-template>
-    </xsl:if>
-    <xsl:apply-templates select="if ($webtitle-quotes) then $webtitle-quotes[position() = (1 to $quotes-front)] 
-      else $mastertitle-quotes[position() = (1 to $quotes-front)]" mode="#current"/>
-  </xsl:template>
 
-  <xsl:template name="editions">
-    <xsl:param name="_content"/>
-    <xsl:param name="binding" tunnel="yes"/>
-    <xsl:param name="first_edition" tunnel="yes"/>
-    <xsl:param name="isbn" tunnel="yes"/>
-    
-    <xsl:variable name="available-editions" as="element(title_record)*">
-      <xsl:sequence select="$editions[availability_id = $metadata/*/availability_dump/availability_record
-      [xs:integer(availability_code) gt 0]/availability_id]"/>
-    </xsl:variable>
-    <xsl:if test="$available-editions">
-         <p class="editions">Dieses Buch ist auch erschienen als: </p>
-        <ul class="no-margin">
-          <xsl:for-each select="$available-editions/edition_type_id">
-            <li>
-              <!-- Wo sind denn die Unterschiede zu Broschur/Taschenbuch -->
-              <xsl:value-of select="$metadata/*/edition_type_dump/edition_type_record[edition_type_id = current()]/edition_type"/>
-              <xsl:if test="not(matches($binding, '^\s*$'))">
-                <xsl:text>, </xsl:text>
-                <xsl:value-of select="concat(current()/../binding, '. ')"/>
-              </xsl:if>
-              <xsl:if test="not(matches($first_edition, '^\s*$'))">
-                <xsl:value-of select="$first_edition"/>
-                <xsl:value-of select="replace(current()/../first_edition, '^(\d{4})-.*', '$1')"/>
-                <xsl:value-of select="'. '"/>
-              </xsl:if>             
-              <xsl:if test="not(matches($isbn, '^\s*$'))">
-                <xsl:value-of select="$isbn"/>
-                <xsl:value-of select="current()/../isbn_13"/>
-              </xsl:if>             
-            </li>
-          </xsl:for-each>
-        </ul>
-    </xsl:if>
 
-  </xsl:template>
-
-  <xsl:template name="book-quotes-back">
-    <xsl:param name="_content"/>
-    <xsl:variable name="first-quote-back" select="xs:integer($max-quotes-front) + 1" as="xs:integer?"/>
-    <xsl:if test="((count($webtitle-quotes) ge $first-quote-back) or (count($mastertitle-quotes) ge $first-quote-back)) and not(matches($_content, '^\s*$'))">
-      <xsl:apply-templates select="$_content[matches(*[1]/local-name(), '^h\d')]">
-        <xsl:with-param name="class" select="'quotes'"/>
-      </xsl:apply-templates>
-    </xsl:if>
-
-    <xsl:apply-templates select="if ($webtitle-quotes) then $webtitle-quotes[position() = ($first-quote-back to xs:integer($max-quotes))] 
-                                 else $mastertitle-quotes[position() = ($first-quote-back to xs:integer($max-quotes))]" mode="#current"/>
-  </xsl:template>
-  
+<!--  
   <xsl:variable name="quote-random" as="xs:integer*">
     <xsl:sequence select="xs:integer(format-time(current-time(), '[s01]'))*6 mod
       xs:integer($max-quotes-author) + 1"></xsl:sequence>
-  </xsl:variable>  
+  </xsl:variable>  -->
   
-  <xsl:template name="random-author-quote">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:variable name="author-quotes" as="element(quote_record)*">
-      <xsl:perform-sort select="$metadata/*/quote_dump/quote_record[xs:string(pers_id) = xs:string(current()/pers_id)][position() = (1 to xs:integer($max-quotes-author))]">
-        <xsl:sort select="number(sort)"/>
-      </xsl:perform-sort>
-    </xsl:variable> 
-    <xsl:apply-templates select="$author-quotes[position() = $quote-random]" mode="#current"/>    
-  </xsl:template>
     
   <xsl:template match="info_body | impress">
     <xsl:choose>
@@ -730,24 +356,6 @@
     </p>
     <xsl:apply-templates select="following-sibling::info_body" mode="#current"/>
   </xsl:template>
-
-  <xsl:template name="additional-content-iteration">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:call-template name="_heading">
-      <xsl:with-param name="content" select="$_content"/>
-      <xsl:with-param name="class" select="'additional-content'"/>
-      <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-    </xsl:call-template>
-    <xsl:variable name="extras" select="$metadata/*/doc_dump/doc_record[pers_id = $metadata/*/role_dump/role_record[title_id = ($webtitle, $mastertitle)[1]/title_id]/pers_id]" as="element(doc_record)*"/>
-    <xsl:for-each select="$extras">
-      <a rel="transclude" href="#additional-content-iteration-item" class="block"/>
-    </xsl:for-each>
-  </xsl:template>
-  
-  <xsl:template name="additional-content-title">
-    <xsl:param name="_content" as="item()*"/>
-    <xsl:apply-templates select="title" mode="extras"/>
-  </xsl:template>
   
   <xsl:template name="additional-content">
     <xsl:param name="_content"/>
@@ -801,35 +409,6 @@
       <xsl:attribute name="class" select="'autor-zitat'"/>
       <xsl:sequence select="string-join((../quote_author_first_name, .), ' ')"/>
     </xsl:element>
-  </xsl:template>
-
-  <xsl:template name="additional-info">
-    <xsl:param name="_content"/>
-    <xsl:variable name="info" select="($webtitle, $mastertitle)[1]/info_additional[not(matches(., '^\s*$'))]" as="element(info_additional)?"/>
-    <div class="additional-info">
-    <xsl:if test="not(matches($info, '^\s*$'))">
-      <xsl:if test="not(matches($_content, '^\s*$'))">
-        <xsl:call-template name="_heading">
-          <xsl:with-param name="content" select="$_content"/>
-          <xsl:with-param name="class" select="'additional-info'"/>
-          <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-        </xsl:call-template>
-      </xsl:if>
-
-        <xsl:choose>
-          <xsl:when test="$info[*:p]">
-            <xsl:apply-templates select="$info"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <p class="noindent">
-              <xsl:apply-templates select="$info"/>
-            </p>
-          </xsl:otherwise>
-        </xsl:choose>
- 
-      <xsl:apply-templates select="$info/following-sibling::info_additional"/>
-    </xsl:if>
-    </div>
   </xsl:template>
 
   <xsl:template match="info_additional[not(matches(., '^\s*$'))]">

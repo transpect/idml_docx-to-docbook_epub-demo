@@ -15,49 +15,20 @@
     <div id="book">
       <!-- Inputs in this element are globally available -->
       <!-- The number of quotes is needed in front and back templates. Therefore it has to be global. -->
-      <input title="max-quotes" value="10" />
-      <input title="max-quotes-front" value="5" />
-      <input title="max-quotes-author" value="5" />
-      <input title="max-other-books-by-author" value="5" />
-     
-      
-      <input title="role-author-m-s" value="den Autor" />
-      <input title="role-author-m-p" value="die Autoren" />
-      <input title="role-author-f-s" value="die Autorin" />
-      <input title="role-author-f-p" value="die Autorinnen" />
-      <input title="role-author-fm-p" value="die AutorInnen" /><!-- auf 'die Autoren' ändern, falls generisches Maskulinum gewünscht -->
-      <input title="role-editor-m-s" value="den Herausgeber" />
-      <input title="role-editor-m-p" value="die Herausgeber" />
-      <input title="role-editor-f-s" value="die Herausgeberin" />
-      <input title="role-editor-f-p" value="die Herausgeberinnen" />
-      <input title="role-editor-fm-p" value="die HerausgeberInnen" />
-      <input title="role-translator-m-s" value="den Übersetzer" />
-      <input title="role-translator-m-p" value="die Übersetzer" />
-      <input title="role-translator-f-s" value="die Übersetzerin" />
-      <input title="role-translator-f-p" value="die Übersetzerinnen" />
-      <input title="role-translator-fm-p" value="die ÜbersetzerInnen" />
-      <input title="role-illustrator-m-s" value="den Illustrator" />
-      <input title="role-illustrator-m-p" value="die Illustratoren" />
-      <input title="role-illustrator-f-s" value="die Illustratorin" />
-      <input title="role-illustrator-f-p" value="die Illustratorinnen" />
-      <input title="role-illustrator-fm-p" value="die IllustratorInnen" />
-      <a rel="transclude" href="#cover" class="block">Cover</a>      
-      <a rel="transclude" href="#frontmatter" class="block">Frontmatter</a>
+   
+    
+<!--
+      <a rel="transclude" href="#frontmatter" class="block">Frontmatter</a>-->
       <!-- Body -->
       <a rel="calc" name="title"></a>
       <a rel="calc" name="htmlinput-body"></a>
-      <a rel="transclude" href="#backmatter" class="block">Backmatter</a>
+      <!--<a rel="transclude" href="#backmatter" class="block">Backmatter</a>-->
     </div>
 
 
-
+<!--
     <h2 class="documentation">Frontmatter-Template</h2>
 
-    <div id="cover">
-      <div id="epub-cover-image-container">
-        <a rel="calc" name="cover"/>
-      </div> 
-    </div>
     
     <div id="frontmatter">
       <div class="frontmatter">
@@ -76,48 +47,38 @@
 
     <div id="title-page">
       <div class="title">
-        <!--        Der Titel des generierten TOC (NCX). Wenn er von den Daten aus der Datenbank abweichen soll, kann ein entsprechende Titel übergeben werden.-->
+        <!-\-        Der Titel des generierten TOC (NCX). Wenn er von den Daten aus der Datenbank abweichen soll, kann ein entsprechende Titel übergeben werden.-\->
         <a rel="calc" name="title-page"><h1 title="Titelei" class="split"/></a>
       </div>
-    </div>
+    </div>-->
 
 
 
-    <h3 class="documentation">Impressum</h3>
+    <!-- <h3 class="documentation">Impressum</h3> -->
 
-    <div id="impress">
-      <div class="impress">
+    <!-- <div id="impress"> -->
+    <!--   <div class="impress"> -->
         
-        <a rel="calc" name="impress">
-          <h1 class="split">Impressum</h1>
-        </a>
-      </div>
-    </div>
+    <!--     <a rel="calc" name="impress"> -->
+    <!--       <h1 class="split">Impressum</h1> -->
+    <!--     </a> -->
+    <!--   </div> -->
+    <!-- </div> -->
 
 
-    <h3 class="documentation">Inhaltsverzeichnis</h3>
+<!--    <h3 class="documentation">Inhaltsverzeichnis</h3>
 
     <div id="toc">
-      <div class="toc">
+      <div class="toc">-->
         <!-- Die übergebene Überschrift überschreibt die vorher vorhandene Überschrift, der Input depth entsorgt reguliert 
           die Hierarchietiefe. Bei depth = 3, werden alle Überschriften ab h4 nicht mehr im TOC angezeigt -->
-        <a rel="calc" name="toc">
+<!--        <a rel="calc" name="toc">
           <h1 class="split">Inhaltsverzeichnis</h1>
           <input title="depth" value="5"/>
         </a>
       </div>
     </div>
 
-    <h3 class="documentation">Zusatzinhalte</h3>
-
-    <div id="additional-content">
-      <a rel="calc" name="additional-content-iteration" class="block"/>
-    </div>    
-    
-    <div id="additional-content-iteration-item">
-        <h2 class="additional-content-title split"><a rel="calc" name="additional-content-title"/></h2>
-        <a rel="calc" name="additional-content" class="block"/>
-    </div>
     
     <h3 class="documentation">Über das Buch</h3>
 
@@ -126,141 +87,10 @@
         <a rel="calc" name="about-book-text">
           <h1 class="split">Über das Buch</h1>
         </a>
-        <p class="noindent-top">Mehr zu diesem Buch auf der <a rel="calc" name="weburl-title">Webseite</a> des Unionsverlags.</p>
-      </div>
-      <a rel="transclude" href="#editions" class="block">Buchausgaben</a>
-      <div class="book-quotes-front">
-        <a rel="calc" name="book-quotes-front"><h2>Stimmen zum Buch</h2></a>
-      </div>
-      <a rel="transclude" href="#bios" class="block">Kurzbiografie der Beteiligten</a>
-    </div>
-
-    <h4 class="documentation">Weitere Ausgaben des Buches</h4>
-    
-    <div id="editions">
-      <div class="editions">
-        <a rel="calc" name="editions">
-          <p class="noindent-top">Dieses Buch ist auch erschienen als:</p>
-          <!-- Informationen, die dort erscheinen. Eventuell ergänzen um Preis, Seiten, etc. und die Literale dazu zugänglich machen -->
-          <input title="first_edition" value="Erstausgabe erschienen "/>
-          <input title="binding" value="-"/>
-          <input title="isbn" value="ISBN: "/>
-        </a>
-        <p class="noindent-top">Überblick der lieferbaren Ausgaben <a rel="calc" name="weburl-title">auf der Webseite des Unionsverlags.</a></p>
-      </div>
-    </div>
-    
-    
-    <h4 class="documentation">Kurzinfos zu den Beteiligten</h4>
-    
-    <div id="bios">
-      <a rel="calc" name="bio-iteration">
-        <h2 class="split">Über <a rel="calc" name="role"/></h2>
-        <input title="role-name" value="Herausgeber"/>
-      </a>
-      <a rel="calc" name="bio-iteration">
-        <h2 class="split">Über <a rel="calc" name="role"/></h2>
-        <input title="role-name" value="Autor"/>
-      </a>
-      <a rel="calc" name="bio-iteration">
-        <h2 class="split">Über <a rel="calc" name="role"></a></h2>
-        <input title="role-name" value="Übersetzung"/>
-      </a>
-      <a rel="calc" name="bio-iteration">
-        <h2 class="split">Über <a rel="calc" name="role"/></h2>
-        <input title="role-name" value="Illustration"/>
-      </a>
-    </div>
-    
-    <div id="bio-iteration-item">
-      <div class="bio">
-        <a rel="calc" name="author-pic" class="block"></a>
-        <a rel="calc" name="short-bio" class="block"/>
-        <a rel="calc" name="random-author-quote"/>
-        <p class="noindent-top">Mehr zu <a rel="calc" name="weburl-person"/> auf der Webseite des Unionsverlags.</p>
-      </div>
-    </div>    
-
-   <h2 class="documentation">Backmatter-Template</h2>
-
-    <div id="backmatter">
-      <div class="backmatter">
-        <h1 class="split">Mehr über dieses Buch</h1>
-
-        <a rel="calc" name="additional-info"><h2>Ausführlichere Informationen zum Buch</h2></a>
-        <a rel="calc" name="book-quotes-back"><h2 class="nosplit">Weitere Stimmen zum Buch</h2></a>
-        <a rel="transclude" href="#author-bios-long" class="block"/>
-        <a rel="transclude" href="#other-books-by-author"/>
-        <a rel="transclude" href="#events" class="block">Events</a>
       </div>
     </div>
 
-
-
-    <h4 class="documentation">Ausführlichere Informationen zu den Beteiligten</h4>
-    
-    <div id="author-bios-long">
-      <a rel="calc" name="author-bio-iteration-long" class="block"><h3>Mehr über die Beteiligten am Buch</h3></a>
-    </div>    
-    
-    <div id="author-bio-iteration-long-item">
-      <div class="long-bio">
-        <a rel="calc" name="author-bio-long" class="block"><h1 class="split">Mehr über <a rel="calc" name="person-name"/></h1></a>
-        <a rel="calc" name="author-quotes" class="block"/>
-        <p class="noindent-top">Mehr zu <a rel="calc" name="weburl-person"/> auf der Webseite des Unionsverlags.</p>
-      </div>
-    </div>
-    
-    <!-- person-name-other is static -->
-    <div id="other-books-by-author">
-      <a rel="calc" name="other-books-iteration" class="block">
-        <h1 class="other-books split">Andere Bücher, die Sie interessieren könnten</h1>
-      </a>
-    </div>  
-
-    <div id="heading-other-books">
-      <h2 class="other-books">Weitere Bücher von <a rel="calc" name="person-name"/></h2>
-      <a rel="transclude" href="#reading-atlas" class="block"/>
-    </div>  
-
-    <div id="other-books-iteration-item">
-      <div class="other-book">
-        <a rel="calc" name="other-books-title" class="block"/>
-        <a rel="calc" name="other-book-cover" class="block"/> 
-        <a rel="calc" name="short-description" class="block"/>
-        <a rel="calc" name="long-description" class="block"/>
-        <a rel="calc" name="isbn">ISBN: </a>
-        <a rel="calc" name="keywords">Schlagwörter zum Buch: </a>
-        <p class="title-link">Mehr zu <a rel="calc" name="weburl-other-title">diesem Buch</a> auf der Webseite des Unionsverlags.</p>
-      </div>
-    </div>    
-
-    
-    <!--    <h3 class="documentation">Schauplätze</h3>
-    
-    <div class="uvBookPlaces">
-      <h3 class="prelim">Die Schauplätze</h3>
-      <h4 class="prelim">Die Schauplätze des Buches</h4>
-      <ul>
-        <li>### Aus den geo-Tags des Buches die Schauplätze sammeln</li>
-      </ul>
-      
-      <h4 class="prelim">Die Schauplätze der Autoren</h4>
-      <ul>
-        <li>### Aus den geo-Tags der Personen (Autor/Übersetzer/etc.) die Schauplätze sammeln</li>
-      </ul>
-    </div>-->
-
-    <h3 class="documentation">Leseatlas <a rel="calc" name="person-name"/></h3>
-
-    <div id="reading-atlas">
-      <div class="reading-atlas">
-        <a rel="calc" name="reading-atlas">
-          <h2 class="split">Lese-Atlas</h2>
-          <p class="noindent">xxx</p>
-        </a>
-      </div>
-    </div>
+   
     
     
     <h3 class="documentation">Events</h3>
@@ -271,7 +101,7 @@
       <p class="noindent">Suchen Sie Unterlagen zur Diskussion oder zum Studium?</p>
       <p class="noindent">Materialien finden Sie auf den <a rel="calc" name="weburl-title">Webseiten des Unionsverlags</a>.</p>
       <p class="noindent">Möchten Sie eine Lesung oder Veranstaltung mit oder zu … veranstalten? Wir helfen Ihnen gerne weiter. Schreiben Sie an <a href="mailto:ebook@unionsverlag.ch">ebook@unionsverlag.ch</a></p>
-    </div>
+    </div>-->
 
 
   </body>
