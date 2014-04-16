@@ -63,9 +63,14 @@
     <p:pipe port="result" step="hub2tei"/>
   </p:output>
 
+  <p:output port="vars">
+    <p:pipe step="vars" port="result"/>
+  </p:output>
+
   <p:output port="result" primary="true">
     <p:pipe port="result" step="epub-convert"/>
   </p:output>
+  
   
   
   <p:option name="idmlfile" required="true"/>
@@ -398,7 +403,6 @@
   <p:in-scope-names name="vars"/>
   
   
-  
   <p:template name="epub-config">
     <p:input port="template">
       <p:inline>
@@ -425,6 +429,11 @@
       <p:pipe port="result" step="vars"/>
     </p:input>
   </p:template>
+  
+  <letex:store-debug pipeline-step="idml2epub_tei_onix/epub-config">
+    <p:with-option name="active" select="$debug" />
+    <p:with-option name="base-uri" select="$debug-dir-uri" />
+  </letex:store-debug>
   
   <p:uuid match="//packageid/text()" name="uuid"/>
   

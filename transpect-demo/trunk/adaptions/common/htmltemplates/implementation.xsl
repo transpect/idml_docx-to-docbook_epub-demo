@@ -311,18 +311,6 @@
   </xsl:template>
 
 
-  <xsl:template match="quote_record">
-    <div class="quote">
-      <xsl:apply-templates select="description" mode="#current"/>
-      <p class="byline">
-        <xsl:value-of select="string-join((
-          string-join((quote_author_first_name, quote_author_last_name), ' '),
-          media_name, media_location, publication_date
-          )[not(matches(., '^\s*$'))], ', ')"/>
-      </p>
-    </div>
-  </xsl:template>
-
   <xsl:template match="description | bio">
     <xsl:choose>
       <xsl:when test="html:p">
@@ -343,7 +331,7 @@
     </xsl:copy>
   </xsl:template>
   
-  <xsl:template match="info_header">
+<!--  <xsl:template match="info_header">
     <p class="info-header">
       <xsl:choose>
         <xsl:when test="html:p">
@@ -355,9 +343,9 @@
       </xsl:choose>
     </p>
     <xsl:apply-templates select="following-sibling::info_body" mode="#current"/>
-  </xsl:template>
+  </xsl:template>-->
   
-  <xsl:template name="additional-content">
+<!--  <xsl:template name="additional-content">
     <xsl:param name="_content"/>
     <xsl:variable name="extras" select="$metadata/*/doc_dump/doc_record[pers_id = $metadata/*/role_dump/role_record[title_id = ($webtitle, $mastertitle)[1]/title_id]/pers_id]" as="element(doc_record)*"/>
     <xsl:if test="not(matches($extras, '^\s*$'))">
@@ -387,14 +375,14 @@
         </xsl:for-each>
      </div>     
     </xsl:if>
-  </xsl:template>
+  </xsl:template>-->
   
-  <xsl:template match="subtitle" mode="extras">
+<!--  <xsl:template match="subtitle" mode="extras">
     <xsl:element name="p">
       <xsl:attribute name="class" select="local-name()"/>
       <xsl:apply-templates mode="#current"/>
     </xsl:element>
-  </xsl:template>
+  </xsl:template>-->
   
   <xsl:template match="*:text">
     <xsl:apply-templates select="node()" mode="#current"/>
@@ -404,13 +392,6 @@
       <xsl:apply-templates mode="#current"/>
   </xsl:template>
   
-  <xsl:template match="quote_author_last_name" mode="extras">
-    <xsl:element name="p">
-      <xsl:attribute name="class" select="'autor-zitat'"/>
-      <xsl:sequence select="string-join((../quote_author_first_name, .), ' ')"/>
-    </xsl:element>
-  </xsl:template>
-
   <xsl:template match="info_additional[not(matches(., '^\s*$'))]">
     <!-- eventuell leere Absaetze entsorgen -->
     <xsl:apply-templates select="*"/>
@@ -426,7 +407,7 @@
     </h1>
   </xsl:template>
 
- <xsl:template match="*[name() = ('subtitle', 'subtitle_2', 'translation_title')][matches(., '^\s*$')]"/>
+<!-- <xsl:template match="*[name() = ('subtitle', 'subtitle_2', 'translation_title')][matches(., '^\s*$')]"/>
 
   <xsl:template match="subtitle[matches(., '\S')]">
     <div class="subtitles">
@@ -441,7 +422,7 @@
     <p class="{name()}">
       <xsl:apply-templates mode="#current"/>
     </p>
-  </xsl:template>
+  </xsl:template>-->
 
   <xsl:template match="*:br/@clear" mode="#all"/>
     
