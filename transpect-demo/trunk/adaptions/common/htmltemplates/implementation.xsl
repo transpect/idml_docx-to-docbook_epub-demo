@@ -129,11 +129,11 @@
 
 
 
-  <xsl:function name="uv:contribs-for-role">
+<!--  <xsl:function name="uv:contribs-for-role">
     <xsl:param name="all-contribs" as="element(person_record)*"/>
     <xsl:param name="role-name" as="xs:string"/>
     <xsl:sequence select="$all-contribs[matches(role_record/role_name, $role-name)]"/>
-  </xsl:function>
+  </xsl:function>-->
 
   
   <xsl:template name="keywords">
