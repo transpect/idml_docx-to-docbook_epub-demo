@@ -35,6 +35,7 @@ ZIP         = $(call out_path,$(IN_FILE_COPY),,zip)
 DEBUG_DIR   = $(call uri,$(OUT_DIR)/debug)
 PROGRESSDIR = $(DEBUG_DIR)/status
 ACTIONLOG  = $(PROGRESSDIR)/action.log
+VARS       = $(call out_path,$(IN_FILE_COPY),vars,xml)
 DEVNULL     = $(call win_path,/dev/null)
 
 export
@@ -50,7 +51,7 @@ ifeq ($(IN_FILE),)
 endif
 
 mkdirs:
-	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),tei,xml) $(call out_path,$(IN_FILE_COPY),epub,html))
+	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),tei,xml) $(call out_path,$(IN_FILE_COPY),epub,html) $(call out_path,$(IN_FILE_COPY),vars,xml))
 
 transpect-prerequisite:
 	-mkdir -p -v $(OUT_DIR)
@@ -151,6 +152,7 @@ idml2epub_tei_onix: check_input transpect-prerequisite mkdirs
 		-o html=$(HTML) \
 		-o htmlreport=$(HTMLREPORT) \
 		-o schematron=$(SCHREPORT) \
+		-o vars=$(VARS) \
 		-o result=$(DEVNULL) \
 		$(call uri,adaptions/common/xpl/idml2epub_tei_onix.xpl) \
 		idmlfile=$(call win_path,$(IN_FILE_COPY)) \
