@@ -10,6 +10,7 @@
   </head>
   <body>
 
+
     <h2 class="documentation">Haupt-Template</h2>
 
     <div id="book">
@@ -20,14 +21,62 @@
 <!--
       <a rel="transclude" href="#frontmatter" class="block">Frontmatter</a>-->
       <!-- Body -->
-      <a rel="calc" name="title"></a>
       <a rel="calc" name="htmlinput-body"></a>
+<!--      <a rel="calc" name="title"><h1>Titel</h1></a>-->
+      <a rel="transclude" href="#metadaten"></a>
+      <a rel="transclude" href="#infos"></a>
       <!--<a rel="transclude" href="#backmatter" class="block">Backmatter</a>-->
+    </div>
+    
+
+    <h2 class="documentation">Metadaten</h2>
+
+    <div id="metadaten">
+      <h1>Metadaten</h1>
+        <p class="noindent">
+          <a rel="calc" name="title">Titel:</a>
+          <a rel="calc" name="author">Autor:</a>
+          <a rel="calc" name="publisher">Herausgeber:</a>
+          <a rel="calc" name="year">Erscheinungsjahr:</a>
+          <a rel="calc" name="keywords">Keywords:</a>
+        </p>
+    </div>
+    
+
+
+    <h3 class="documentation">Inhaltsverzeichnis</h3>
+    
+    <div id="toc">
+      <div class="toc">
+        <!-- Die übergebene Überschrift überschreibt die vorher vorhandene Überschrift, der Input depth entsorgt reguliert 
+          die Hierarchietiefe. Bei depth = 3, werden alle Überschriften ab h4 nicht mehr im TOC angezeigt -->
+        <a rel="calc" name="toc">
+          <h1 class="split">Inhaltsverzeichnis</h1>
+          <input title="depth" value="5"/>
+        </a>
+      </div>
+    </div>
+
+
+    <h2 class="documentation">Informationen</h2>
+    
+    <div id="infos">
+      <h1>Mehr Informationen</h1>
+      <p class="noindent">Weitere Informationen zu le-tex transpect finden Sie auf der Website von <a rel="calc" name="weburl">le-tex transpect</a>.</p>
+      <p class="noindent">Ein Demo-Projekt können Sie auf der Website <a rel="calc" name="weburl-demo"></a> einsehen bzw. unter derselben URL auschecken.<br/> 
+        Das Demoprojekt enthält folgende Konvertierungen:</p>
+      <ul>
+        <li>DOCX &#8594; IDML</li>
+        <li>DOCX &#8594; EPUB</li>
+        <li>IDML &#8594; EPUB über TEI</li>
+        <li>IDML &#8594; EPUB über HUB mit Verarbeitung von ONIX-Metadaten</li>
+      </ul>
+      <p class="noindent">Eine Konfigurationsanleitung (in Englisch) finden Sie auf der Website <a rel="calc" name="weburl-manual"></a>.</p>
     </div>
 
 
 
-    <h2 class="documentation">Frontmatter-Template</h2>
+<!--    <h2 class="documentation">Frontmatter-Template</h2>
 
     
     <div id="frontmatter">
@@ -37,20 +86,20 @@
         <a rel="transclude" href="#impress" class="block">Das Impressum</a>
         <a rel="transclude" href="#toc" class="block">Das Inhaltsverzeichnis</a>
         <a rel="transclude" href="#about-book" class="block">Über das Buch</a>
-<!--        <a rel="transclude" href="#additional-content" class="block">Zusatzinhalte</a>-->
+<!-\-        <a rel="transclude" href="#additional-content" class="block">Zusatzinhalte</a>-\->
       </div>
-    </div>
+    </div>-->
 
 
 
-    <h3 class="documentation">Titelseite</h3>
+ <!--   <h3 class="documentation">Titelseite</h3>
 
     <div id="title-page">
       <div class="title">
-        <!--        Der Titel des generierten TOC (NCX). Wenn er von den Daten aus der Datenbank abweichen soll, kann ein entsprechende Titel übergeben werden.-->
+        <!-\-        Der Titel des generierten TOC (NCX). Wenn er von den Daten aus der Datenbank abweichen soll, kann ein entsprechende Titel übergeben werden.-\->
         <a rel="calc" name="title-page"><h1 title="Titelei" class="split"/></a>
       </div>
-    </div>
+    </div>-->
 
 
 
@@ -66,18 +115,6 @@
     <!-- </div> -->
 
 
-    <h3 class="documentation">Inhaltsverzeichnis</h3>
-
-    <div id="toc">
-      <div class="toc">
-        <!-- Die übergebene Überschrift überschreibt die vorher vorhandene Überschrift, der Input depth entsorgt reguliert 
-          die Hierarchietiefe. Bei depth = 3, werden alle Überschriften ab h4 nicht mehr im TOC angezeigt -->
-        <a rel="calc" name="toc">
-          <h1 class="split">Inhaltsverzeichnis</h1>
-          <input title="depth" value="5"/>
-        </a>
-      </div>
-    </div>
 
     
     <h3 class="documentation">Über das Buch</h3>

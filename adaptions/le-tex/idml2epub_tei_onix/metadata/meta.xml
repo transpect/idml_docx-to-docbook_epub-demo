@@ -7,6 +7,23 @@
     <m283>m.luening@mvb-online.de</m283>
     <m182>20140404</m182>
   </header>
+  <product>  
+    <title>
+      <b202>01</b202>
+      <b203>Avant-Pop</b203>
+      <b029>Von Susan Sontag über Prada und Sonic Youth bis Lady Gaga und zurück</b029>
+    </title>
+  </product>  
+
+  
+</ONIXmessage>
+  
+  <!--<header>
+    <m174>VLB - Verzeichnis Lieferbarer Bücher</m174>
+    <m175>Martin Lüning, 069.29802.447</m175>
+    <m283>m.luening@mvb-online.de</m283>
+    <m182>20140404</m182>
+  </header>
   <product datestamp="20140404">
     <a001>3926587</a001>
     <a002>03</a002>
@@ -379,4 +396,4 @@
       </price>
     </supplydetail>
   </product>
-</ONIXmessage>
+</ONIXmessage>-->

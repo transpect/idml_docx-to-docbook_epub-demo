@@ -63,9 +63,9 @@
     <p:pipe port="result" step="hub2tei"/>
   </p:output>
 
-  <p:output port="vars">
+<!--  <p:output port="vars">
     <p:pipe step="vars" port="result"/>
-  </p:output>
+  </p:output>-->
 
   <p:output port="result" primary="true">
     <p:pipe port="result" step="epub-convert"/>
@@ -428,6 +428,9 @@
     <p:input port="parameters">
       <p:pipe port="result" step="vars"/>
     </p:input>
+<!--    <p:input port="parameters">
+      <p:pipe port="result" step="paths"/>
+    </p:input>-->
   </p:template>
   
   <letex:store-debug pipeline-step="idml2epub_tei_onix/epub-config">
