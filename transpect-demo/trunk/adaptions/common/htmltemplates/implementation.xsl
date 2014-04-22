@@ -101,6 +101,8 @@
       <xsl:apply-templates select="$metadata//weburl-demo" mode="#current" />
     </a>
   </xsl:template>
+  
+  <xsl:template match="*:br/@clear" mode="#all"/>
     
   <xsl:template match="@* | *">
     <xsl:param name="class" as="xs:string?"/>
