@@ -13,7 +13,7 @@
   version="1.0">
 
 
-  
+ 
   <p:input port="conf" primary="true">
     <p:document href="http://customers.le-tex.de/generic/book-conversion/conf/conf.xml"/>
   </p:input>
@@ -29,24 +29,11 @@
 
   <p:output port="hubevolved" primary="false">
     <p:pipe port="result" step="delete-srcpath-inhierarchized-hub"/>
-    <!--<p:pipe port="result" step="evolve-hub-dyn"/>-->
   </p:output>
   <p:serialization port="hubevolved" omit-xml-declaration="false"/>
 
-
-  <!-- <p:output port="hub" primary="false"> -->
-  <!--   <p:pipe port="result" step="delete-srcpath-inhierarchized-hub"/> -->
-  <!-- </p:output> -->
-  <!-- <p:serialization port="hub" omit-xml-declaration="false"/> -->
-
-  <!-- <p:output port="flat-hub" primary="false"> -->
-  <!--   <p:pipe port="result" step="idml2xml"/> -->
-  <!-- </p:output> -->
-
-
   <p:output port="html" primary="false">
     <p:pipe port="result" step="remove-srcpath-from-html"/>
-    <!--<p:pipe port="result" step="hub2htm"/>-->
   </p:output>
 
   <p:output port="schematron" primary="false">
@@ -56,7 +43,6 @@
   <p:output port="htmlreport" primary="false">
     <p:pipe port="result" step="htmlreport"/>
   </p:output>
-
 
   <p:output port="result" primary="true">
     <p:pipe port="result" step="epub-convert"/>
@@ -85,7 +71,6 @@
   <p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/errorPI2svrl.xpl"/>
   <p:import href="http://transpect.le-tex.de/calabash-extensions/ltx-validate-with-rng/rng-validate-to-PI.xpl"/>
-  
   
   <p:import href="paths.xpl"/>
   <p:import href="epub.xpl"/>
@@ -133,7 +118,6 @@
   
   <p:sink/>
 
-  
   <bc:check-styles name="check-styles">
     <p:input port="source">
       <p:pipe port="result" step="evolve-hub-dyn"/>
@@ -152,7 +136,6 @@
     <p:with-option name="active" select="$check"/>
   </bc:check-styles>
 
-
   <bc:validate-with-schematron name="validate-business-rules">
     <p:input port="html-in">
       <p:empty/>
@@ -170,7 +153,6 @@
     <p:with-option name="active" select="$check"/>
   </bc:validate-with-schematron>
 
-
   <letex:validate-with-rng-PI name="rng2pi">
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
@@ -186,7 +168,6 @@
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </letex:store-debug>
-
 
   <transpect:errorPI2svrl name="errorPI2svrl" severity="error">
     <p:with-option name="debug" select="$debug"/>
@@ -219,9 +200,7 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </hub2htm:convert>
 
-
   <p:delete match="@srcpath" name="remove-srcpath-from-html"/> 
-
   
   <transpect:patch-svrl name="htmlreport">
     <p:input port="source">
@@ -247,7 +226,6 @@
     </p:input>
     <p:input port="source">
       <p:pipe port="result" step="remove-srcpath-from-html"/>
-<!--      <p:pipe port="result" step="hub2htm"/>-->
     </p:input>
     <p:input port="report-in">
       <p:pipe port="report" step="validate-business-rules"/>
@@ -255,8 +233,5 @@
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </transpect:epub>
-  
-  
-
-  
+   
 </p:declare-step>
