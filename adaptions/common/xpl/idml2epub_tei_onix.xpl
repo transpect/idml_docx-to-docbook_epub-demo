@@ -47,7 +47,6 @@
   <p:serialization port="hubevolved" omit-xml-declaration="false"/>
 
   <p:output port="html" primary="false">
-    <!-- <p:pipe port="result" step="tei2html"/> -->
     <p:pipe port="result" step="remove-srcpath-from-html"/>
   </p:output>
 
@@ -63,16 +62,10 @@
     <p:pipe port="result" step="hub2tei"/>
   </p:output>
 
-<!--  <p:output port="vars">
-    <p:pipe step="vars" port="result"/>
-  </p:output>-->
-
   <p:output port="result" primary="true">
     <p:pipe port="result" step="epub-convert"/>
   </p:output>
-  
-  
-  
+   
   <p:option name="idmlfile" required="true"/>
   <p:option name="hub-version" select="'1.1'"/>
   
@@ -104,8 +97,7 @@
  
   <p:import href="paths.xpl"/>
   <p:import href="epub.xpl"/>
-  
-     
+      
   <transpect:paths name="paths"> 
     <p:with-option name="pipeline" select="'idml2epub_tei_onix.xpl'"/> 
     <p:with-option name="publisher" select="$publisher"/> 
@@ -141,7 +133,6 @@
 
  <p:delete match="@srcpath" name="delete-srcpath-inhierarchized-hub"/>
 
-
   <p:sink/>
   
   <bc:empty-report name="create-empty-report">
@@ -149,8 +140,7 @@
   </bc:empty-report>
   
   <p:sink/>
-
-  
+ 
   <bc:check-styles name="check-styles">
     <p:input port="source">
       <p:pipe port="result" step="evolve-hub-dyn"/>
@@ -169,7 +159,6 @@
     <p:with-option name="active" select="$check"/>
   </bc:check-styles>
 
-
   <bc:validate-with-schematron name="validate-business-rules">
     <p:input port="html-in">
       <p:empty/>
@@ -187,7 +176,6 @@
     <p:with-option name="active" select="$check"/>
   </bc:validate-with-schematron>
 
-
   <letex:validate-with-rng-PI name="rng2pi">
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
@@ -204,7 +192,6 @@
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </letex:store-debug>
 
-
   <transpect:errorPI2svrl name="errorPI2svrl" severity="error">
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
@@ -212,8 +199,6 @@
       <p:pipe port="report" step="validate-business-rules"/>
     </p:input>
   </transpect:errorPI2svrl>
-  
-  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
   
   <hub2htm:convert name="hub2htm">
     <p:input port="source">
@@ -237,11 +222,9 @@
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </hub2htm:convert>
-  
-  
+   
   <p:delete match="@srcpath" name="remove-srcpath-from-html"/> 
-  
-  
+   
   <transpect:patch-svrl name="htmlreport">
     <p:input port="source">
       <p:pipe port="result" step="hub2htm"/>
@@ -259,10 +242,6 @@
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </transpect:patch-svrl>
-  
-  
-  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-  
 
   <hub2tei:hub2tei name="hub2tei">
     <p:input port="source">
@@ -273,7 +252,6 @@
     </p:input>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-    <!-- <p:with-option name="srcpaths" select="'yes'"/> -->
   </hub2tei:hub2tei>
 
   <tei2html:tei2html name="tei2html">
@@ -287,28 +265,6 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </tei2html:tei2html>
   
-<!--    <p:delete match="@srcpath" name="remove-srcpath-from-html"/>
-    
-  
-  <transpect:patch-svrl name="htmlreport">
-    <p:input port="source">
-      <p:pipe port="result" step="tei2html"/>
-    </p:input>
-    <p:input port="svrl">
-      <p:pipe step="errorPI2svrl" port="report"/>
-    </p:input>
-    <p:input port="params">
-      <p:pipe port="result" step="paths"/>
-    </p:input>
-    <p:with-option name="severity-default-name" select="'Warning'"/>
-    <p:with-option name="report-title" select="/c:param-set/c:param[@name eq 'work-basename']/@value">
-      <p:pipe port="result" step="paths"/>
-    </p:with-option>
-    <p:with-option name="debug" select="$debug"/>
-    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </transpect:patch-svrl>-->
-  
-
   <p:sink/>
   
   <p:load name="meta">
@@ -351,7 +307,6 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </html:generate-xsl-from-html-template>
   
-
   <p:sink/>
   
   <html:apply-generated-xsl name="apply-generated">
@@ -371,8 +326,6 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </html:apply-generated-xsl>
   
-
-  
   <p:add-attribute name="add-base-uri" match="/*" attribute-name="xml:base">
     <p:with-option name="attribute-value"
       select="replace(
@@ -384,7 +337,6 @@
       '(idml|xml|docx)$',
       'html'
       )">
-      <!-- <p:pipe port="result" step="params"/> -->
       <p:pipe port="result" step="paths"/>
     </p:with-option>
     <p:input port="source">
@@ -396,18 +348,13 @@
     <p:with-option name="active" select="$debug" />
     <p:with-option name="base-uri" select="$debug-dir-uri" />
   </letex:store-debug>
-  
-  
+   
   <p:sink/>
-  
-  <p:in-scope-names name="vars"/>
-  
-  
+ 
   <p:template name="epub-config">
     <p:input port="template">
       <p:inline>
         <epub-config>
-          <!--          <cover href="{resolve-uri('../images/cover.jpg', base-uri(/*))}"/>-->
           <opf>
             <packageid>placeholder</packageid>
             <metadata>
@@ -426,11 +373,8 @@
       <p:pipe step="add-base-uri" port="result"/>
     </p:input>
     <p:input port="parameters">
-      <p:pipe port="result" step="vars"/>
-    </p:input>
-<!--    <p:input port="parameters">
       <p:pipe port="result" step="paths"/>
-    </p:input>-->
+    </p:input>
   </p:template>
   
   <letex:store-debug pipeline-step="idml2epub_tei_onix/epub-config">
@@ -439,16 +383,14 @@
   </letex:store-debug>
   
   <p:uuid match="//packageid/text()" name="uuid"/>
-  
-  
+   
   <letex:store-debug pipeline-step="idml2epub_tei_onix/meta">
     <p:with-option name="active" select="$debug" />
     <p:with-option name="base-uri" select="$debug-dir-uri" />
   </letex:store-debug>
   
   <p:sink/>
-  
-  
+   
   <bc:load-cascaded name="load-epub-heading-conf" filename="epubtools/heading-conf.xml">
     <p:input port="paths">
       <p:pipe port="result" step="paths"/>
@@ -458,17 +400,7 @@
   </bc:load-cascaded>
   
   <p:sink/>
-  
-<!--  <p:delete match="/html:html/html:body/html:div[@class eq 'epub-cover-image-container']" name="delete-prelim-cover-div">
-    <p:input port="source">
-      <p:pipe port="result" step="add-base-uri"/>
-    </p:input>
-  </p:delete>
-  
-  <p:sink/>
-  -->
-  
-
+ 
   <epub:convert name="epub-convert">
     <p:input port="conf">
       <p:pipe port="result" step="load-epub-heading-conf"/>
@@ -480,21 +412,12 @@
       <p:pipe port="result" step="uuid"/>
     </p:input>
     <p:input port="report-in">
-<!--      <p:pipe port="report" step="validate-business-rules"/>-->
       <p:pipe port="result" step="create-empty-report"/>
     </p:input>
-<!--    <p:input port="report-in">
-      <p:pipe step="tei2epub" port="report-in"/>
-    </p:input>-->
     <p:with-option name="terminate-on-error" select="'no'"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </epub:convert>
   
-
-  
-  
-
-
 </p:declare-step>
 
