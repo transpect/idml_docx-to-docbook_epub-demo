@@ -12,16 +12,9 @@
   version="2.0">
 
   <!--<xsl:import href="http://transpect.le-tex.de/adaptions/common/evolve-hub/driver.xsl"/>-->
-  <!--<xsl:import href="https://subversion.le-tex.de/common/transpect-demo/trunk/adaptions/common/evolve-hub/"/>-->
+  <xsl:import href="https://subversion.le-tex.de/common/transpect-demo/trunk/adaptions/common/evolve-hub/"/>
   
-  <xsl:template match="phrase[@condition='storytitle']"/>
-    
-  
-  <xsl:template match="sidebar">
-    <!--        <xsl:value-of select="."/>-->
-    <xsl:text>,</xsl:text>
-    
-  </xsl:template>
+ 
 
 
 
