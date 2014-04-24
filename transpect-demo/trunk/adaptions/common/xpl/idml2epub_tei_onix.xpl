@@ -268,7 +268,7 @@
   <p:sink/>
   
   <p:load name="meta">
-    <p:with-option name="href" select="concat(/c:param-set/c:param[@name eq 'publisher-path']/@value, 'idml2epub_tei_onix/metadata/meta-unionsverlag.xml')">
+    <p:with-option name="href" select="concat(/c:param-set/c:param[@name eq 'publisher-path']/@value, 'idml2epub_tei_onix/metadata/meta.xml')">
       <p:pipe port="result" step="paths"/>
     </p:with-option>
   </p:load>
