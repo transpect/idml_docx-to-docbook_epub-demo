@@ -26,7 +26,7 @@
   <!-- title of the html document-->
   <xsl:template name="htmltitle" as="element(html:title)">
     <title>
-      <xsl:value-of select="$metadata//title"/>
+      <xsl:value-of select="$htmlinput//title"/> 
     </title>
   </xsl:template>
    
@@ -39,7 +39,7 @@
     <xsl:param name="_content" as="item()*"/>
     <p class="author">
       <xsl:value-of select="$_content"/>
-      <xsl:apply-templates select="$metadata//author" mode="#current" />
+      <xsl:apply-templates select="$metadata//descriptivedetail/contributor/b036" mode="#current" />
     </p>  
   </xsl:template>
 
@@ -47,19 +47,15 @@
     <xsl:param name="_content" as="item()*"/>
     <p class="title">
       <xsl:value-of select="$_content"/>
-      <xsl:apply-templates select="$metadata//title" mode="#current" />
+      <xsl:apply-templates select="$metadata//descriptivedetail/titledetail/titleelement/b203" mode="#current" />
     </p>  
   </xsl:template>
   
   <xsl:template name="keywords">
     <xsl:param name="_content" as="item()*"/>
-    <p class="keywords">
+    <p class="title">
       <xsl:value-of select="$_content"/>
-      <xsl:apply-templates select="$metadata//keyword[position() = 1]" mode="#current" /><xsl:text>, </xsl:text>
-      <xsl:for-each select="$metadata//keyword[position() != last()][position() != 1]">
-        <keyword xmlns=""><xsl:value-of select="."/></keyword><xsl:text>, </xsl:text>
-      </xsl:for-each>
-      <xsl:apply-templates select="$metadata//keyword[position() = last()]" mode="#current" />
+      <xsl:apply-templates select="$metadata//descriptivedetail/subject/b070" mode="#current" />
     </p>  
   </xsl:template>
   
@@ -67,7 +63,7 @@
     <xsl:param name="_content" as="item()*"/>
     <p class="publisher">
       <xsl:value-of select="$_content"/>
-      <xsl:apply-templates select="$metadata//publisher" mode="#current" />
+      <xsl:apply-templates select="$metadata//publishingdetail/publisher/b081" mode="#current" />
     </p>  
   </xsl:template>
   
@@ -75,13 +71,23 @@
     <xsl:param name="_content" as="item()*"/>
     <p class="year">
       <xsl:value-of select="$_content"/>
-      <xsl:apply-templates select="$metadata//year" mode="#current" />
+      <xsl:apply-templates select="$metadata//publishingdetail/publishingdate/b306" mode="#current" />
+    </p>  
+  </xsl:template>
+  
+  <xsl:template name="weburl-whitepaper">
+    <xsl:param name="_content" as="item()*"/>
+    <p class="keywords">
+      <xsl:value-of select="$_content"/>
+      <a href="{$metadata//productsupply/supplydetail/supplier/website/b295}">
+        <xsl:apply-templates select="$metadata//productsupply/supplydetail/supplier/website/b295" mode="#current" />
+      </a>
     </p>  
   </xsl:template>
   
   <xsl:template name="weburl">
     <xsl:param name="_content" as="item()*"/>
-    <a href="{$metadata//weburl}">
+    <a href="{$metadata//relatedmaterial/relatedproduct[1]/website/b295}">
       <xsl:sequence select="$_content"/>        
     </a>   
   </xsl:template>
@@ -89,16 +95,16 @@
   <xsl:template name="weburl-manual">
     <xsl:param name="_content" as="item()*"/>
     <xsl:sequence select="$_content"/>    
-    <a href="{$metadata//weburl-manual}">    
-      <xsl:apply-templates select="$metadata//weburl-manual" mode="#current" />
+    <a href="{$metadata//relatedmaterial/relatedproduct[2]/website/b295}">    
+      <xsl:apply-templates select="$metadata//relatedmaterial/relatedproduct[2]/website/b295" mode="#current" />
     </a>
   </xsl:template>
   
   <xsl:template name="weburl-demo">
     <xsl:param name="_content" as="item()*"/>
     <xsl:sequence select="$_content"/>    
-    <a href="{$metadata//weburl-demo}">    
-      <xsl:apply-templates select="$metadata//weburl-demo" mode="#current" />
+    <a href="{$metadata//relatedmaterial/relatedproduct[3]/website/b295}">    
+      <xsl:apply-templates select="$metadata//relatedmaterial/relatedproduct[3]/website/b295" mode="#current" />
     </a>
   </xsl:template>
   
