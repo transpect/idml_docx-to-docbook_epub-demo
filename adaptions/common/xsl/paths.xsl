@@ -11,7 +11,7 @@
   <!-- for example publishername_seriesname_workname_whatever -->
   
   <xsl:variable name="campus-file-regex" as="xs:string"
-    select="'^campus_(0*\d+)_(.*)$'" />
+    select="'^(as)_(\d+)$'" />
 
   <xsl:function name="bc:components-from-filename" as="xs:string+">
     <xsl:param name="filename" as="xs:string"/>
