@@ -20,24 +20,50 @@
   </p:input>
   
   <p:output port="hub" primary="false">
-    <p:pipe port="result" step="delete-srcpath-inhierarchized-hub"/>
+    <p:documentation>
+      The 'hub' output port provides the evolved hub including srcpaths.
+    </p:documentation>
+    <p:pipe port="result" step="evolve-hub-dyn"/>
   </p:output>
-  <p:serialization port="hub" omit-xml-declaration="false"/>
   <p:output port="flat-hub" primary="false">
+    <p:documentation>
+      The 'flat-hub' output port provides the flat hub file derived from docx conversion.
+    </p:documentation>
     <p:pipe port="result" step="docx2hub"/>
   </p:output>
-  <p:output port="html" primary="false">
-    <p:pipe port="result" step="remove-srcpath-from-html"/>
+  <p:output port="docbook" primary="false">
+    <p:documentation>
+      The 'docbook' output port provides Docbook-flavoured XML.
+    </p:documentation>
+    <p:pipe port="result" step="hub2dbk"/>
   </p:output>
   <p:output port="schematron" primary="false">
+    <p:documentation>
+      The 'schematron' output port provides the collected reports of all schematron checks.
+    </p:documentation>
     <p:pipe port="result" step="errorPI2svrl"/>
   </p:output>
+  <p:output port="html" primary="false">
+    <p:documentation>
+      The 'html' output port provides a HTML file 
+    </p:documentation>
+    <p:pipe port="result" step="remove-srcpath-from-html"/>
+  </p:output>
   <p:output port="htmlreport" primary="false">
+    <p:documentation>
+      The 'htmlreport' output port provides the HTML report file with Schematron and RelaxNG messages.
+    </p:documentation>
     <p:pipe port="result" step="htmlreport"/>
   </p:output>
   <p:output port="result" primary="true">
+    <p:documentation>
+      The 'epub' output port provides the result of the EPUB conversion.
+    </p:documentation>
     <p:pipe port="result" step="epub-convert"/>
   </p:output>
+  
+  <p:serialization port="docbook" omit-xml-declaration="false"/>
+  <p:serialization port="hub" omit-xml-declaration="false"/>
   
   <p:option name="docxfile" required="true"/>
   <p:option name="hub-version" select="'1.1'"/>
@@ -90,6 +116,9 @@
   </docx2hub:convert>
   
   <bc:evolve-hub name="evolve-hub-dyn" srcpaths="yes">
+    <p:documentation>
+      Build headline hierarchy, detect lists, figure captions etc.
+    </p:documentation>
     <p:input port="paths">
       <p:pipe port="result" step="paths"/>
     </p:input>
@@ -97,7 +126,17 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </bc:evolve-hub>
 
-  <p:delete match="@srcpath" name="delete-srcpath-inhierarchized-hub"/>
+  <p:xslt name="hub2dbk">
+    <p:documentation>
+      Drops hub-specific elements and attributes.
+    </p:documentation>
+    <p:input port="parameters">
+      <p:empty/>
+    </p:input>
+    <p:input port="stylesheet">
+      <p:document href="../xsl/hub2dbk.xsl"/>
+    </p:input>
+  </p:xslt>
 
   <p:sink/>
   
