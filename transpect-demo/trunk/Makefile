@@ -119,13 +119,13 @@ docx2epub: check_input transpect-prerequisite mkdirs
 		local-css=$(LOCALCSS) \
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG) \
-	mv -v $(HUB) $(OUT_DIR)
-	mv -v $(HTMLREPORT) $(OUT_DIR)
-	mv -v $(EPUB) $(OUT_DIR)
-	mv -v $(DOCBOOK) $(OUT_DIR)
-	mv -v $(IN_FILE_COPY) $(OUT_DIR)
+	cp -v $(HUB) $(OUT_DIR)
+	cp -v $(HTMLREPORT) $(OUT_DIR)
+	cp -v $(EPUB) $(OUT_DIR)
+	cp -v $(DOCBOOK) $(OUT_DIR)
+	cp -v $(IN_FILE_COPY) $(OUT_DIR)
 	zip $(ZIP) $(HUB) $(HTMLREPORT) $(EPUB) $(DOCBOOK) $(IN_FILE_COPY)
-	mv -v $(ZIP) $(OUT_DIR)
+	cp -v $(ZIP) $(OUT_DIR)
 
 idml2epub_hub: check_input transpect-prerequisite mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
