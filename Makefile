@@ -13,7 +13,6 @@ out_path = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.(docx|i
 out_base = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.(docx|idml)/$$1\/$(2)\//')
 #out_dir  = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\//')
 
-
 LOCALCSS = true
 CHECK = yes
 PROGRESS = yes
@@ -27,7 +26,8 @@ SCHREPORT   = $(call out_path,$(IN_FILE_COPY),report,sch.xml)
 HTMLREPORT  = $(call out_path,$(IN_FILE_COPY),report,xhtml)
 HTML        = $(call out_path,$(IN_FILE_COPY),epub,xhtml)
 HUB         = $(call out_path,$(IN_FILE_COPY),hub,flat.xml)
-HUBEVOLVED  = $(call out_path,$(IN_FILE_COPY),hub,evolved.xml)
+HUBEVOLVED  = $(call out_path,$(IN_FILE_COPY),hub,hub.xml)
+DOCBOOK     = $(call out_path,$(IN_FILE_COPY),,dbk.xml)
 TEI         = $(call out_path,$(IN_FILE_COPY),tei,tei.xml)
 IDML        = $(call out_path,$(IN_FILE_COPY),,idml)
 EPUB        = $(call out_path,$(IN_FILE_COPY),,epub)
@@ -62,7 +62,7 @@ conversion: check_input transpect-prerequisite
 	@echo "DEBUG = $(DEBUG)"
 	@echo "DEBUG-DIR = $(DEBUG_DIR)"
 ifeq ($(suffix $(IN_FILE_COPY)),.docx)
-	$(MAKE) docx2epub_and_docx2idml
+	$(MAKE) docx2epub
 else
 ifeq ($(suffix $(IN_FILE_COPY)),.idml)
 	$(MAKE) usage
@@ -108,6 +108,7 @@ docx2epub: check_input transpect-prerequisite mkdirs
 	HEAP=$(HEAP) $(CALABASH) -D \
 		-i conf=$(call uri,conf/conf.xml) \
 		-o hub=$(HUB) \
+		-o docbook=$(DOCBOOK) \
 		-o html=$(HTML) \
 		-o htmlreport=$(HTMLREPORT) \
 		-o schematron=$(SCHREPORT) \
@@ -118,8 +119,13 @@ docx2epub: check_input transpect-prerequisite mkdirs
 		local-css=$(LOCALCSS) \
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG) \
-	cp -v $(HTMLREPORT) $(OUT_DIR)
-	cp -v $(HUB) $(OUT_DIR)
+	mv -v $(HUB) $(OUT_DIR)
+	mv -v $(HTMLREPORT) $(OUT_DIR)
+	mv -v $(EPUB) $(OUT_DIR)
+	mv -v $(DOCBOOK) $(OUT_DIR)
+	mv -v $(IN_FILE_COPY) $(OUT_DIR)
+	zip $(ZIP) $(HUB) $(HTMLREPORT) $(EPUB) $(DOCBOOK) $(IN_FILE_COPY)
+	mv -v $(ZIP) $(OUT_DIR)
 
 idml2epub_hub: check_input transpect-prerequisite mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
@@ -141,6 +147,7 @@ idml2epub_hub: check_input transpect-prerequisite mkdirs
 	cp -v $(HUBEVOLVED) $(OUT_DIR)
 	cp -v $(HTML) $(OUT_DIR)
 	cp -v $(HTMLREPORT) $(OUT_DIR)
+	zip -v $(ZIP) $(HUB) $(HUBEVOLVED) $(HTML) $(HTMLREPORT)
 
 idml2epub_tei_onix: check_input transpect-prerequisite mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
