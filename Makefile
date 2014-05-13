@@ -27,9 +27,9 @@ HTMLREPORT  = $(call out_path,$(IN_FILE_COPY),report,xhtml)
 HTML        = $(call out_path,$(IN_FILE_COPY),epub,xhtml)
 HUB         = $(call out_path,$(IN_FILE_COPY),hub,flat.xml)
 HUBEVOLVED  = $(call out_path,$(IN_FILE_COPY),hub,hub.xml)
-DOCBOOK     = $(call out_path,$(IN_FILE_COPY),,dbk.xml)
+DOCBOOK     = $(call out_path,$(IN_FILE_COPY),hub,dbk.xml)
 TEI         = $(call out_path,$(IN_FILE_COPY),tei,tei.xml)
-IDML        = $(call out_path,$(IN_FILE_COPY),,idml)
+IDML        = $(call out_path,$(IN_FILE_COPY),idml,idml)
 EPUB        = $(call out_path,$(IN_FILE_COPY),,epub)
 ZIP         = $(call out_path,$(IN_FILE_COPY),,zip)
 DEBUG_DIR   = $(call uri,$(OUT_DIR)/debug)
@@ -50,7 +50,7 @@ ifeq ($(IN_FILE),)
 endif
 
 mkdirs:
-	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),tei,xml) $(call out_path,$(IN_FILE_COPY),epub,html))
+	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),tei,xml) $(call out_path,$(IN_FILE_COPY),epub,html) $(call out_path,$(IN_FILE_COPY),epub,epub) $(call out_path,$(IN_FILE_COPY),docbook,xml))
 
 transpect-prerequisite:
 	-mkdir -p -v $(OUT_DIR)
@@ -107,7 +107,7 @@ docx2idml: check_input transpect-prerequisite mkdirs
 docx2epub: check_input transpect-prerequisite mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
 		-i conf=$(call uri,conf/conf.xml) \
-		-o hub=$(HUB) \
+		-o hub=$(HUBEVOLVED) \
 		-o docbook=$(DOCBOOK) \
 		-o html=$(HTML) \
 		-o htmlreport=$(HTMLREPORT) \
@@ -119,13 +119,14 @@ docx2epub: check_input transpect-prerequisite mkdirs
 		local-css=$(LOCALCSS) \
 		debug-dir-uri=$(DEBUG_DIR)
 		debug=$(DEBUG) \
-	cp -v $(HUB) $(OUT_DIR)
+# copy files into out dir
+	cp -v $(HUBEVOLVED) $(OUT_DIR)
 	cp -v $(HTMLREPORT) $(OUT_DIR)
-	cp -v $(EPUB) $(OUT_DIR)
 	cp -v $(DOCBOOK) $(OUT_DIR)
-	cp -v $(IN_FILE_COPY) $(OUT_DIR)
-	zip $(ZIP) $(HUB) $(HTMLREPORT) $(EPUB) $(DOCBOOK) $(IN_FILE_COPY)
-	cp -v $(ZIP) $(OUT_DIR)
+# zip output files
+	cd $(OUT_DIR); zip $(ZIP) *.xhtml *.xml *.epub
+# add images from epub dir to zip file
+	cd $(OUT_DIR)/epub/OEBPS; zip -u $(ZIP) *.png *.wmf *.jpg *.jpeg
 
 idml2epub_hub: check_input transpect-prerequisite mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
@@ -147,7 +148,8 @@ idml2epub_hub: check_input transpect-prerequisite mkdirs
 	cp -v $(HUBEVOLVED) $(OUT_DIR)
 	cp -v $(HTML) $(OUT_DIR)
 	cp -v $(HTMLREPORT) $(OUT_DIR)
-	zip -v $(ZIP) $(HUB) $(HUBEVOLVED) $(HTML) $(HTMLREPORT)
+	zip -v $(OUT_DIR)
+#	cp -v $(ZIP) $(OUT_DIR)
 
 idml2epub_tei_onix: check_input transpect-prerequisite mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
