@@ -15,8 +15,8 @@
     <p:document href="http://customers.le-tex.de/generic/book-conversion/conf/conf.xml"/>
   </p:input>
   <p:input port="schema" primary="false">
-    <p:documentation>Excepts the Hub RelaxNG XML schema</p:documentation>
-    <p:document href="http://www.le-tex.de/resource/schema/hub/1.1/hub.rng"/>
+    <p:documentation>Excepts the Docbook 5.0 RNG schema</p:documentation>
+    <p:document href="http://www.le-tex.de/resource/schema/docbook/5.0/docbook.rng"/>
   </p:input>
   
   <p:output port="hub" primary="false">
@@ -35,7 +35,7 @@
     <p:documentation>
       The 'docbook' output port provides Docbook-flavoured XML.
     </p:documentation>
-    <p:pipe port="result" step="hub2dbk"/>
+    <p:pipe port="result" step="remove-srcpath-from-docbook"/>
   </p:output>
   <p:output port="schematron" primary="false">
     <p:documentation>
@@ -80,7 +80,8 @@
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />
   <p:import href="http://transpect.le-tex.de/docx2hub/wml2hub.xpl"/>
-  <p:import href="http://transpect.le-tex.de/hub2html/xpl/hub2html.xpl"/>  
+  <p:import href="http://transpect.le-tex.de/hub2html/xpl/hub2html.xpl"/>
+  <p:import href="http://transpect.le-tex.de/hub2docbook/xpl/hub2docbook.xpl"/>  
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/evolve-hub.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/empty-report.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/validate-with-schematron.xpl"/>
@@ -88,7 +89,6 @@
   <p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/errorPI2svrl.xpl"/>
   <p:import href="http://transpect.le-tex.de/calabash-extensions/ltx-validate-with-rng/rng-validate-to-PI.xpl"/>
-  
   
   <p:import href="paths.xpl"/>
   <p:import href="epub.xpl"/>
@@ -125,18 +125,6 @@
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </bc:evolve-hub>
-
-  <p:xslt name="hub2dbk">
-    <p:documentation>
-      Drops hub-specific elements and attributes.
-    </p:documentation>
-    <p:input port="parameters">
-      <p:empty/>
-    </p:input>
-    <p:input port="stylesheet">
-      <p:document href="../xsl/hub2dbk.xsl"/>
-    </p:input>
-  </p:xslt>
 
   <p:sink/>
   
@@ -181,14 +169,24 @@
     <p:with-option name="active" select="$check"/>
   </bc:validate-with-schematron>
   
+  <p:sink/>
+  
+  <letex:hub2docbook name="hub2docbook">
+    <p:input port="source">
+      <p:pipe port="result" step="evolve-hub-dyn"/>
+    </p:input>
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+  </letex:hub2docbook>
+  
+  <!-- remove srcpaths -->
+  <p:delete match="@srcpath" name="remove-srcpath-from-docbook"/>  
+  
   <letex:validate-with-rng-PI name="rng2pi">
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:input port="schema">
       <p:pipe port="schema" step="docx2epub"/>
-    </p:input>
-    <p:input port="source">
-      <p:pipe port="result" step="evolve-hub-dyn"/>
     </p:input>
   </letex:validate-with-rng-PI>
   
@@ -207,7 +205,7 @@
   
   <hub2htm:convert name="hub2htm">
     <p:input port="source">
-      <p:pipe port="result" step="errorPI2svrl"/>
+      <p:pipe port="result" step="evolve-hub-dyn"/>
     </p:input>
     <p:input port="paths">
       <p:pipe port="result" step="paths"/>
