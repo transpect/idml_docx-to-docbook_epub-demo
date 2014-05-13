@@ -126,11 +126,7 @@ docx2epub: check_input transpect-prerequisite mkdirs
 # zip output files
 	cd $(OUT_DIR); zip $(ZIP) *.xhtml *.xml *.epub
 # add images from epub dir to zip file
-	cd $(OUT_DIR)/epub/OEBPS; zip -u $(ZIP) *.png *.wmf *.jpg *.jpeg
-# if zip had nothing to do, this is no error
-ifeq ($?, 12)
-exit 0
-endif
+	-cd $(OUT_DIR)/epub/OEBPS; zip -u $(ZIP) *.png *.wmf *.jpg *.jpeg
 
 idml2epub_hub: check_input transpect-prerequisite mkdirs 
 	HEAP=$(HEAP) $(CALABASH) -D \
