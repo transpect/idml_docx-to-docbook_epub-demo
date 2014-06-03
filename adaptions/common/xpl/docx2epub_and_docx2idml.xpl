@@ -5,6 +5,7 @@
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:bc="http://transpect.le-tex.de/book-conversion"
   xmlns:docx2hub = "http://www.le-tex.de/namespace/docx2hub"
+  xmlns:trdemo="http://www.le-tex.de/namespace/trdemo"
   xmlns:transpect="http://www.le-tex.de/namespace/transpect"
   xmlns:letex="http://www.le-tex.de/namespace"
   name="docx2epub_and_docx2idml"
@@ -58,7 +59,7 @@
   <p:import href="http://transpect.le-tex.de/xproc-util/store-zip/xpl/store-zip.xpl"/>
   <p:import href="http://transpect.le-tex.de/xproc-util/copy-files/xpl/copy-files.xpl"/>
 
-  <transpect:paths name="paths"> 
+  <trdemo:paths name="paths"> 
     <p:with-option name="pipeline" select="'docx2epub_and_docx2idml.xpl'"/> 
     <p:with-option name="publisher" select="$publisher"/> 
     <p:with-option name="series" select="$series"/> 
@@ -70,7 +71,7 @@
     <p:input port="conf"> 
       <p:pipe port="conf" step="docx2epub_and_docx2idml"/> 
     </p:input>
-  </transpect:paths>
+  </trdemo:paths>
 
   <p:sink/>
 

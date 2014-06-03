@@ -7,6 +7,7 @@
   xmlns:hub2htm="http://www.le-tex.de/namespace/hub2htm"
   xmlns:hub2tei="http://www.le-tex.de/namespace/hub2tei"
   xmlns:tei="http://www.tei-c.org/ns/1.0"
+  xmlns:trdemo="http://www.le-tex.de/namespace/trdemo"
   xmlns:tei2html="http://www.le-tex.de/namespace/tei2html"
   xmlns:transpect="http://www.le-tex.de/namespace/transpect"
   xmlns:letex="http://www.le-tex.de/namespace"
@@ -98,7 +99,7 @@
   <p:import href="paths.xpl"/>
   <p:import href="epub.xpl"/>
       
-  <transpect:paths name="paths"> 
+  <trdemo:paths name="paths"> 
     <p:with-option name="pipeline" select="'idml2epub_tei_onix.xpl'"/> 
     <p:with-option name="publisher" select="$publisher"/> 
     <p:with-option name="series" select="$series"/> 
@@ -110,7 +111,7 @@
     <p:input port="conf"> 
       <p:pipe port="conf" step="idml2epub_tei_onix"/> 
     </p:input>
-  </transpect:paths>
+  </trdemo:paths>
 
   <idml2xml:hub name="idml2xml">
     <p:with-option name="debug" select="$debug"/>
