@@ -11,9 +11,11 @@
   exclude-result-prefixes="xs xlink hub"
   version="2.0">
 
-  <!--<xsl:import href="http://transpect.le-tex.de/adaptions/common/evolve-hub/driver.xsl"/>-->
-  <xsl:import href="https://subversion.le-tex.de/common/transpect-demo/trunk/adaptions/common/evolve-hub/"/>
+  <xsl:import href="driver.xsl"/>
   
+  <!-- For IDML synthesis, we use conditional text (with condition “storyname”) in order to mark the main story
+    where the newly generated content goes -->
+  <xsl:template match="*[@remap = 'HiddenText'][@condition = 'storyname']" mode="hub:preprocess-hierarchy"/>
  
 
 
