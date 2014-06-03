@@ -121,7 +121,7 @@
     <p:with-option name="srcpaths" select="'yes'"/>
   </idml2xml:hub>
 
-  <bc:evolve-hub name="evolve-hub-dyn" srcpaths="yes">
+  <bc:evolve-hub name="evolve-hub-dyn" srcpaths="yes"  load="evolve-hub/driver_idml">
     <p:input port="source">
       <p:pipe port="result" step="idml2xml"/>
     </p:input>
