@@ -5,6 +5,7 @@
   xmlns:bc="http://transpect.le-tex.de/book-conversion"
   xmlns:hub2htm="http://www.le-tex.de/namespace/hub2htm"
   xmlns:docx2hub = "http://www.le-tex.de/namespace/docx2hub"
+  xmlns:trdemo="http://www.le-tex.de/namespace/trdemo"
   xmlns:transpect="http://www.le-tex.de/namespace/transpect"
   xmlns:letex="http://www.le-tex.de/namespace"
   name="docx2idml"
@@ -37,7 +38,7 @@
   <p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
   <p:import href="paths.xpl"/>
   
-  <transpect:paths name="paths"> 
+  <trdemo:paths name="paths"> 
     <p:with-option name="pipeline" select="'docx2idml.xpl'"/> 
     <p:with-option name="publisher" select="$publisher"/> 
     <p:with-option name="series" select="$series"/> 
@@ -49,7 +50,7 @@
     <p:input port="conf"> 
       <p:pipe port="conf" step="docx2idml"/> 
     </p:input>
-  </transpect:paths>
+  </trdemo:paths>
     
   <docx2hub:convert name="docx2hub">
     <p:with-option name="debug" select="$debug"/>
