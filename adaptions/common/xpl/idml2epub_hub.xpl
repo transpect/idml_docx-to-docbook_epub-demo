@@ -5,6 +5,7 @@
   xmlns:bc="http://transpect.le-tex.de/book-conversion"
   xmlns:docx2hub="http://www.le-tex.de/namespace/docx2hub"
   xmlns:hub2htm="http://www.le-tex.de/namespace/hub2htm"
+  xmlns:trdemo="http://www.le-tex.de/namespace/trdemo"
   xmlns:transpect="http://www.le-tex.de/namespace/transpect"
   xmlns:letex="http://www.le-tex.de/namespace"
   xmlns:idml2xml  = "http://www.le-tex.de/namespace/idml2xml"
@@ -75,7 +76,7 @@
   <p:import href="paths.xpl"/>
   <p:import href="epub.xpl"/>
   
-  <transpect:paths name="paths"> 
+  <trdemo:paths name="paths"> 
     <p:with-option name="pipeline" select="'idml2epub_hub.xpl'"/> 
     <p:with-option name="publisher" select="$publisher"/> 
     <p:with-option name="series" select="$series"/> 
@@ -87,7 +88,7 @@
     <p:input port="conf"> 
       <p:pipe port="conf" step="idml2epub_hub"/> 
     </p:input>
-  </transpect:paths>
+  </trdemo:paths>
 
   <idml2xml:hub name="idml2xml">
     <p:with-option name="debug" select="$debug"/>
@@ -220,7 +221,7 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </transpect:patch-svrl>
 
-  <transpect:epub name="epub-convert">
+  <trdemo:epub name="epub-convert">
     <p:input port="paths">
       <p:pipe port="result" step="paths"/>
     </p:input>
@@ -232,6 +233,6 @@
     </p:input>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </transpect:epub>
+  </trdemo:epub>
    
 </p:declare-step>
