@@ -10,7 +10,7 @@
   xmlns:letex="http://www.le-tex.de/namespace"
   xmlns:idml2xml  = "http://www.le-tex.de/namespace/idml2xml"
   name="idml2epub_hub"
-  type="transpect:idml2epub_hub"
+  type="trdemo:idml2epub_hub"
   version="1.0">
 
 
