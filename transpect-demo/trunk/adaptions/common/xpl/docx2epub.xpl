@@ -9,10 +9,18 @@
   xmlns:trdemo="http://www.le-tex.de/namespace/trdemo"
   xmlns:letex="http://www.le-tex.de/namespace"
   name="docx2epub"
-  type="transpect:docx2epub"
+  type="trdemo:docx2epub"
   version="1.0">
   
+  <p:documentation>
+    This step expects a Word DOCX file and converts it to Docbook, 
+    EPUB and provides a HTML checking report.
+  </p:documentation>
+  
   <p:input port="conf" primary="true">
+    <p:documentation>
+      The conf port expects the Transpect configuration file.
+    </p:documentation>
     <p:document href="http://customers.le-tex.de/generic/book-conversion/conf/conf.xml"/>
   </p:input>
   <p:input port="schema" primary="false">
@@ -66,18 +74,57 @@
   <p:serialization port="docbook" omit-xml-declaration="false"/>
   <p:serialization port="hub" omit-xml-declaration="false"/>
   
-  <p:option name="docxfile" required="true"/>
-  <p:option name="hub-version" select="'1.1'"/>
+  <p:option name="docxfile" required="true">
+    <p:documentation>
+      The path to the DOCX file.
+    </p:documentation>
+  </p:option>
+  <p:option name="hub-version" select="'1.1'">
+    <p:documentation>
+      The version of the HUB XML Format. See https://github.com/le-tex/Hub for the RelaxNG schema. 
+    </p:documentation>
+  </p:option>
   
-  <p:option name="series" select="''" required="false"/> 
-  <p:option name="work" select="''" required="false"/> 
-  <p:option name="publisher" select="''" required="false"/>
+  <p:option name="publisher" select="''" required="false">
+    <p:documentation>
+      Used to set the publisher statically. If this option is not set, the 
+      step named "paths" will determine the publisher name by the input filename.
+    </p:documentation>
+  </p:option>
+  <p:option name="series" select="''" required="false">
+    <p:documentation>
+      Used to set the book series statically. If this option is not set, the 
+      step named "paths" will determine the series name by the input filename.
+    </p:documentation>
+  </p:option>
+  <p:option name="work" select="''" required="false">
+    <p:documentation>
+      Used to set the work statically. If this option is not set, the 
+      step named "paths" will determine the work name by the input filename.
+    </p:documentation>
+  </p:option>
   
-  <p:option name="debug" select="'no'"/> 
-  <p:option name="debug-dir-uri" select="'debug'"/>
+  <p:option name="debug" select="'no'">
+    <p:documentation>
+      Used to switch debug mode on or off. Pass 'yes' to enable debug mode.
+    </p:documentation>
+  </p:option> 
+  <p:option name="debug-dir-uri" select="'debug'">
+    <p:documentation>
+      Expects a file URI of the directory that should be used to store debug information. 
+    </p:documentation>
+  </p:option>
   
-  <p:option name="progress" required="false" select="'yes'"/>
-  <p:option name="check" required="false" select="'yes'"/>
+  <p:option name="progress" required="false" select="'yes'">
+    <p:documentation>
+      Whether to display progress information as text files in a certain directory
+    </p:documentation>
+  </p:option>
+  <p:option name="check" required="false" select="'yes'">
+    <p:documentation>
+      Pass "yes" to enable checking with Schematron.
+    </p:documentation>
+  </p:option>
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />
   <p:import href="http://transpect.le-tex.de/docx2hub/wml2hub.xpl"/>

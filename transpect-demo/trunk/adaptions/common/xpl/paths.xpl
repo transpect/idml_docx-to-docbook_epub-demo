@@ -7,20 +7,49 @@
   name="trdemo-paths"
   type="trdemo:paths">
   
-  <p:option name="series" required="false" select="''"/>
-  <p:option name="work" required="false" select="''"/>
-  <p:option name="publisher" required="false" select="''"/>
+  <p:documentation>
+    The paths step evaluates dynamically publisher, book series, 
+    work name and paths by the input filename. It provides a c:param-set document 
+    for subsequent steps.
+  </p:documentation>
+
+  <p:input port="conf" primary="true"/>
+  <p:output port="result" primary="true"/>
+
+  <p:option name="publisher" required="false" select="''">
+    <p:documentation>
+      Used to set the publisher statically. If this option is not set, the 
+      step named "paths" will determine the publisher name by the input filename.
+    </p:documentation>
+  </p:option>
+  <p:option name="series" required="false" select="''">
+    <p:documentation>
+      Used to set the book series statically. If this option is not set, the 
+      step named "paths" will determine the series name by the input filename.
+    </p:documentation>
+  </p:option>
+  <p:option name="work" required="false" select="''">
+    <p:documentation>
+      Used to set the work statically. If this option is not set, the 
+      step named "paths" will determine the work name by the input filename.
+    </p:documentation>
+  </p:option>
   <p:option name="file" required="false" select="''"/>
-  <p:option name="debug" required="false" select="'no'"/>
-  <p:option name="debug-dir-uri" required="false" select="resolve-uri('debug')"/>
+  <p:option name="debug" required="false" select="'no'">
+    <p:documentation>
+      Used to switch debug mode on or off. Pass 'yes' to enable debug mode.
+    </p:documentation>
+  </p:option>
+  <p:option name="debug-dir-uri" required="false" select="resolve-uri('debug')">
+    <p:documentation>
+      Expects a file URI of the directory that should be used to store debug information. 
+    </p:documentation>
+  </p:option>
   <p:option name="pipeline" />
   <p:option name="progress" required="false" select="'no'">
     <p:documentation>Whether to display progress information as text files in a certain directory</p:documentation>
   </p:option>
-  
-  <p:input port="conf" primary="true"/>
-  <p:output port="result" primary="true"/>
-  
+    
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/paths.xpl"/>
   
