@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <p:declare-step
   xmlns:p="http://www.w3.org/ns/xproc"
-  xmlns:c="http://www.w3.org/ns/xproc-step"
-  xmlns:cx="http://xmlcalabash.com/ns/extensions"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:bc="http://transpect.le-tex.de/book-conversion"
-  xmlns:transpect="http://www.le-tex.de/namespace/transpect"
+  xmlns:trdemo="http://www.le-tex.de/namespace/trdemo"
   version="1.0"
-  name="transpect-paths"
-  type="transpect:paths">
+  name="trdemo-paths"
+  type="trdemo:paths">
   
   <p:option name="series" required="false" select="''"/>
   <p:option name="work" required="false" select="''"/>
@@ -43,7 +40,7 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="progress" select="$progress"/>
     <p:input port="conf">
-      <p:pipe port="conf" step="transpect-paths"/>
+      <p:pipe port="conf" step="trdemo-paths"/>
     </p:input>
   </bc:paths>
   
