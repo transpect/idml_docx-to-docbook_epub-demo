@@ -49,6 +49,7 @@
     </meta>
     <projectTree name="transpect-demo.xpr">
         <folder masterFiles="true" name="Master Files">
+            <file name="adaptions/common/xpl/docx2epub.xpl"/>
             <file name="evolve-hub/evolve-hub.xsl"/>
             <file name="idml2xml/xslt/idml2xml.xsl"/>
         </folder>

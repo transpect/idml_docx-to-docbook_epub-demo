@@ -6,10 +6,10 @@
   xmlns:epub="http://transpect.le-tex.de/epubtools"
   xmlns:cx="http://xmlcalabash.com/ns/extensions" 
   xmlns:letex="http://www.le-tex.de/namespace"
-  xmlns:transpect="http://www.le-tex.de/namespace/transpect" 
+  xmlns:trdemo="http://www.le-tex.de/namespace/trdemo" 
   version="1.0" 
-  name="transpect-epub" 
-  type="transpect:epub">
+  name="trdemo-epub" 
+  type="trdemo:epub">
 
   <p:input port="source" primary="false"/>
   <p:input port="paths" primary="true"/>
@@ -29,7 +29,7 @@
 
   <bc:load-cascaded name="load-epub-heading-conf" filename="epubtools/heading-conf.xml">
     <p:input port="paths">
-      <p:pipe port="paths" step="transpect-epub"/>
+      <p:pipe port="paths" step="trdemo-epub"/>
     </p:input>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
@@ -42,7 +42,7 @@
       <p:empty/>
     </p:input>
     <p:input port="source">
-      <p:pipe port="paths" step="transpect-epub"/>
+      <p:pipe port="paths" step="trdemo-epub"/>
     </p:input>
     <p:input port="stylesheet">
       <p:inline>
@@ -86,7 +86,7 @@
 
   <p:parameters name="params">
     <p:input port="parameters">
-      <p:pipe port="paths" step="transpect-epub"/>
+      <p:pipe port="paths" step="trdemo-epub"/>
     </p:input>
   </p:parameters>
 
@@ -96,7 +96,7 @@
       <p:pipe port="result" step="params"/>
     </p:with-option>
     <p:input port="source">
-      <p:pipe port="source" step="transpect-epub"/>
+      <p:pipe port="source" step="trdemo-epub"/>
     </p:input>
   </p:add-attribute>
     
@@ -116,7 +116,7 @@
       <p:pipe port="result" step="load-meta"/>
     </p:input>
     <p:input port="report-in">
-      <p:pipe step="transpect-epub" port="report-in"/>
+      <p:pipe step="trdemo-epub" port="report-in"/>
     </p:input>
     <p:with-option name="terminate-on-error" select="'no'"/>
     <p:with-option name="debug" select="$debug"/>

@@ -17,7 +17,7 @@ LOCALCSS = true
 CHECK = yes
 PROGRESS = yes
 CALABASH = $(MAKEFILEDIR)/calabash/calabash.sh
-DEBUG = yes
+DEBUG = no
 HEAP = 1024m
 
 OUT_DIR     = $(call out_base,$(IN_FILE),output)
@@ -52,6 +52,12 @@ endif
 mkdirs:
 	-mkdir -p -v $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),tei,xml) $(call out_path,$(IN_FILE_COPY),epub,html) $(call out_path,$(IN_FILE_COPY),epub,epub) $(call out_path,$(IN_FILE_COPY),docbook,xml))
 
+
+clean: docx2epub
+	rm -rf $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),tei,xml) $(call out_path,$(IN_FILE_COPY),epub,html) $(call out_path,$(IN_FILE_COPY),epub,epub) $(call out_path,$(IN_FILE_COPY),docbook,xml)) $(IN_FILE_COPY).tmp
+	
+	
+	
 transpect-prerequisite:
 	-mkdir -p -v $(OUT_DIR)
 	cp $(IN_FILE) $(IN_FILE_COPY)
@@ -62,7 +68,7 @@ conversion: check_input transpect-prerequisite
 	@echo "DEBUG = $(DEBUG)"
 	@echo "DEBUG-DIR = $(DEBUG_DIR)"
 ifeq ($(suffix $(IN_FILE_COPY)),.docx)
-	$(MAKE) docx2epub
+	$(MAKE) clean
 else
 ifeq ($(suffix $(IN_FILE_COPY)),.idml)
 	$(MAKE) usage
@@ -92,6 +98,7 @@ docx2epub_and_docx2idml: check_input transpect-prerequisite mkdirs
 		debug=$(DEBUG)
 	cp -v $(HTMLREPORT) $(OUT_DIR)
 	cp -v $(HUB) $(OUT_DIR)
+	
 
 docx2idml: check_input transpect-prerequisite mkdirs
 	HEAP=$(HEAP) $(CALABASH) -D \
@@ -105,6 +112,7 @@ docx2idml: check_input transpect-prerequisite mkdirs
 		debug=$(DEBUG)
 
 docx2epub: check_input transpect-prerequisite mkdirs 
+	@echo "start docx2epub $(DEBUG)" 
 	HEAP=$(HEAP) $(CALABASH) -D \
 		-i conf=$(call uri,conf/conf.xml) \
 		-o hub=$(HUBEVOLVED) \
@@ -117,8 +125,8 @@ docx2epub: check_input transpect-prerequisite mkdirs
 		docxfile=$(call win_path,$(IN_FILE_COPY)) \
 		check=$(CHECK) \
 		local-css=$(LOCALCSS) \
-		debug-dir-uri=$(DEBUG_DIR)
-		debug=$(DEBUG) \
+		debug-dir-uri=$(DEBUG_DIR) \
+		debug=$(DEBUG)
 # copy files into out dir
 	cp -v $(HUBEVOLVED) $(OUT_DIR)
 	cp -v $(HTMLREPORT) $(OUT_DIR)
@@ -173,10 +181,6 @@ idml2epub_tei_onix: check_input transpect-prerequisite mkdirs
 	cp -v $(TEI) $(OUT_DIR)
 	cp -v $(HTML) $(OUT_DIR)
 	cp -v $(HTMLREPORT) $(OUT_DIR)
-
-clean:
-	-cd $(OUT_DIR) && rm -rf debug.zip $(HTMLREPORT) $(SCHREPORT) $(HTML) $(HUB) $(IN_FILE_COPY).tmp 
-
 
 test:
 	@echo =$(call win_path,$(IN_FILE_COPY))
