@@ -13,6 +13,9 @@ out_path = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.(docx|i
 out_base = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.(docx|idml)/$$1\/$(2)\//')
 #out_dir  = $(shell echo $(call win_path,$(1)) | perl -pe 's/^(.+)\/(.+)\.docx/$$1\/$(2)\//')
 
+# Just a default for the targets without IN_FILE (so that there is no error when calculating OUT_DIR):
+IN_FILE = generic_output
+
 LOCALCSS = true
 CHECK = yes
 PROGRESS = yes
@@ -36,9 +39,15 @@ DEBUG_DIR   = $(call uri,$(OUT_DIR)/debug)
 PROGRESSDIR = $(DEBUG_DIR)/status
 ACTIONLOG  = $(PROGRESSDIR)/action.log
 DEVNULL     = $(call win_path,/dev/null)
+FRONTEND_PIPELINES = adaptions/common/xpl/docx2epub.xpl \
+	adaptions/common/xpl/docx2epub_and_docx2idml.xpl \
+	adaptions/common/xpl/docx2idml.xpl \
+	adaptions/common/xpl/idml2epub_hub.xpl \
+	adaptions/common/xpl/idml2epub_tei_onix.xpl \
+	transpectdoc/xpl/transpectdoc.xpl
 
 export
-unexport out_dir out_base out_path win_path uri
+unexport out_base out_path win_path uri
 
 default: usage
 
@@ -55,9 +64,7 @@ mkdirs:
 
 clean: docx2epub
 	rm -rf $(dir $(call out_path,$(IN_FILE_COPY),report,xhtml) $(call out_path,$(IN_FILE_COPY),hub,xml) $(call out_path,$(IN_FILE_COPY),tei,xml) $(call out_path,$(IN_FILE_COPY),epub,html) $(call out_path,$(IN_FILE_COPY),epub,epub) $(call out_path,$(IN_FILE_COPY),docbook,xml)) $(IN_FILE_COPY).tmp
-	
-	
-	
+
 transpect-prerequisite:
 	-mkdir -p -v $(OUT_DIR)
 	cp $(IN_FILE) $(IN_FILE_COPY)
@@ -98,7 +105,6 @@ docx2epub_and_docx2idml: check_input transpect-prerequisite mkdirs
 		debug=$(DEBUG)
 	cp -v $(HTMLREPORT) $(OUT_DIR)
 	cp -v $(HUB) $(OUT_DIR)
-	
 
 docx2idml: check_input transpect-prerequisite mkdirs
 	HEAP=$(HEAP) $(CALABASH) -D \
@@ -181,6 +187,15 @@ idml2epub_tei_onix: check_input transpect-prerequisite mkdirs
 	cp -v $(TEI) $(OUT_DIR)
 	cp -v $(HTML) $(OUT_DIR)
 	cp -v $(HTMLREPORT) $(OUT_DIR)
+
+transpectdoc: $(addprefix $(MAKEFILEDIR)/,$(FRONTEND_PIPELINES))
+	$(CALABASH) $(foreach pipe,$^,$(addprefix -i source=,$(call uri,$(pipe)))) \
+		$(call uri,$(MAKEFILEDIR)/transpectdoc/xpl/transpectdoc.xpl) \
+		output-base-uri=$(call uri,$(MAKEFILEDIR)/doc/transpectdoc) \
+		project-name=transpect-demo \
+		debug=$(DEBUG) debug-dir-uri=$(DEBUG_DIR)
+
+.PHONY: transpectdoc
 
 test:
 	@echo =$(call win_path,$(IN_FILE_COPY))
