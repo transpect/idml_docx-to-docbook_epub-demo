@@ -20,6 +20,9 @@
     <xsl:variable name="work-basename" select="bc:work-basename-from-filename($filename)"/>
     
     <xsl:choose>
+      <xsl:when test="matches($work-basename, '^transpect_wp_')">
+        <xsl:sequence select="('letex', 'wp', $work-basename)"/>
+      </xsl:when>
       <xsl:when test="matches($work-basename, $campus-file-regex)">
         <xsl:analyze-string select="$work-basename" regex="{$campus-file-regex}">
           <xsl:matching-substring>

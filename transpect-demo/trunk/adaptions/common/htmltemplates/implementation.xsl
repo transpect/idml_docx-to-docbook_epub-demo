@@ -12,6 +12,8 @@
   <xsl:variable name="htmlinput" as="document-node(element(html:html))+" select="collection()[position() gt 1]"/>
   <xsl:param name="work" as="xs:string"/>
 
+  <xsl:variable name="work-metadata" select="$metadata/ONIXmessage/product[a001 = $work]" as="element(product)?"/>
+
   <xsl:template name="main">
     <html>
       <head>
@@ -33,6 +35,20 @@
   <xsl:template name="htmlinput-body">
     <xsl:apply-templates select="$htmlinput[1]/html:html/html:body/node() except ($htmlinput[1]/html:html/html:body/html:div[@class = 'toc'])"/>
     <xsl:apply-templates select="$htmlinput[1]/html:html/html:body/html:div[@class = 'toc']" mode="discard-toc"/>
+  </xsl:template>
+
+  <xsl:template name="metadaten">
+    <xsl:param name="_content" as="item()*"/>
+    <xsl:if test="$work-metadata">
+      <a rel="transclude" href="#metadaten"/>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="infos">
+    <xsl:param name="_content" as="item()*"/>
+    <xsl:if test="$work-metadata">
+      <a rel="transclude" href="#infos"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="author">
