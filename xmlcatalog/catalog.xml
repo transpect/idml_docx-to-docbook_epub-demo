@@ -33,6 +33,7 @@
   <nextCatalog catalog="../xslt-util/mime-type/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xslt-util/resolve-uri/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xslt-util/xslt-based-catalog-resolver/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../xproc-util/load-file/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/store-debug/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/store-zip/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xproc-util/xml-model/xmlcatalog/catalog.xml"/> 
