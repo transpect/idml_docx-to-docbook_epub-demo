@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <p:declare-step
   xmlns:p="http://www.w3.org/ns/xproc"
+  xmlns:c="http://www.w3.org/ns/xproc-step"  
   xmlns:bc="http://transpect.le-tex.de/book-conversion"
   xmlns:trdemo="http://www.le-tex.de/namespace/trdemo"
   version="1.0"
@@ -14,7 +15,18 @@
   </p:documentation>
 
   <p:input port="conf" primary="true"/>
-  <p:output port="result" primary="true"/>
+  <p:input port="report-in">
+    <p:inline>
+      <c:reports pipeline="transpect-demo"/>
+    </p:inline>
+  </p:input>
+
+  <p:output port="result" primary="true">
+    <p:pipe port="result" step="paths"/>
+  </p:output>
+  <p:output port="report">
+    <p:pipe port="result" step="insert-report"/>
+  </p:output>
 
   <p:option name="publisher" required="false" select="''">
     <p:documentation>
@@ -71,6 +83,22 @@
     <p:input port="conf">
       <p:pipe port="conf" step="trdemo-paths"/>
     </p:input>
+    <p:input port="report-in">
+      <p:pipe port="report-in" step="trdemo-paths"/>
+    </p:input>
   </bc:paths>
   
+  <p:sink/>
+
+  <p:insert name="insert-report" position="last-child">
+    <p:input port="source">
+      <p:pipe port="report-in" step="trdemo-paths"/>
+    </p:input>
+    <p:input port="insertion">
+      <p:pipe port="report" step="paths"/>
+    </p:input>
+  </p:insert>
+  
+  <p:sink/>
+
 </p:declare-step>
