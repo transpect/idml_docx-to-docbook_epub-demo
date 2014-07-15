@@ -213,7 +213,7 @@
     <p:input port="params">
       <p:pipe port="result" step="paths"/>
     </p:input>
-    <p:with-option name="severity-default-name" select="'Warning'"/>
+    <p:with-option name="severity-default-name" select="'warning'"/>
     <p:with-option name="report-title" select="/c:param-set/c:param[@name eq 'work-basename']/@value">
       <p:pipe port="result" step="paths"/>
     </p:with-option>
