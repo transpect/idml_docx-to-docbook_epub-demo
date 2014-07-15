@@ -42,11 +42,6 @@
   </p:output>
 <!--  <p:serialization port="hub" omit-xml-declaration="false"/>-->
 
-  <p:output port="hubevolved" primary="false">
-    <p:pipe port="result" step="delete-srcpath-inhierarchized-hub"/>
-  </p:output>
-  <p:serialization port="hubevolved" omit-xml-declaration="false"/>
-
   <p:output port="html" primary="false">
     <p:pipe port="result" step="remove-srcpath-from-html"/>
   </p:output>
@@ -98,7 +93,7 @@
  
   <p:import href="paths.xpl"/>
   <p:import href="epub.xpl"/>
-      
+  
   <trdemo:paths name="paths"> 
     <p:with-option name="pipeline" select="'idml2epub_tei_onix.xpl'"/> 
     <p:with-option name="publisher" select="$publisher"/> 
@@ -111,7 +106,16 @@
     <p:input port="conf"> 
       <p:pipe port="conf" step="idml2epub_tei_onix"/> 
     </p:input>
+    <p:input port="report-in">
+      <p:inline>
+        <c:reports pipeline="idml2epub_tei_onix"/>
+      </p:inline>
+    </p:input>
   </trdemo:paths>
+
+  <cx:message>
+    <p:with-option name="message" select="'PATHS: ', /*/name(), ' ', /*/*/@name"/>
+  </cx:message>
 
   <idml2xml:hub name="idml2xml">
     <p:with-option name="debug" select="$debug"/>
@@ -119,7 +123,12 @@
     <p:with-option name="idmlfile" select="/c:param-set/c:param[@name eq 'file']/@value"/>
     <p:with-option name="hub-version" select="$hub-version"/>
     <p:with-option name="srcpaths" select="'yes'"/>
+    <p:input port="report-in">
+      <p:pipe step="paths" port="report"/>
+    </p:input>
   </idml2xml:hub>
+
+  <cx:message message="HHHHHHHHHHHHHHHHHHH"/>
 
   <bc:evolve-hub name="evolve-hub-dyn" srcpaths="yes"  load="evolve-hub/driver_idml">
     <p:input port="source">
@@ -132,25 +141,14 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </bc:evolve-hub>
 
- <p:delete match="@srcpath" name="delete-srcpath-inhierarchized-hub"/>
+  <cx:message message="IIIIIIIIIIIIIIIIIIIII"/>
 
-  <p:sink/>
-  
-  <bc:empty-report name="create-empty-report">
-    <p:with-option name="pipeline" select="'idml2epub_tei_onix'"/>
-  </bc:empty-report>
-  
-  <p:sink/>
- 
   <bc:check-styles name="check-styles">
-    <p:input port="source">
-      <p:pipe port="result" step="evolve-hub-dyn"/>
-    </p:input>
     <p:input port="html-in">
       <p:empty/>
     </p:input>
     <p:input port="report-in">
-      <p:pipe port="result" step="create-empty-report"/>
+      <p:pipe step="idml2xml" port="report"/>
     </p:input>
     <p:input port="parameters">
       <p:pipe port="result" step="paths"/>
@@ -223,27 +221,34 @@
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </hub2htm:convert>
-   
-  <p:delete match="@srcpath" name="remove-srcpath-from-html"/> 
-   
-  <transpect:patch-svrl name="htmlreport">
-    <p:input port="source">
-      <p:pipe port="result" step="hub2htm"/>
-    </p:input>
-    <p:input port="svrl">
-      <p:pipe step="errorPI2svrl" port="report"/>
-    </p:input>
-    <p:input port="params">
-      <p:pipe port="result" step="paths"/>
-    </p:input>
-    <p:with-option name="severity-default-name" select="'Warning'"/>
-    <p:with-option name="report-title" select="/c:param-set/c:param[@name eq 'work-basename']/@value">
-      <p:pipe port="result" step="paths"/>
-    </p:with-option>
-    <p:with-option name="debug" select="$debug"/>
-    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </transpect:patch-svrl>
 
+  <p:sink/>
+
+  <p:try name="meta">
+    <p:group>
+      <p:output port="result" primary="true"/>
+      <p:load name="load-meta">
+        <p:with-option name="href"
+          select="concat(/c:param-set/c:param[@name eq 'publisher-path']/@value, 'idml2epub_tei_onix/metadata/meta.xml')">
+          <p:pipe port="result" step="paths"/>
+        </p:with-option>
+      </p:load>
+    </p:group>
+    <p:catch>
+      <p:output port="result" primary="true"/>
+      <p:identity>
+        <p:input port="source">
+          <p:inline>
+            <!-- to do: complain -->
+            <ONIXmessage release="3.0"/>
+          </p:inline>
+        </p:input>
+      </p:identity>
+    </p:catch>
+  </p:try>
+  
+  <p:sink/>
+  
   <hub2tei:hub2tei name="hub2tei">
     <p:input port="source">
       <p:pipe port="result" step="evolve-hub-dyn"/>
@@ -266,83 +271,34 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </tei2html:tei2html>
   
-  <p:sink/>
+  <p:delete match="@srcpath" name="remove-srcpath-from-html"/> 
   
-  <p:load name="meta">
-    <p:with-option name="href" select="concat(/c:param-set/c:param[@name eq 'publisher-path']/@value, 'idml2epub_tei_onix/metadata/meta.xml')">
-      <p:pipe port="result" step="paths"/>
-    </p:with-option>
-  </p:load>
-  
-  <p:sink/>
-  
-  <bc:load-whole-cascade name="all-templates" filename="htmltemplates/template.xhtml">
-    <p:input port="paths">
-      <p:pipe port="result" step="paths"/>
-    </p:input>
-  </bc:load-whole-cascade>
-  
-  <html:consolidate-templates name="consolidate-templates">
-    <p:with-option name="debug" select="$debug"/>
-    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </html:consolidate-templates>
-    
-  <p:sink/>
-  
-  <bc:load-cascaded name="htmltemplates-implementation" filename="htmltemplates/implementation.xsl">
-    <p:input port="paths">
-      <p:pipe port="result" step="paths"/>
-    </p:input>
-    <p:with-option name="debug" select="$debug"/>
-    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </bc:load-cascaded>
-  
-  <html:generate-xsl-from-html-template name="generate-xsl-from-html-template">
-    <p:input port="implementing-xsl">
-      <p:pipe port="result" step="htmltemplates-implementation"/>
-    </p:input>
-    <p:input port="source">
-      <p:pipe port="result" step="consolidate-templates"/>
-    </p:input>
-    <p:with-option name="debug" select="$debug"/>
-    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </html:generate-xsl-from-html-template>
-  
-  <p:sink/>
-  
-  <html:apply-generated-xsl name="apply-generated">
-    <p:input port="source">
-      <p:pipe port="result" step="remove-srcpath-from-html"/>
-    </p:input>
-    <p:input port="metadata">
+  <html:templates name="htmltemplates">
+    <p:input port="meta">
       <p:pipe port="result" step="meta"/>
     </p:input>
-    <p:input port="stylesheet-from-htmltemplate">
-      <p:pipe port="result" step="generate-xsl-from-html-template"/>
-    </p:input>
     <p:input port="paths">
       <p:pipe port="result" step="paths"/>
     </p:input>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </html:apply-generated-xsl>
+  </html:templates>
   
   <p:add-attribute name="add-base-uri" match="/*" attribute-name="xml:base">
     <p:with-option name="attribute-value"
-      select="replace(
-      replace(
-      /c:param-set/c:param[@name eq 'file-uri']/@value,
-      '/(idml|tei|hub|docx)/([^/]+)$',
-      '/epub/$2'
-      ),
-      '(idml|xml|docx)$',
-      'html'
-      )">
+      select="if (/c:param-set/c:param[@name eq 'file-uri']/@value)
+              then replace(
+                replace(
+                  /c:param-set/c:param[@name eq 'file-uri']/@value,
+                  '/(idml|tei|hub|docx)/([^/]+)$',
+                  '/epub/$2'
+                ),
+                '(idml|xml|docx)$',
+                'html'
+              )
+              else concat(static-base-uri(), '/tmp')">
       <p:pipe port="result" step="paths"/>
     </p:with-option>
-    <p:input port="source">
-      <p:pipe port="result" step="apply-generated"/>
-    </p:input>
   </p:add-attribute>
   
   <letex:store-debug pipeline-step="idml2epub_tei_onix/add-base-uri">
@@ -413,12 +369,32 @@
       <p:pipe port="result" step="uuid"/>
     </p:input>
     <p:input port="report-in">
-      <p:pipe port="result" step="create-empty-report"/>
+      <p:pipe port="report" step="errorPI2svrl"/>
     </p:input>
     <p:with-option name="terminate-on-error" select="'no'"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </epub:convert>
+
+  <p:sink/>
+
+  <transpect:patch-svrl name="htmlreport">
+    <p:input port="source">
+      <p:pipe port="result" step="hub2htm"/>
+    </p:input>
+    <p:input port="svrl">
+      <p:pipe step="epub-convert" port="report"/>
+    </p:input>
+    <p:input port="params">
+      <p:pipe port="result" step="paths"/>
+    </p:input>
+    <p:with-option name="severity-default-name" select="'warning'"/>
+    <p:with-option name="report-title" select="/c:param-set/c:param[@name eq 'work-basename']/@value">
+      <p:pipe port="result" step="paths"/>
+    </p:with-option>
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+  </transpect:patch-svrl>
   
 </p:declare-step>
 
