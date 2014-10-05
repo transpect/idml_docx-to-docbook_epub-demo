@@ -6,14 +6,14 @@
   xmlns:epub="http://transpect.le-tex.de/epubtools"
   xmlns:cx="http://xmlcalabash.com/ns/extensions" 
   xmlns:letex="http://www.le-tex.de/namespace"
-  xmlns:trdemo="http://www.le-tex.de/namespace/trdemo" 
+  xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo" 
   version="1.0" 
-  name="trdemo-epub" 
-  type="trdemo:epub">
+  name="trdemo-epub-convert" 
+  type="trdemo:epub-convert">
 
   <p:input port="source" primary="false"/>
   <p:input port="paths" primary="true"/>
-  <p:input port="report-in"/>
+  
   <p:output port="result" primary="true">
     <p:pipe port="result" step="epub-convert"/>
   </p:output>
