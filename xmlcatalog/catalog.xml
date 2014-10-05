@@ -8,12 +8,8 @@
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../docx2hub/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../idml2xml/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xml2idml/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../idmlval/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../hub2html/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../hub2docbook/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../hub2tei/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../tei2html/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../hub2dbk/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../html-tables/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../htmltemplates/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/>
@@ -33,7 +29,8 @@
   <nextCatalog catalog="../xslt-util/mime-type/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xslt-util/resolve-uri/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xslt-util/xslt-based-catalog-resolver/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xproc-util/load-file/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../xproc-util/file-uri/xmlcatalog/catalog.xml"/>
+	<nextCatalog catalog="../xproc-util/load-file/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/store-debug/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/store-zip/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xproc-util/xml-model/xmlcatalog/catalog.xml"/> 
