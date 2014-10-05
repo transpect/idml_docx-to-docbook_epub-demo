@@ -16,16 +16,16 @@
                         <Boolean>false</Boolean>
                     </entry>
                     <entry>
-                        <String>editor.hard.line.wrap</String>
-                        <Boolean>true</Boolean>
-                    </entry>
-                    <entry>
                         <String>editor.indent.size.v9.2</String>
                         <Integer>2</Integer>
                     </entry>
                     <entry>
                         <String>editor.line.width</String>
                         <Integer>128</Integer>
+                    </entry>
+                    <entry>
+                        <String>editor.use.tabs</String>
+                        <Boolean>true</Boolean>
                     </entry>
                     <entry>
                         <String>enable.project.master.files.support</String>

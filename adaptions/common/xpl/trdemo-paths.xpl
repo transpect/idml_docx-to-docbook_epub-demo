@@ -3,7 +3,8 @@
   xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:c="http://www.w3.org/ns/xproc-step"  
   xmlns:bc="http://transpect.le-tex.de/book-conversion"
-  xmlns:trdemo="http://www.le-tex.de/namespace/trdemo"
+  xmlns:letex="http://www.le-tex.de/namespace"
+  xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
   version="1.0"
   name="trdemo-paths"
   type="trdemo:paths">
@@ -17,15 +18,16 @@
   <p:input port="conf" primary="true"/>
   <p:input port="report-in">
     <p:inline>
-      <c:reports pipeline="transpect-demo"/>
+    	<c:reports pipeline="trdemo-paths"/>
     </p:inline>
   </p:input>
 
   <p:output port="result" primary="true">
     <p:pipe port="result" step="paths"/>
   </p:output>
+	
   <p:output port="report">
-    <p:pipe port="result" step="insert-report"/>
+    <p:pipe port="report" step="paths"/>
   </p:output>
 
   <p:option name="publisher" required="false" select="''">
@@ -46,30 +48,47 @@
       step named "paths" will determine the work name by the input filename.
     </p:documentation>
   </p:option>
+	
   <p:option name="file" required="false" select="''"/>
+	
   <p:option name="debug" required="false" select="'no'">
     <p:documentation>
       Used to switch debug mode on or off. Pass 'yes' to enable debug mode.
     </p:documentation>
   </p:option>
-  <p:option name="debug-dir-uri" required="false" select="resolve-uri('debug')">
+  
+	<p:option name="debug-dir-uri" required="false" select="resolve-uri('debug')">
     <p:documentation>
       Expects a file URI of the directory that should be used to store debug information. 
     </p:documentation>
   </p:option>
-  <p:option name="pipeline" />
-  <p:option name="progress" required="false" select="'no'">
+  
+	<p:option name="pipeline" />
+  
+	<p:option name="progress" required="false" select="'no'">
     <p:documentation>Whether to display progress information as text files in a certain directory</p:documentation>
   </p:option>
-    
-  <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />
+	
+	<p:option name="status-dir-uri" select="concat($debug-dir-uri, '/status')">
+		<p:documentation>
+			Expects URI where the text files containing the progress information are stored.
+		</p:documentation>
+	</p:option>
+	
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/paths.xpl"/>
-  
-  <p:identity name="import-paths-xsl">
-    <p:input port="source">
-      <p:document href="../xsl/paths.xsl"/>
-    </p:input>
-  </p:identity>
+	<p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/simple-progress-msg.xpl"/>
+	
+	<letex:simple-progress-msg file="trdemo-paths.txt">
+		<p:input port="msgs">
+			<p:inline>
+				<c:messages>
+					<c:message xml:lang="en">Generating File Paths</c:message>
+					<c:message xml:lang="de">Generiere Dateisystempfade</c:message>
+				</c:messages>
+			</p:inline>
+		</p:input>
+		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
+	</letex:simple-progress-msg>
   
   <bc:paths name="paths">
     <p:with-option name="pipeline" select="$pipeline"/>
@@ -80,25 +99,12 @@
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="progress" select="$progress"/>
+  	<p:input port="stylesheet">
+  		<p:document href="../xsl/trdemo-paths.xsl"/>
+  	</p:input>
     <p:input port="conf">
       <p:pipe port="conf" step="trdemo-paths"/>
     </p:input>
-    <p:input port="report-in">
-      <p:pipe port="report-in" step="trdemo-paths"/>
-    </p:input>
   </bc:paths>
   
-  <p:sink/>
-
-  <p:insert name="insert-report" position="last-child">
-    <p:input port="source">
-      <p:pipe port="report-in" step="trdemo-paths"/>
-    </p:input>
-    <p:input port="insertion">
-      <p:pipe port="report" step="paths"/>
-    </p:input>
-  </p:insert>
-  
-  <p:sink/>
-
 </p:declare-step>
