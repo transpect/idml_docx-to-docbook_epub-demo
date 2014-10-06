@@ -37,6 +37,35 @@
 			The 'result' output port provides the xml file.
 		</p:documentation>
 	</p:output>
+	
+	<p:output port="docbook" primary="false">
+		<p:documentation>
+			The 'docbook' output port provides Docbook-flavoured XML.
+		</p:documentation>
+		<p:pipe port="result" step="hub2dbk"/>
+	</p:output>
+	
+	<p:output port="schematron" primary="false" sequence="true">
+		<p:documentation>
+			The 'schematron' output port provides the collected reports of all schematron checks.
+		</p:documentation>
+		<p:pipe port="report" step="trdemo-validate"/>
+	</p:output>
+	
+	
+	<p:output port="html" primary="false">
+		<p:documentation>
+			The 'html' output port provides a HTML file 
+		</p:documentation>
+		<p:pipe port="result" step="hub2htm-convert"/>
+	</p:output>
+	
+	<p:output port="htmlreport" primary="false">
+		<p:documentation>
+			The 'htmlreport' output port provides the HTML report file with Schematron and RelaxNG messages.
+		</p:documentation>
+		<p:pipe port="result" step="htmlreport"/>
+	</p:output>
 
 	<!--<p:output port="hub" primary="false">
 		<p:documentation>
@@ -152,17 +181,20 @@
 		</p:documentation>
 	</p:option>
 		
-	<!-- import modules -->
+	<!-- import external modules -->
 	
-	<p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />
-	<p:import href="http://transpect.le-tex.de/hub2html/xpl/hub2html.xpl"/>  
+	<p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />  
 	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl" />
 	<p:import href="http://transpect.le-tex.de/hub2html/xpl/hub2html.xpl"/>
+	<p:import href="http://transpect.le-tex.de/htmlreports/xpl/patch-svrl.xpl"/>
+	
+	<!-- import local modules -->
 	
 	<p:import href="trdemo-paths.xpl"/>
 	<p:import href="trdemo-convert-input.xpl"/>
 	<p:import href="trdemo-validate.xpl"/>
 	<p:import href="trdemo-hub2dbk.xpl"/>
+	<p:import href="trdemo-epub-convert.xpl"/>
 	
 	<trdemo:paths name="trdemo-paths">
 		<p:input port="conf">
@@ -186,7 +218,7 @@
 		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:convert-input>
 	
-	<trdemo:hub2dbk>
+	<trdemo:hub2dbk name="hub2dbk">
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 		<p:with-option name="progress" select="$progress"/>
@@ -205,10 +237,10 @@
 	
 	<hub2htm:convert name="hub2htm-convert">
 		<p:input port="source">
-			<p:pipe port="result" step="evolve-hub-dyn"/>
+			<p:pipe port="result" step="trdemo-convert-input"/>
 		</p:input>
 		<p:input port="paths">
-			<p:pipe port="result" step="paths"/>
+			<p:pipe port="result" step="trdemo-paths"/>
 		</p:input>
 		<p:input port="other-params">
 			<p:inline>
@@ -220,21 +252,21 @@
 			</p:inline>
 		</p:input>
 		<p:with-param name="html-title" select="/c:param-set/c:param[@name eq 'work-basename']/@value">
-			<p:pipe port="result" step="paths"/>
+			<p:pipe port="result" step="trdemo-paths"/>
 		</p:with-param>
 		<p:with-option name="debug" select="$debug"/>
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-	</hub2htm:convert>
+	</hub2htm:convert>	
 	
 	<transpect:patch-svrl name="htmlreport">
 		<p:input port="source">
 			<p:pipe port="result" step="hub2htm-convert"/>
 		</p:input>
-		<p:input port="svrl">
-			<p:pipe step="trdemo-validate" port="report"/>
+		<p:input port="reports">
+			<p:pipe port="report" step="trdemo-validate"/>
 		</p:input>
 		<p:input port="params">
-			<p:pipe port="result" step="paths"/>
+			<p:pipe port="result" step="trdemo-paths"/>
 		</p:input>
 		<p:with-option name="severity-default-name" select="'warning'"/>    
 		<p:with-option name="report-title" select="/c:param-set/c:param[@name eq 'work-basename']/@value">
@@ -244,7 +276,7 @@
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 	</transpect:patch-svrl>
 	
-	<trdemo:convert-epub name="trdemo-convert-epub">
+	<trdemo:epub-convert name="trdemo-epub-convert">
 		<p:input port="paths">
 			<p:pipe port="result" step="trdemo-paths"/>
 		</p:input>
@@ -253,6 +285,6 @@
 		</p:input>
 		<p:with-option name="debug" select="$debug"/>
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-	</trdemo:convert-epub>
+	</trdemo:epub-convert>
 	
 </p:declare-step>
