@@ -8,8 +8,8 @@
   xmlns:letex="http://www.le-tex.de/namespace"
   xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo" 
   version="1.0" 
-  name="trdemo-epub-convert" 
-  type="trdemo:epub-convert">
+  type="trdemo:epub-convert"
+  name="trdemo-epub-convert"> 
 
   <p:input port="source" primary="false"/>
   <p:input port="paths" primary="true"/>
@@ -25,56 +25,67 @@
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   <p:import href="http://transpect.le-tex.de/epubtools/epub-convert.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/load-cascaded.xpl"/>
-  <p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
-
-  <bc:load-cascaded name="load-epub-heading-conf" filename="epubtools/heading-conf.xml">
-    <p:input port="paths">
-      <p:pipe port="paths" step="trdemo-epub"/>
-    </p:input>
-    <p:with-option name="debug" select="$debug"/>
-    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </bc:load-cascaded>
-
-  <p:sink/>
-
+	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
+	
   <p:xslt name="load-meta">
     <p:input port="parameters">
       <p:empty/>
     </p:input>
     <p:input port="source">
-      <p:pipe port="paths" step="trdemo-epub"/>
+      <p:pipe port="paths" step="trdemo-epub-convert"/>
     </p:input>
     <p:input port="stylesheet">
       <p:inline>
-        <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:c="http://www.w3.org/ns/xproc-step"
-          xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+        <xsl:stylesheet 
+        	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+        	xmlns:c="http://www.w3.org/ns/xproc-step"
+          xmlns:dc="http://purl.org/dc/elements/1.1/" 
+          version="2.0">
 
           <xsl:template match="/c:param-set">
-            <epub-config>
-              <opf>
-                <packageid>
-                  <xsl:value-of select="c:param[@name eq 'work-basename']/@value"/>
-                </packageid>
-                <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-                  <dc:identifier>
-                    <xsl:value-of select="c:param[@name eq 'work-basename']/@value"/>
-                  </dc:identifier>
-                  <dc:title>
-                    <xsl:value-of select="c:param[@name eq 'work']/@value"/>
-                  </dc:title>
-                  <dc:creator>
-                    <xsl:value-of select="c:param[@name eq 'publisher']/@value"/>
-                  </dc:creator>
-                  <dc:publisher>
-                    <xsl:value-of select="c:param[@name eq 'publisher']/@value"/>
-                  </dc:publisher>
-                  <dc:date>
-                    <xsl:value-of select="current-date()"/>
-                  </dc:date>
-                  <dc:language>de</dc:language>
-                </metadata>
-              </opf>
-            </epub-config>
+          	<epub-config format="EPUB3" layout="reflowable">
+          		
+          		<types>
+
+          			<type name="landmarks" heading="Übersicht" hidden="true" types="bodymatter toc"/>
+          			<type name="toc" heading="Inhaltsverzeichnis" file="toc" hidden="true"/>
+          			<type name="cover" heading="Cover" file="cover"/>
+          			<type name="frontmatter" heading="Vorspann"/>
+          			<type name="bodymatter" heading="Hauptteil"/>
+          			<type name="backmatter" heading="Anhang"/>
+          			<type name="glossary" heading="Glossar"/>
+          			<type name="letex:bio" file="author"/>
+          			<type name="letex:about-the-book" file="about-the-book"/>
+          			<type name="abstract" file="about-the-content"/>
+          			<type name="fulltitle" file="title"/>
+          			<type name="copyright-page" file="copyright"/>
+          			<type name="part" file="part"/>
+          			<type name="chapter" file="chapter"/>
+          			<type name="appendix" file="appendix"/>
+          			<type name="glossary" file="glossary"/>
+          			<type name="other-credits" file="other-credits"/>
+          			<type name="letex:popup" file="popup"/>
+          			<type name="letex:advertisement" file="advertisement"/>
+          		</types>
+          		
+          		<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+          			<dc:identifier><xsl:value-of select="c:param[@name eq 'work-basename']/@value"/></dc:identifier>
+          			<dc:title>Mustertitel</dc:title>
+          			<dc:creator><xsl:value-of select="c:param[@name eq 'publisher']/@value"/></dc:creator>
+          			<dc:publisher><xsl:value-of select="c:param[@name eq 'publisher']/@value"/></dc:publisher>
+          			<dc:date><xsl:value-of select="current-date()"/></dc:date>
+          		</metadata>
+          		
+          		<hierarchy media-type="application/xhtml+xml" max-population="40" max-text-length="200000">
+          			<unconditional-split elt="div" attr="class" attval="white"/>
+          			<unconditional-split elt="h1"/>
+          			<heading elt="h1"/>
+          			<unconditional-split attr="epub:type" attval="letex:bio"/>
+          			<unconditional-split attr="epub:type" attval="cover"/>
+          		</hierarchy>
+          	
+          	</epub-config>
+          	
           </xsl:template>
 
         </xsl:stylesheet>
@@ -86,7 +97,7 @@
 
   <p:parameters name="params">
     <p:input port="parameters">
-      <p:pipe port="paths" step="trdemo-epub"/>
+      <p:pipe port="paths" step="trdemo-epub-convert"/>
     </p:input>
   </p:parameters>
 
@@ -96,7 +107,7 @@
       <p:pipe port="result" step="params"/>
     </p:with-option>
     <p:input port="source">
-      <p:pipe port="source" step="trdemo-epub"/>
+      <p:pipe port="source" step="trdemo-epub-convert"/>
     </p:input>
   </p:add-attribute>
     
@@ -109,15 +120,12 @@
     <p:input port="source">
       <p:pipe port="result" step="add-base-uri"/>
     </p:input>
-    <p:input port="conf">
-      <p:pipe port="result" step="load-epub-heading-conf"/>
-    </p:input>
     <p:input port="meta">
       <p:pipe port="result" step="load-meta"/>
     </p:input>
-    <p:input port="report-in">
-      <p:pipe step="trdemo-epub" port="report-in"/>
-    </p:input>
+  	<p:input port="conf">
+  		<p:empty/>
+  	</p:input>
     <p:with-option name="terminate-on-error" select="'no'"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
