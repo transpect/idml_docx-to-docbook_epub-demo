@@ -27,7 +27,11 @@
 	
 	<p:output port="result" primary="true"/>
 	
-	<p:output port="report" primary="false"/>
+	<p:output port="report" primary="false" sequence="true">
+		<p:pipe port="report" step="check-styles"/>
+		<p:pipe port="report" step="validate-business-rules"/>
+		<p:pipe port="report" step="validate-with-rng"/>
+	</p:output>
 	
 	<!-- options -->
 	
