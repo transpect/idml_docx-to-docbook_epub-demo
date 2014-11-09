@@ -17,7 +17,8 @@
   <nextCatalog catalog="../pubcoach/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../css-expand/xmlcatalog/catalog.xml"/>  
   <nextCatalog catalog="../css-generate/xmlcatalog/catalog.xml"/>  
-  <nextCatalog catalog="../epubtools/xmlcatalog/catalog.xml"/>    
+  <nextCatalog catalog="../epubtools/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../epubcheck/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../fontlib/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../schema/hub/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../schema/xhtml1/xmlcatalog/catalog.xml"/>
