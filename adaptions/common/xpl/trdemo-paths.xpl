@@ -63,20 +63,16 @@
     </p:documentation>
   </p:option>
   
-	<p:option name="pipeline" />
-  
-	<p:option name="progress" required="false" select="'no'">
-    <p:documentation>Whether to display progress information as text files in a certain directory</p:documentation>
-  </p:option>
-	
-	<p:option name="status-dir-uri" select="concat($debug-dir-uri, '/status')">
-		<p:documentation>
-			Expects URI where the text files containing the progress information are stored.
-		</p:documentation>
-	</p:option>
+	<p:option name="pipeline"/>
 	
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/paths.xpl"/>
 	<p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/simple-progress-msg.xpl"/>
+	
+  <p:variable name="status-dir-uri" select="concat($debug-dir-uri, '/status')">
+    <p:documentation>
+      Expects URI where the text files containing the progress information are stored.
+    </p:documentation>
+  </p:variable>
 	
 	<letex:simple-progress-msg file="trdemo-paths.txt">
 		<p:input port="msgs">
@@ -98,7 +94,6 @@
     <p:with-option name="file" select="$file"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-    <p:with-option name="progress" select="$progress"/>
   	<p:input port="stylesheet">
   		<p:document href="../xsl/trdemo-paths.xsl"/>
   	</p:input>

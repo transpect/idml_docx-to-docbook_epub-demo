@@ -47,18 +47,6 @@
 		</p:documentation>
 	</p:option>
 	
-	<p:option name="progress" required="false" select="'yes'">
-		<p:documentation>
-			Whether to display progress information as text files in a certain directory
-		</p:documentation>
-	</p:option>
-	
-	<p:option name="status-dir-uri" select="concat($debug-dir-uri, '/status')">
-		<p:documentation>
-			Expects URI where the text files containing the progress information are stored.
-		</p:documentation>
-	</p:option>
-	
 	<p:option name="check" required="false" select="'yes'">
 		<p:documentation>
 			Pass "yes" to enable checking with Schematron.

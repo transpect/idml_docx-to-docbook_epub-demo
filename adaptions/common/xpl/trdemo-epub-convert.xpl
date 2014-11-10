@@ -32,6 +32,13 @@
   <p:import href="http://transpect.le-tex.de/epubcheck/xpl/epubcheck.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/load-cascaded.xpl"/>
 	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
+  
+  <p:variable name="status-dir-uri" select="concat($debug-dir-uri, '/status')">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <h3>Variable: <code>status-dir-uri</code></h3>
+      <p>This variable expects an URI. The file (see option above) is saved to this URI.</p>
+    </p:documentation>
+  </p:variable>
 	
   <p:xslt name="load-meta">
     <p:input port="parameters">
@@ -135,7 +142,6 @@
     <p:with-option name="terminate-on-error" select="'no'"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-    <p:with-option name="status-dir-uri" select="$debug-dir-uri"/>
   </epub:convert>
   
   <letex:epubcheck name="epubcheck">
@@ -148,7 +154,6 @@
     <p:with-option name="svrl-srcpath" select="$svrl-srcpath"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-    <p:with-option name="status-dir-uri" select="$debug-dir-uri"/>
   </letex:epubcheck>
   
   <p:sink/>
