@@ -115,9 +115,12 @@
   </p:parameters>
 
   <p:add-attribute name="add-base-uri" match="/*" attribute-name="xml:base">
-    <p:with-option name="attribute-value"
-      select="replace(replace(/c:param-set/c:param[@name eq 'file-uri']/@value, '/(docx|xml|hub|idml)/', '/epub/'), '\.(docx|xml|hub|idml)$', '.html')">
+    <!--<p:with-option name="attribute-value"
+      select="replace(replace(/c:param-set/c:param[@name eq 'file-uri']/@value, '/(docx|xml|hub|idml|zip)/', '/epub/'), '\.(docx|xml|hub|idml|zip)$', '.html')">
       <p:pipe port="result" step="params"/>
+    </p:with-option>-->
+    <p:with-option name="attribute-value" select="concat(/*:html/*:head/*:meta[@name eq 'source-dir-uri']/@content, 'epub.html')">
+      <p:pipe port="source" step="trdemo-epub-convert"/>
     </p:with-option>
     <p:input port="source">
       <p:pipe port="source" step="trdemo-epub-convert"/>
