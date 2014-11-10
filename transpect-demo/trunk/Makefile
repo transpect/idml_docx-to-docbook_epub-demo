@@ -27,7 +27,9 @@ DEBUG = no
 HEAP = 1024m
 
 OUT_DIR       = $(call out_base,$(IN_FILE),output)
+ZIP_DIR = $(OUT_DIR)/zip
 IN_FILE_COPY  = $(OUT_DIR)/$(notdir $(IN_FILE))
+IN_FILE_BASE  = $(call out_base,$(IN_FILE),)
 DEBUG_DIR     = $(call out_path,$(OUT_DIR)/debug)
 DEBUG_DIR_URI = $(call uri,$(OUT_DIR)/debug)
 PROGRESS_DIR  = $(DEBUG_DIR)/status
@@ -66,17 +68,33 @@ copy-infile:
 	@echo ""
 	cp $(IN_FILE) $(IN_FILE_COPY)
 	chmod 664 $(IN_FILE_COPY)
+#ifeq ($(suffix $(IN_FILE)),.zip)
+#	$(MAKE) unzip
+#endif
+
+#unzip:
+#	@echo ""
+#	@echo "Makefile target: unzip"
+#	@echo ""
+#	-mkdir $(ZIP_DIR)
+#	unzip $(IN_FILE_COPY) -d $(ZIP_DIR)
+# IN_FILE_COPY = ls  $(ZIP_DIR) | sed -e '/idml/b' -e '/docx/b' -e d
+#	 @echo "$(IN_FILE_COPY)"
 
 conversion: check_input mkdirs copy-infile
 	@echo "OUTPUT DIR = $(OUT_DIR)"
 	@echo "DEBUG = $(DEBUG)"
 	@echo "DEBUG-DIR = $(DEBUG_DIR)"
+	@echo "IN_FILE_BASE = $(IN_FILE_BASE)"
 	@echo "PROGRESS = $(PROGRESS)"
 	@echo "PROGRESS_DIR = $(PROGRESS_DIR)"
 	@echo "ACTION_LOG = $(ACTION_LOG)"
-
+	rm -r $(DEBUG_DIR)
 	HEAP=$(HEAP) $(CALABASH) -D \
 		-o result=$(DEVNULL) \
+		-o docbook=$(IN_FILE_COPY).dbk.xml \
+		-o html=$(IN_FILE_COPY).preview.xhtml \
+		-o htmlreport=$(IN_FILE_COPY).report.xhtml \
 		$(call uri,adaptions/common/xpl/trdemo-main.xpl) \
 		file=$(call win_path,$(IN_FILE_COPY)) \
 		check=$(CHECK) \
@@ -84,6 +102,11 @@ conversion: check_input mkdirs copy-infile
 		status-dir-uri=$(PROGRESS_DIR_URI) \
 		debug-dir-uri=$(DEBUG_DIR_URI) \
 		debug=$(DEBUG)
+ifneq ($(DEBUG),yes)
+	rm -r $(DEBUG_DIR)
+	rm -r $(OUT_DIR)/epub
+endif
+
 
 transpectdoc: $(addprefix $(MAKEFILEDIR)/,$(FRONTEND_PIPELINES))
 	$(CALABASH) $(foreach pipe,$^,$(addprefix -i source=,$(call uri,$(pipe)))) \
@@ -99,7 +122,6 @@ test:
 	@echo $(call out_path,$(IN_FILE_COPY))
 	@echo $(HUB)
 	@echo $(HUBEVOLVED)
-
 
 progress:
 	@ls -1rt $(PROGRESS_DIR)/*.txt | xargs -d'\n' -I § sh -c 'date "+%H:%M:%S " -r § | tr -d [:cntrl:]; cat §'
