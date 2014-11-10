@@ -42,22 +42,14 @@
 		<p:documentation>
 			The 'docbook' output port provides Docbook-flavoured XML.
 		</p:documentation>
-		<p:pipe port="result" step="hub2dbk"/>
+		<p:pipe port="result" step="strip-srcpath-from-dbk"/>
 	</p:output>
-	
-	<p:output port="schematron" primary="false" sequence="true">
-		<p:documentation>
-			The 'schematron' output port provides the collected reports of all schematron checks.
-		</p:documentation>
-		<p:pipe port="report" step="trdemo-validate"/>
-	</p:output>
-	
 	
 	<p:output port="html" primary="false">
 		<p:documentation>
 			The 'html' output port provides a HTML file 
 		</p:documentation>
-		<p:pipe port="result" step="hub2htm-convert"/>
+		<p:pipe port="result" step="strip-srcpath-from-html"/>
 	</p:output>
 	
 	<p:output port="htmlreport" primary="false">
@@ -207,37 +199,50 @@
 		<p:with-option name="file" select="$file"/> 
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-		<p:with-option name="progress" select="$progress"/>
 		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:paths>
 	
 	<trdemo:convert-input name="trdemo-convert-input">
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-		<p:with-option name="progress" select="$progress"/>
 		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:convert-input>
 	
 	<trdemo:hub2dbk name="hub2dbk">
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-		<p:with-option name="progress" select="$progress"/>
 		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:hub2dbk>
 	
+	<p:delete match="@srcpath" name="strip-srcpath-from-dbk"/>
+	
+	<letex:store-debug pipeline-step="trdemo/trdemo-hub2dbk">
+		<p:with-option name="active" select="$debug"/>
+		<p:with-option name="base-uri" select="$debug-dir-uri"/>
+	</letex:store-debug>
+	
+	<p:sink/>
+	
 	<trdemo:validate name="trdemo-validate">
+		<p:input port="source">
+			<p:pipe port="result" step="hub2dbk"/>
+		</p:input>
 		<p:input port="paths">
 			<p:pipe port="result" step="trdemo-paths"/> 
 		</p:input>
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-		<p:with-option name="progress" select="$progress"/>
 		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:validate>
+  
+  <letex:store-debug pipeline-step="trdemo/trdemo-validate">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </letex:store-debug>
 	
 	<hub2htm:convert name="hub2htm-convert">
 		<p:input port="source">
-			<p:pipe port="result" step="trdemo-convert-input"/>
+		  <p:pipe port="result" step="hub2dbk"/>
 		</p:input>
 		<p:input port="paths">
 			<p:pipe port="result" step="trdemo-paths"/>
@@ -256,7 +261,27 @@
 		</p:with-param>
 		<p:with-option name="debug" select="$debug"/>
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-	</hub2htm:convert>	
+	</hub2htm:convert>
+	
+	<p:delete match="@srcpath" name="strip-srcpath-from-html"/>
+  
+  <trdemo:epub-convert name="trdemo-epub-convert">
+    <p:input port="source">
+      <p:pipe port="result" step="strip-srcpath-from-html"/>
+    </p:input>
+    <p:input port="paths">
+      <p:pipe port="result" step="trdemo-paths"/>
+    </p:input>
+    <!-- construct default srcpath from 1st element containing a scrpath attribute -->
+    <p:with-option name="svrl-srcpath" select="concat(
+      /*:hub/*:info/*:keywordset[@role eq 'hub']/*:keyword[@role eq 'source-dir-uri'],
+      (/*:hub//*[@srcpath])[1]/@srcpath
+      )">
+      <p:pipe port="result" step="trdemo-convert-input"/>
+    </p:with-option>
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+  </trdemo:epub-convert>
 	
 	<transpect:patch-svrl name="htmlreport">
 		<p:input port="source">
@@ -264,6 +289,7 @@
 		</p:input>
 		<p:input port="reports">
 			<p:pipe port="report" step="trdemo-validate"/>
+		  <p:pipe port="report" step="trdemo-epub-convert"/>
 		</p:input>
 		<p:input port="params">
 			<p:pipe port="result" step="trdemo-paths"/>
@@ -275,16 +301,5 @@
 		<p:with-option name="debug" select="$debug"/>
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 	</transpect:patch-svrl>
-	
-	<trdemo:epub-convert name="trdemo-epub-convert">
-		<p:input port="paths">
-			<p:pipe port="result" step="trdemo-paths"/>
-		</p:input>
-		<p:input port="source">
-			<p:pipe port="result" step="hub2htm-convert"/>
-		</p:input>
-		<p:with-option name="debug" select="$debug"/>
-		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-	</trdemo:epub-convert>
 	
 </p:declare-step>
