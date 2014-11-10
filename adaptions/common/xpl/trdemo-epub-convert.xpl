@@ -17,13 +17,19 @@
   <p:output port="result" primary="true">
     <p:pipe port="result" step="epub-convert"/>
   </p:output>
+  
+  <p:output port="report" primary="false">
+    <p:pipe port="result" step="epubcheck"/>
+  </p:output>
 
-  <p:option name="debug" required="false" select="'no'"/>
-  <p:option name="debug-dir-uri" required="false" select="resolve-uri('debug')"/>
-  <p:option name="local-css" required="false" select="'false'"/>
+  <p:option name="debug" select="'no'"/>
+  <p:option name="debug-dir-uri" select="resolve-uri('debug')"/>
+  <p:option name="local-css" select="'false'"/>
+  <p:option name="svrl-srcpath" select="'/'"/>
 
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   <p:import href="http://transpect.le-tex.de/epubtools/epub-convert.xpl"/>
+  <p:import href="http://transpect.le-tex.de/epubcheck/xpl/epubcheck.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/load-cascaded.xpl"/>
 	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
 	
@@ -129,6 +135,22 @@
     <p:with-option name="terminate-on-error" select="'no'"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="status-dir-uri" select="$debug-dir-uri"/>
   </epub:convert>
+  
+  <letex:epubcheck name="epubcheck">
+    <p:with-option name="epubfile-path" select="replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+\.)(docx|idml|epub)$', '$1epub', 'i')">
+      <p:pipe port="paths" step="trdemo-epub-convert"/>
+    </p:with-option>
+    <p:with-option name="epubcheck-path" select="concat(/c:param-set/c:param[@name eq 'common-path']/@value, '../../epubcheck/bin/epubcheck-3.0.1.jar')">
+      <p:pipe port="paths" step="trdemo-epub-convert"/>
+    </p:with-option>
+    <p:with-option name="svrl-srcpath" select="$svrl-srcpath"/>
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="status-dir-uri" select="$debug-dir-uri"/>
+  </letex:epubcheck>
+  
+  <p:sink/>
 
 </p:declare-step>
