@@ -26,7 +26,7 @@
   <pattern id="images">
     <rule context="dbk:mediaobject|dbk:inlinemediaobject">
       <let name="fileref" value="dbk:imageobject/dbk:imagedata/@fileref"/>
-      <let name="file-extension" value="replace($fileref, '^.+/.+\.([a-z]+)$', '$1', 'i')"/>
+      <let name="file-extension" value="replace($fileref, '^.+\.([a-zA-Z]+)$', '$1', 'i')"/>
 
       <assert test="matches($file-extension, '^(jpg|jpeg|png|svg)$', 'i')" id="image-format">
         <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
