@@ -199,19 +199,16 @@
 		<p:with-option name="file" select="$file"/> 
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:paths>
 	
 	<trdemo:convert-input name="trdemo-convert-input">
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:convert-input>
 	
 	<trdemo:hub2dbk name="hub2dbk">
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:hub2dbk>
 	
 	<p:delete match="@srcpath" name="strip-srcpath-from-dbk"/>
@@ -232,7 +229,6 @@
 		</p:input>
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:validate>
   
   <letex:store-debug pipeline-step="trdemo/trdemo-validate">
