@@ -87,6 +87,7 @@
           			<dc:creator><xsl:value-of select="c:param[@name eq 'publisher']/@value"/></dc:creator>
           			<dc:publisher><xsl:value-of select="c:param[@name eq 'publisher']/@value"/></dc:publisher>
           			<dc:date><xsl:value-of select="current-date()"/></dc:date>
+          		  <dc:language>de</dc:language>
           		</metadata>
           		
           		<hierarchy media-type="application/xhtml+xml" max-population="40" max-text-length="200000">
