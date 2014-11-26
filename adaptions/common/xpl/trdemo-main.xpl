@@ -111,9 +111,9 @@
 -->	
 	<!-- output port serialization -->
 	
-<!--	<p:serialization port="html" method="xhtml" media-type="application/xhtml+xml"/>
+	<p:serialization port="html" method="xhtml" media-type="application/xhtml+xml" indent="true"/>
 	<p:serialization port="htmlreport" method="xhtml" media-type="application/xhtml+xml"/>
--->	
+	
 	<!-- options -->
 	
 	<p:option name="file" required="true">
