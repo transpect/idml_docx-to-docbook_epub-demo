@@ -10,6 +10,7 @@
   <xsl:variable name="file-regex" select="'^([-a-zA-Z0-9\.]+)_([-a-zA-Z0-9\.]+)_([-a-zA-Z0-9\.]+)(_[-a-zA-Z0-9\.]+)?'" as="xs:string"/>
   <!-- for example publishername_seriesname_workname_whatever -->
   
+  <!-- example configuration for word input from campus -->
   <xsl:variable name="campus-file-regex" as="xs:string"
     select="'^(as)_(\d+)$'" />
 
