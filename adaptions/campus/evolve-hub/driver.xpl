@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" 
+<p:declare-step 
+  xmlns:p="http://www.w3.org/ns/xproc" 
   xmlns:c="http://www.w3.org/ns/xproc-step"  
   xmlns:cx="http://xmlcalabash.com/ns/extensions" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
@@ -7,8 +8,7 @@
   xmlns:transpect="http://www.le-tex.de/namespace/transpect"  
   xmlns:letex="http://www.le-tex.de/namespace"
   version="1.0"
-  name="evolve-hub"
-  >
+  name="evolve-hub">
   
   <p:option name="debug" required="false" select="'no'"/>
   <p:option name="debug-dir-uri" />

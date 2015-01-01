@@ -207,6 +207,9 @@
 	</trdemo:convert-input>
 	
 	<trdemo:hub2dbk name="hub2dbk">
+	  <p:input port="paths">
+	    <p:pipe port="result" step="trdemo-paths"/> 
+	  </p:input>
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 	</trdemo:hub2dbk>

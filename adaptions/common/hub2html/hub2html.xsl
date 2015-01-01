@@ -7,11 +7,12 @@
   xmlns:html="http://www.w3.org/1999/xhtml"
   xmlns:css="http://www.w3.org/1996/css" 
   xmlns:xlink="http://www.w3.org/1999/xlink" 
-  xmlns:hub="http://docbook.org/ns/docbook"
+  xmlns:dbk="http://docbook.org/ns/docbook"
   xmlns:hub2htm="http://www.le-tex.de/namespace/hub2htm" 
   xmlns:docx2hub="http://www.le-tex.de/namespace/docx2hub"
   xmlns:letex="http://www.le-tex.de/namespace" 
-  xmlns="http://www.w3.org/1999/xhtml">
+  xmlns="http://www.w3.org/1999/xhtml"
+  xpath-default-namespace="http://docbook.org/ns/docbook">
 
   <!--  * This stylesheet is used to transform hub format in XHTML 1.0
         * 
@@ -23,5 +24,10 @@
         * -->
   
   <xsl:import href="http://transpect.le-tex.de/hub2html/xsl/hub2html.xsl"/>
+  
+  <xsl:template match="/book/title" priority="100">
+    <xsl:message terminate="yes"/>
+    <h1><xsl:apply-templates mode="hub2htm-default"/></h1>
+  </xsl:template>
     
 </xsl:stylesheet>
