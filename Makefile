@@ -113,7 +113,7 @@ transpectdoc: $(addprefix $(MAKEFILEDIR)/,$(FRONTEND_PIPELINES))
 		$(call uri,$(MAKEFILEDIR)/transpectdoc/xpl/transpectdoc.xpl) \
 		output-base-uri=$(call uri,$(MAKEFILEDIR)/doc/transpectdoc) \
 		project-name=transpect-demo \
-		debug=$(DEBUG) debug-dir-uri=$(DEBUG_DIR)
+		debug=$(DEBUG) debug-dir-uri=$(DEBUG_DIR_URI)
 
 .PHONY: transpectdoc
 
