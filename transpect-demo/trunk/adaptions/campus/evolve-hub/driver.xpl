@@ -4,14 +4,14 @@
   xmlns:c="http://www.w3.org/ns/xproc-step"  
   xmlns:cx="http://xmlcalabash.com/ns/extensions" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:bc="http://transpect.le-tex.de/book-conversion"
   xmlns:transpect="http://www.le-tex.de/namespace/transpect"  
   xmlns:letex="http://www.le-tex.de/namespace"
   version="1.0"
   name="evolve-hub">
   
   <p:option name="debug" required="false" select="'no'"/>
-  <p:option name="debug-dir-uri" />
+  <p:option name="debug-dir-uri" select="'debug'"/>
+  <p:option name="status-dir-uri" select="'status'"/>
   
   <p:input port="source" primary="true"/>
   <p:input port="parameters" kind="parameter" primary="true"/>
@@ -134,11 +134,11 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </letex:xslt-mode>
   
-  <bc:evolve-hub_lists-by-indent>
+  <transpect:evolve-hub_lists-by-indent>
     <p:input port="stylesheet"><p:pipe step="evolve-hub" port="stylesheet"/></p:input>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </bc:evolve-hub_lists-by-indent>
+  </transpect:evolve-hub_lists-by-indent>
   
   <letex:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/60" mode="hub:ids">
     <p:input port="stylesheet"><p:pipe step="evolve-hub" port="stylesheet"/></p:input>
