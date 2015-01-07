@@ -178,7 +178,7 @@
 	
 	<hub2htm:convert name="hub2htm-convert">
 		<p:input port="source">
-		  <p:pipe port="result" step="hub2dbk"/>
+		  <p:pipe port="result" step="trdemo-convert-input"/>
 		</p:input>
 		<p:input port="paths">
 			<p:pipe port="result" step="trdemo-paths"/>
@@ -192,7 +192,7 @@
 				</c:param-set>
 			</p:inline>
 		</p:input>
-		<p:with-param name="html-title" select="/c:param-set/c:param[@name eq 'work-basename']/@value">
+	  <p:with-param name="html-title" select="/c:param-set/c:param[@name eq 'basename']/@value">
 			<p:pipe port="result" step="trdemo-paths"/>
 		</p:with-param>
 		<p:with-option name="debug" select="$debug"/>
