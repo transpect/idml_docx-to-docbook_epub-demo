@@ -2,50 +2,81 @@
 <xsl:stylesheet
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:bc="http://transpect.le-tex.de/book-conversion"
+  xmlns:transpect="http://www.le-tex.de/namespace/transpect" 
   version="2.0">
-  
+  <!--  *
+        * This stylesheet is used to derive parameters for the transpect configuration cascade 
+        * from the input filename. The parameter names can be configured in the transpect configuration file.
+        * 
+        * -->
   <xsl:import href="http://transpect.le-tex.de/book-conversion/converter/xsl/paths.xsl"/>
-  
-  <xsl:variable name="file-regex" select="'^([-a-zA-Z0-9\.]+)_([-a-zA-Z0-9\.]+)_([-a-zA-Z0-9\.]+)(_[-a-zA-Z0-9\.]+)?'" as="xs:string"/>
-  <!-- for example publishername_seriesname_workname_whatever -->
-  
-  <!-- example configuration for word input from campus -->
-  <xsl:variable name="campus-file-regex" as="xs:string"
-    select="'^(as)_(\d+)$'" />
+  <!--  *
+        * The regex below is used to parse the file basename with the function "transpect:parse-file-name". 
+        * According to this regex, the following example basenames are permitted:
+        * 
+        * letex_brochure_word_2929223
+        * campus_blabla_word_22222
+        * as_99911122233
+        *
+        * -->
+  <xsl:variable name="regex" select="'^([-a-zA-Z0-9\.]+)_([-a-zA-Z0-9\.]+)_?([-a-zA-Z0-9\.]+)?_?([-a-zA-Z0-9\.]+)?$'" as="xs:string"/>
 
-  <xsl:function name="bc:components-from-filename" as="xs:string+">
-    <xsl:param name="filename" as="xs:string"/>
-    <xsl:param name="conf" as="element(publisher-conf)"/>
+  <!--  *
+        * Overwrite the behaviour of "transpect:parse-file-name" from paths.xsl which is imported above. 
+        * The function is used to derive the appropriate regex-groups from the filename. The regex-groups 
+        * must apply to your transpect configuration, which is the secondary input of the XProc step "transpect:paths".
+        *
+        * -->
+  <xsl:function name="transpect:parse-file-name" as="attribute(*)*">
+    <xsl:param name="filename" as="xs:string?"/>
+    <xsl:variable name="base" select="transpect:basename($filename)" as="xs:string"/>
+    <xsl:attribute name="base" select="$base"/>
+    <xsl:variable name="ext" select="transpect:ext($filename)" as="xs:string"/>
+    <xsl:attribute name="ext" select="$ext"/>
+    <!--  *
+          * analyze-string is used to parse the filename. The matching substring is decomposed to 
+          * derive the appropriate values for the transpect configuration.
+          * -->
+    <xsl:analyze-string select="$base" regex="{$regex}">
+      <xsl:matching-substring>
+        <xsl:choose>
+          <!--  *
+                * this when-branch is specific for the campus extension of the transpect-demo
+                *  -->
+          <xsl:when test="matches($base, '^as_\d{13}$')">
+            <xsl:attribute name="publisher" select="'campus'"/>
+            <xsl:attribute name="series" select="'as'"/>
+            <xsl:attribute name="production-line" select="if($ext eq 'docx') then 'word' 
+              else if($ext eq 'idml') then 'indesign'
+              else 'generic'"/>
+            <xsl:attribute name="work" select="regex-group(2)"/>
+          </xsl:when>
+          <!--  *
+                * default branch for any file basenames
+                *  -->
+          <xsl:otherwise>
+            <xsl:attribute name="publisher" select="regex-group(1)"/>
+            <xsl:attribute name="series" select="regex-group(2)"/>
+            <xsl:attribute name="production-line" select="if($ext eq 'docx') then 'word' 
+              else if($ext eq 'idml') then 'indesign'
+              else 'generic'"/>
+            <xsl:attribute name="work" select="if(regex-group(3)) then regex-group(3) else $base"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:matching-substring>
+      <!--  *
+            * if the regex does not apply, the attributes default values are used
+            *  -->
+      <xsl:non-matching-substring>
+        <xsl:attribute name="publisher" select="regex-group(1)"/>
+        <xsl:attribute name="series" select="regex-group(2)"/>
+        <xsl:attribute name="production-line" select="if($ext eq 'docx') then 'word'
+          else if($ext eq 'idml') then 'indesign'
+          else 'generic'"/>
+        <xsl:attribute name="work" select="$base"/>        
+      </xsl:non-matching-substring>
+    </xsl:analyze-string>
     
-    <xsl:variable name="work-basename" select="bc:work-basename-from-filename($filename)"/>
-    
-    <xsl:choose>
-      <xsl:when test="matches($work-basename, '^transpect_wp_')">
-        <xsl:sequence select="('letex', 'wp', $work-basename)"/>
-      </xsl:when>
-      <xsl:when test="matches($work-basename, $campus-file-regex)">
-        <xsl:analyze-string select="$work-basename" regex="{$campus-file-regex}">
-          <xsl:matching-substring>
-            <xsl:sequence select="'campus'"/>
-            <xsl:sequence select="regex-group(1)"/>
-            <xsl:sequence select="regex-group(2)"/>
-          </xsl:matching-substring>
-        </xsl:analyze-string>
-      </xsl:when>
-      <xsl:when test="matches($work-basename, $file-regex)">
-        <xsl:analyze-string select="$work-basename" regex="{$file-regex}">
-          <xsl:matching-substring>
-            <xsl:sequence select="(regex-group(1), 'letex')[1]"/>
-            <xsl:sequence select="(regex-group(2), 'legacy')[1]"/>
-            <xsl:sequence select="(regex-group(3), $work-basename)[1]"/>
-          </xsl:matching-substring>
-        </xsl:analyze-string>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:sequence select="('letex', 'legacy', $work-basename)"/>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:function>
   
 </xsl:stylesheet>
