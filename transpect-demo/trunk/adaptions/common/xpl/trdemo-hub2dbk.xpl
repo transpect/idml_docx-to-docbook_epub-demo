@@ -2,7 +2,7 @@
 <p:declare-step 
 	xmlns:p="http://www.w3.org/ns/xproc"
 	xmlns:c="http://www.w3.org/ns/xproc-step"
-	xmlns:bc="http://transpect.le-tex.de/book-conversion"
+	xmlns:transpect="http://www.le-tex.de/namespace/transpect"
 	xmlns:letex="http://www.le-tex.de/namespace"
 	xmlns:hub2dbk="http://www.le-tex.de/namespace/hub2dbk"
 	xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
@@ -32,30 +32,22 @@
 	
 	<!-- options -->
 	
-	<p:option name="debug" select="'no'">
-		<p:documentation>
-			Used to switch debug mode on or off. Pass 'yes' to enable debug mode.
-		</p:documentation>
-	</p:option>
-	
-	<p:option name="debug-dir-uri" select="'debug'">
-		<p:documentation>
-			Expects a file URI of the directory that should be used to store debug information. 
-		</p:documentation>
-	</p:option>
-	
+  <p:option name="debug" select="'yes'"/> 
+  <p:option name="debug-dir-uri" select="'debug'"/>
+  <p:option name="status-dir-uri" select="'status'"/>
+  
 	<!-- imports -->
 	
 	<p:import href="http://transpect.le-tex.de/hub2dbk/xpl/hub2dbk.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/load-cascaded.xpl"/>
   
-  <bc:load-cascaded name="load-hub2dbk-stylesheet" filename="hub2dbk/hub2dbk.xsl">
+  <transpect:load-cascaded name="load-hub2dbk-stylesheet" filename="hub2dbk/hub2dbk.xsl">
     <p:input port="paths">
       <p:pipe port="paths" step="trdemo-hub2dbk"/>
     </p:input>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </bc:load-cascaded>
+  </transpect:load-cascaded>
 	
 	<hub2dbk:convert>
 	  <p:input port="source">
@@ -66,6 +58,7 @@
 	  </p:input>
 		<p:with-option name="debug" select="$debug"/>
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</hub2dbk:convert>
 	
 </p:declare-step>

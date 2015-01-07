@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <p:declare-step
   xmlns:p="http://www.w3.org/ns/xproc"
-  xmlns:c="http://www.w3.org/ns/xproc-step"  
-  xmlns:bc="http://transpect.le-tex.de/book-conversion"
+  xmlns:c="http://www.w3.org/ns/xproc-step"
+  xmlns:transpect="http://www.le-tex.de/namespace/transpect"
   xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
   xmlns:docx2hub="http://www.le-tex.de/namespace/docx2hub"
   xmlns:idml2xml="http://www.le-tex.de/namespace/idml2xml"
@@ -22,17 +22,9 @@
 	
 	<!-- options -->
 	
-	<p:option name="debug" select="'no'">
-		<p:documentation>
-			Used to switch debug mode on or off. Pass 'yes' to enable debug mode.
-		</p:documentation>
-	</p:option> 
-	
-	<p:option name="debug-dir-uri" select="'debug'">
-		<p:documentation>
-			Expects a file URI of the directory that should be used to store debug information. 
-		</p:documentation>
-	</p:option>
+  <p:option name="debug" select="'yes'"/> 
+  <p:option name="debug-dir-uri" select="'debug'"/>
+  <p:option name="status-dir-uri" select="'status'"/>
 	
 	<!-- imports -->
 	
@@ -50,7 +42,8 @@
 				<p:with-option name="all-styles" select="'no'"/>
 				<p:with-option name="srcpaths" select="'yes'"/>
 				<p:with-option name="debug" select="$debug"/>
-				<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>				
+				<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+			  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 			</idml2xml:hub>		
 		</p:when>
 		<p:when test="matches($file, '^.+\.docx$')">
@@ -59,11 +52,12 @@
 				<p:with-option name="srcpaths" select="'yes'"/>
 				<p:with-option name="debug" select="$debug"/>
 				<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+			  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 			</docx2hub:convert>
 		</p:when>
 	</p:choose>
 
-	<bc:evolve-hub name="evolve-hub-dyn" srcpaths="yes">
+	<transpect:evolve-hub name="evolve-hub-dyn" srcpaths="yes">
 		<p:documentation>
 			Build headline hierarchy, detect lists, figure captions etc.
 		</p:documentation>
@@ -72,6 +66,7 @@
 		</p:input>
 		<p:with-option name="debug" select="$debug"/>
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-	</bc:evolve-hub>
+	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
+	</transpect:evolve-hub>
 
 </p:declare-step>
