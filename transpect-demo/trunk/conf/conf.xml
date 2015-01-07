@@ -22,10 +22,6 @@
     <reserved name="xpl"/>
     <reserved name="xsl"/>
     <clade role="publisher" name="letex" content-base-uri="http://www.le-tex.de/transpect-demo/content/letex">
-      <param name="publisher-prefix-for-style-mapping" value="letex"/>  
-      <param name="use-css-decorator-classes" value="no"/>
-      <param name="epub-version" value="EPUB3"/>
-      <param name="publisher-prefix-for-style-mapping" value="letex"/>
       <clade role="series" name="standard">
         <clade role="production-line" name="indesign">
           <content role="work"/>
@@ -35,11 +31,7 @@
         </clade>
       </clade>
     </clade>
-    <clade role="publisher" name="campus" content-base-uri="http://www.le-tex.de/transpect-demo/content/campus">
-      <param name="publisher-prefix-for-style-mapping" value="campus"/>  
-      <param name="use-css-decorator-classes" value="no"/>
-      <param name="epub-version" value="EPUB2"/>
-      <param name="publisher-prefix-for-style-mapping" value="campus"/>
+    <clade role="publisher" name="campus" content-base-uri="http://www.le-tex.de/transpect-demo/content/campus">  
       <clade role="series" name="as">
         <clade role="production-line" name="word">
           <content role="work"/>
