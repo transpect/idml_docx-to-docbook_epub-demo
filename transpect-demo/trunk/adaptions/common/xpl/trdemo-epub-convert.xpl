@@ -5,6 +5,7 @@
   xmlns:epub="http://transpect.le-tex.de/epubtools"
   xmlns:cx="http://xmlcalabash.com/ns/extensions" 
   xmlns:letex="http://www.le-tex.de/namespace"
+  xmlns:transpect="http://www.le-tex.de/namespace/transpect"  
   xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo" 
   version="1.0" 
   type="trdemo:epub-convert"
@@ -32,103 +33,65 @@
   <p:import href="http://transpect.le-tex.de/epubcheck/xpl/epubcheck.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/load-cascaded.xpl"/>
 	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
-	
-  <p:xslt name="load-meta">
-    <p:input port="parameters">
-      <p:empty/>
+  
+  <!--  *
+        * Load the epub-config skeleton 
+        * -->
+  
+  <transpect:load-cascaded name="load-epub-config" filename="epubtools/epub-config.xml">
+    <p:input port="paths">
+      <p:pipe port="paths" step="trdemo-epub-convert"/>
     </p:input>
-    <p:input port="source">
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+  </transpect:load-cascaded>
+  
+  <!--  *
+        * Patch the current values from the paths document into the epub-config skeleton.  
+        * -->  
+  
+  <p:xslt name="patch-epub-config">
+    <p:input port="parameters">
       <p:pipe port="paths" step="trdemo-epub-convert"/>
     </p:input>
     <p:input port="stylesheet">
-      <p:inline>
-        <xsl:stylesheet 
-        	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-        	xmlns:c="http://www.w3.org/ns/xproc-step"
-          xmlns:dc="http://purl.org/dc/elements/1.1/" 
-          version="2.0">
-
-          <xsl:template match="/c:param-set">
-          	<epub-config format="EPUB3" layout="reflowable">
-          		
-          		<types>
-
-          			<type name="landmarks" heading="Übersicht" hidden="true" types="bodymatter toc"/>
-          			<type name="toc" heading="Inhaltsverzeichnis" file="toc" hidden="true"/>
-          			<type name="cover" heading="Cover" file="cover"/>
-          			<type name="frontmatter" heading="Vorspann"/>
-          			<type name="bodymatter" heading="Hauptteil"/>
-          			<type name="backmatter" heading="Anhang"/>
-          			<type name="glossary" heading="Glossar"/>
-          			<type name="letex:bio" file="author"/>
-          			<type name="letex:about-the-book" file="about-the-book"/>
-          			<type name="abstract" file="about-the-content"/>
-          			<type name="fulltitle" file="title"/>
-          			<type name="copyright-page" file="copyright"/>
-          			<type name="part" file="part"/>
-          			<type name="chapter" file="chapter"/>
-          			<type name="appendix" file="appendix"/>
-          			<type name="glossary" file="glossary"/>
-          			<type name="other-credits" file="other-credits"/>
-          			<type name="letex:popup" file="popup"/>
-          			<type name="letex:advertisement" file="advertisement"/>
-          		</types>
-          		
-          		<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-          			<dc:identifier><xsl:value-of select="c:param[@name eq 'work-basename']/@value"/></dc:identifier>
-          			<dc:title>Mustertitel</dc:title>
-          			<dc:creator><xsl:value-of select="c:param[@name eq 'publisher']/@value"/></dc:creator>
-          			<dc:publisher><xsl:value-of select="c:param[@name eq 'publisher']/@value"/></dc:publisher>
-          			<dc:date><xsl:value-of select="current-date()"/></dc:date>
-          		  <dc:language>de</dc:language>
-          		</metadata>
-          		
-          		<hierarchy media-type="application/xhtml+xml" max-population="40" max-text-length="200000">
-          			<unconditional-split elt="div" attr="class" attval="white"/>
-          			<unconditional-split elt="h1"/>
-          			<heading elt="h1"/>
-          			<unconditional-split attr="epub:type" attval="letex:bio"/>
-          			<unconditional-split attr="epub:type" attval="cover"/>
-          		</hierarchy>
-          	
-          	</epub-config>
-          	
-          </xsl:template>
-
-        </xsl:stylesheet>
-      </p:inline>
+      <p:document href="../xsl/trdemo-epub-config.xsl"/>
     </p:input>
   </p:xslt>
-
+  
+  <letex:store-debug pipeline-step="epubtools/epub-config">
+    <p:with-option name="active" select="$debug" />
+    <p:with-option name="base-uri" select="$debug-dir-uri" />
+  </letex:store-debug>
+  
   <p:sink/>
-
-  <p:parameters name="params">
-    <p:input port="parameters">
-      <p:pipe port="paths" step="trdemo-epub-convert"/>
-    </p:input>
-  </p:parameters>
-
+  
+  <!--  *
+        * The step epub:convert locate the HTML file with it's base URI. Therefore 
+        * it's necessary to patch the base uri to the current location of the HTML file. 
+        * -->
+  
   <p:add-attribute name="add-base-uri" match="/*" attribute-name="xml:base">
     <p:with-option name="attribute-value"
-      select="replace(replace(/c:param-set/c:param[@name eq 'file-uri']/@value, '/(docx|xml|hub|idml|zip)/', '/epub/'), '\.(docx|xml|hub|idml|zip)$', '.html')">
-      <p:pipe port="result" step="params"/>
+      select="replace(replace(/c:param-set/c:param[@name eq 'file']/@value, '/(docx|idml)/', '/epub/'), '\.(docx|idml)$', '.html')">
+      <p:pipe port="paths" step="trdemo-epub-convert"/>
     </p:with-option>
     <p:input port="source">
       <p:pipe port="source" step="trdemo-epub-convert"/>
     </p:input>
   </p:add-attribute>
-    
-  <letex:store-debug pipeline-step="epubtools/pre-epubconvert">
-    <p:with-option name="active" select="$debug" />
-    <p:with-option name="base-uri" select="$debug-dir-uri" />
-  </letex:store-debug>
+  
+  <!--  *
+        * The step epub:convert locate the HTML file with it's base URI. Therefore 
+        * it's necessary to patch the base uri to the current location of the HTML file. 
+        * -->
   
   <epub:convert name="epub-convert">
     <p:input port="source">
       <p:pipe port="result" step="add-base-uri"/>
     </p:input>
     <p:input port="meta">
-      <p:pipe port="result" step="load-meta"/>
+      <p:pipe port="result" step="patch-epub-config"/>
     </p:input>
   	<p:input port="conf">
   		<p:empty/>
@@ -138,6 +101,10 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
   </epub:convert>
+  
+  <!--  *
+        * The following step implements epubcheck and generates an SVRL report.
+        * -->
   
   <letex:epubcheck name="epubcheck">
     <p:with-option name="epubfile-path" select="replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+\.)(docx|idml|epub)$', '$1epub', 'i')">
@@ -151,6 +118,4 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </letex:epubcheck>
   
-  <p:sink/>
-
 </p:declare-step>
