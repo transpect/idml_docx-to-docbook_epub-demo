@@ -17,7 +17,7 @@
     <xsl:analyze-string select="." regex="^.+/(.+)\.(.+)$">
       <xsl:matching-substring>
         <xsl:variable name="filebasename" select="regex-group(1)" as="xs:string"/>
-        <xsl:variable name="fileextension" select="replace(regex-group(2), 'ai|eps|jpeg|png|tiff','jpg', 'i')" as="xs:string"/>
+        <xsl:variable name="fileextension" select="replace(regex-group(2), 'ai|eps|jpeg|tiff','jpg', 'i')" as="xs:string"/>
         <xsl:attribute name="fileref" select="concat($assets-dirname, '/', $filebasename, '.', $fileextension)"/>
       </xsl:matching-substring>
     </xsl:analyze-string>
