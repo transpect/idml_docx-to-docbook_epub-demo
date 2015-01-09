@@ -97,14 +97,9 @@
     <xsl:copy-of select="."/>
   </xsl:template>  
   
-  <!-- remove bogus content -->
-  <xsl:template match="@docx2hub:*" mode="hub:clean-hub"/>
-
-  <!-- show images in html report --><!--
-  <xsl:template match="@fileref[matches(., 'container[:]word/')]" mode="hub:clean-hub">
-    <xsl:variable name="srcdir" as="xs:string"
-      select="tokenize(/*/*:info/*:keywordset[@role eq 'hub']/*:keyword[@role eq 'source-dir-uri'], '/')[. ne ''][last()]"/>
-    <xsl:attribute name="fileref" select="concat($srcdir, '/', substring-after(., 'container:'))"/>
-  </xsl:template>-->
+  <!--  *
+        * remove preserved application-specific attributes 
+        *  -->
+  <xsl:template match="@docx2hub:*" mode="hub:clean-hub"/>  
 
 </xsl:stylesheet>
