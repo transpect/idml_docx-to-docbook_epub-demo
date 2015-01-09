@@ -13,10 +13,15 @@
   <xsl:param name="assets-dirname" select="'assets'" as="xs:string"/>
   
   <xsl:template match="imageobject/imagedata/@fileref">
-    <xsl:variable name="srcdir" as="xs:string"
-      select="tokenize(/*/*:info/*:keywordset[@role eq 'hub']/*:keyword[@role eq 'source-dir-uri'], '/')[. ne ''][last()]"/>
-    <xsl:variable name="filename" select="replace(., '^.+/(.+)$', 'assets/$1')" as="xs:string"/>
-    <xsl:attribute name="fileref" select="$filename"/>
+    
+    <xsl:analyze-string select="." regex="^.+/(.+)\.(.+)$">
+      <xsl:matching-substring>
+        <xsl:variable name="filebasename" select="regex-group(1)" as="xs:string"/>
+        <xsl:variable name="fileextension" select="replace(regex-group(2), 'ai|eps|jpeg|png|tiff','jpg', 'i')" as="xs:string"/>
+        <xsl:attribute name="fileref" select="concat($assets-dirname, '/', $filebasename, '.', $fileextension)"/>
+      </xsl:matching-substring>
+    </xsl:analyze-string>
+    
   </xsl:template>
   
   <xsl:template match="@*|*">

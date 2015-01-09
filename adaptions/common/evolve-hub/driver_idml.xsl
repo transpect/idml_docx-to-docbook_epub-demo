@@ -16,8 +16,5 @@
   <!-- For IDML synthesis, we use conditional text (with condition “storyname”) in order to mark the main story
     where the newly generated content goes -->
   <xsl:template match="*[@remap = 'HiddenText'][@condition = 'storytitle']" mode="hub:preprocess-hierarchy"/>
- 
-
-
 
 </xsl:stylesheet>
