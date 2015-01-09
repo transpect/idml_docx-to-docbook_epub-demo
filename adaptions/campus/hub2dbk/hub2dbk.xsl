@@ -13,4 +13,17 @@
   
   <xsl:import href="http://transpect.le-tex.de/hub2dbk/xsl/hub2dbk.xsl"/>
   
+  <xsl:template match="hub">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
+  <xsl:template match="hub/info"/>
+  
+  <xsl:template match="hub/section">
+    <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
+    <chapter version="5.0">
+      <xsl:apply-templates/>
+    </chapter>
+  </xsl:template>
+  
 </xsl:stylesheet>
