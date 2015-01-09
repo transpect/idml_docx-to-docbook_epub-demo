@@ -2,30 +2,35 @@
 <p:declare-step 
 	xmlns:p="http://www.w3.org/ns/xproc"
 	xmlns:c="http://www.w3.org/ns/xproc-step" 
-	xmlns:docx2hub="http://www.le-tex.de/namespace/docx2hub"
-	xmlns:hub2htm="http://www.le-tex.de/namespace/hub2htm"
 	xmlns:transpect="http://www.le-tex.de/namespace/transpect"
 	xmlns:letex="http://www.le-tex.de/namespace"
 	xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
 	name="trdemo-main"
 	type="trdemo:main"
 	version="1.0">
-	
-	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-		This ist the initial pipeline for the transpect demo.
-	</p:documentation>
+  
+  <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+    <h1>trdemo:main</h1>
+    <p>This is the frontend pipeline for the transpect demo. It checks and converts 
+      a DOCX or IDML file to HTML, EPUB and Docbook XML and provides an HTML report.</p>
+  </p:documentation>
 	
 	<!-- input port declarations -->
 	
 	<p:input port="conf" primary="true">
 	  <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-	    <p>The 'conf' port expects the Transpect configuration file. Please see <a href="https://subversion.le-tex.de/common/transpect-demo/content/le-tex/setup-manual/en/out/xhtml/transpect-setup.xhtml#sec-cascade">here</a> for further information.</p> 
+	    <h3>Input port: <code>conf</code></h3>
+	    <p>The 'conf' port expects the Transpect configuration file. Please see <a href="https://subversion.le-tex.de/common/transpect-demo/content/le-tex/setup-manual/en/out/xhtml/transpect-setup.xhtml#sec-cascade">here</a> 
+	      for further information.</p> 
 		</p:documentation>
 		<p:document href="http://customers.le-tex.de/generic/book-conversion/conf/conf.xml"/>
 	</p:input>
 	
 	<p:input port="schema" primary="false">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">Excepts the Docbook 5.0 RNG schema</p:documentation>
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+		  <h3>Input port: <code>schema</code></h3>
+		  <p>Expects a RelaxNG schema for Docbook 5.0.</p>
+		</p:documentation>
 		<p:document href="http://www.le-tex.de/resource/schema/docbook/5.0/docbook.rng"/>
 	</p:input>
 	
@@ -33,20 +38,24 @@
 
 	<p:output port="result" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			The 'result' output port provides the xml file.
+		  <h3>Output port: <code>result</code></h3>
+			<p>The output port provides the HTML report with the Schematron 
+			  and RelaxNG validation report messages.</p>
 		</p:documentation>
 	</p:output>
 	
 	<p:output port="docbook" primary="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			The 'docbook' output port provides Docbook-flavoured XML.
+		  <h3>Output port: <code>docbook</code></h3>
+      <p>The output port provides a Docbook 5.0 XML document.</p>
 		</p:documentation>
 		<p:pipe port="result" step="strip-srcpath-from-dbk"/>
 	</p:output>
 	
 	<p:output port="html" primary="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			The 'html' output port provides a HTML file 
+		  <h3>Output port: <code>html</code></h3>
+		  <p>The output port provides a XHTML document.</p> 
 		</p:documentation>
 		<p:pipe port="result" step="strip-srcpath-from-html"/>
 	</p:output>
@@ -61,60 +70,37 @@
 	
 	<p:option name="file" required="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			The path to the input file.
+		  <h3>Option: <code>file</code></h3>
+			<p>The path to the input file.</p>
 		</p:documentation>
 	</p:option>
-	
-	<p:option name="hub-version" select="'1.1'">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			The version of the HUB XML Format. See https://github.com/le-tex/Hub for the RelaxNG schema. 
-		</p:documentation>
-	</p:option>
-	
-	<p:option name="publisher" select="''">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			Used to set the publisher statically. If this option is not set, the 
-			step named "paths" will determine the publisher name by the input filename.
-		</p:documentation>
-	</p:option>
-	
-	<p:option name="series" select="''">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			Used to set the book series statically. If this option is not set, the 
-			step named "paths" will determine the series name by the input filename.
-		</p:documentation>
-	</p:option>
-	
-	<p:option name="work" select="''">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			Used to set the work statically. If this option is not set, the 
-			step named "paths" will determine the work name by the input filename.
-		</p:documentation>
-	</p:option>
-	
+		
 	<p:option name="debug" select="'yes'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			Used to switch debug mode on or off. Pass 'yes' to enable debug mode.
+		  <h3>Option: <code>debug</code></h3>
+			<p>Used to switch debug mode on or off. Pass 'yes' to enable debug mode.</p>
 		</p:documentation>
 	</p:option> 
 	
 	<p:option name="debug-dir-uri" select="'debug'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			Expects a file URI of the directory that should be used to store debug information. 
+		  <h3>Option: <code>debug-dir-uri</code></h3>
+			<p>File URI to the directory used to store debug information.</p> 
 		</p:documentation>
 	</p:option>
 	
 	<p:option name="status-dir-uri" select="'status'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			Expects URI where the text files containing the progress information are stored.
+		  <h3>Option: <code>debug-dir-uri</code></h3>
+			<p>File URI to the directory where the status files are stored. The status files 
+			  can be used by a third party software to show status messages in an user interface.</p>
 		</p:documentation>
 	</p:option>
 		
 	<!-- import external modules -->
 	
-	<p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />  
-	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl" />
-	<p:import href="http://transpect.le-tex.de/hub2html/xpl/hub2html.xpl"/>
+	<p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
+	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
 	<p:import href="http://transpect.le-tex.de/htmlreports/xpl/patch-svrl.xpl"/>
 	
 	<!-- import local modules -->
@@ -123,6 +109,7 @@
 	<p:import href="trdemo-convert-input.xpl"/>
 	<p:import href="trdemo-validate.xpl"/>
 	<p:import href="trdemo-hub2dbk.xpl"/>
+  <p:import href="trdemo-hub2html.xpl"/>
 	<p:import href="trdemo-epub-convert.xpl"/>
 
 	<trdemo:paths name="trdemo-paths">
@@ -176,29 +163,17 @@
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </letex:store-debug>
 	
-	<hub2htm:convert name="hub2htm-convert">
+	<trdemo:hub2html name="trdemo-hub2html">
 		<p:input port="source">
 		  <p:pipe port="result" step="trdemo-convert-input"/>
 		</p:input>
 		<p:input port="paths">
 			<p:pipe port="result" step="trdemo-paths"/>
 		</p:input>
-		<p:input port="other-params">
-			<p:inline>
-				<c:param-set>
-					<c:param name="overwrite-image-paths" value="no"/>
-					<c:param name="generate-toc" value="yes"/>
-					<c:param name="generate-index" value="yes"/>
-				</c:param-set>
-			</p:inline>
-		</p:input>
-	  <p:with-param name="html-title" select="/c:param-set/c:param[@name eq 'basename']/@value">
-			<p:pipe port="result" step="trdemo-paths"/>
-		</p:with-param>
 		<p:with-option name="debug" select="$debug"/>
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/> 
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-	</hub2htm:convert>
+	</trdemo:hub2html>
 	
 	<p:delete match="@srcpath" name="strip-srcpath-from-html"/>
   
@@ -223,7 +198,7 @@
 	
 	<transpect:patch-svrl name="htmlreport">
 		<p:input port="source">
-			<p:pipe port="result" step="hub2htm-convert"/>
+			<p:pipe port="result" step="trdemo-hub2html"/>
 		</p:input>
 		<p:input port="reports">
 			<p:pipe port="report" step="trdemo-validate"/>

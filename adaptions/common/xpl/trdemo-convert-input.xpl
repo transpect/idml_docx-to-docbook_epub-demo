@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<p:declare-step
-  xmlns:p="http://www.w3.org/ns/xproc"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:c="http://www.w3.org/ns/xproc-step"
   xmlns:transpect="http://www.le-tex.de/namespace/transpect"
   xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
@@ -9,16 +8,28 @@
   version="1.0"
   name="trdemo-convert-input"
   type="trdemo:convert-input">
+  
+  <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+    <h1>trdemo:convert-input</h1>
+    <p>This step takes the paths document and converts either a DOCX or IDML file 
+      first to flat and then to evolved Hub XML.</p>
+  </p:documentation>
 	
 	<!-- port declarations -->
 	
-	<p:input port="paths" primary="true">
-		<p:documentation>
-			The 'paths' port expects a c:param-set document including the file pathsv.
-		</p:documentation>
+	<p:input port="paths">
+	  <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+	    <h3>Input port: <code>paths</code></h3>
+	    <p>The 'paths' port expects a c:param-set document including the file paths.</p>
+	  </p:documentation>
 	</p:input>
 	
-	<p:output port="result" primary="true"/>
+	<p:output port="result" primary="true">
+	  <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+	    <h3>Output port: <code>result</code></h3>
+	    <p>The output port </p>
+	  </p:documentation>
+	</p:output>
 	
 	<!-- options -->
 	
@@ -31,6 +42,8 @@
 	<p:import href="http://transpect.le-tex.de/docx2hub/wml2hub.xpl"/>
 	<p:import href="http://transpect.le-tex.de/idml2xml/xpl/idml2hub.xpl"/>
 	<p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/evolve-hub.xpl"/>
+  
+  <p:import href="trdemo-patch-and-copy-filerefs.xpl"/>
 	
 	<!-- load either docx2hub or idml2xml -->
 	
@@ -68,5 +81,14 @@
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</transpect:evolve-hub>
+  
+  <trdemo:patch-and-copy-filerefs>
+    <p:input port="paths">
+      <p:pipe port="paths" step="trdemo-convert-input"/>
+    </p:input>
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="status-dir-uri" select="$status-dir-uri"/>    
+  </trdemo:patch-and-copy-filerefs>
 
 </p:declare-step>
