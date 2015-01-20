@@ -33,6 +33,10 @@
     <xsl:attribute name="base" select="$base"/>
     <xsl:variable name="ext" select="transpect:ext($filename)" as="xs:string"/>
     <xsl:attribute name="ext" select="$ext"/>
+    <!--  * 
+          * set vendor statically 
+          * -->
+    <xsl:attribute name="vendor" select="'trdemo'"/>
     <!--  *
           * analyze-string is used to parse the filename. The matching substring is decomposed to 
           * derive the appropriate values for the transpect configuration.
