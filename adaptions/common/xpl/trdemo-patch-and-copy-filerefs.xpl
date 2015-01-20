@@ -2,6 +2,8 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:c="http://www.w3.org/ns/xproc-step"
   xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
+  xmlns:cx="http://xmlcalabash.com/ns/extensions"
+  xmlns:l="http://xproc.org/library"
   xmlns:letex="http://www.le-tex.de/namespace"
   xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
   name="trdemo-patch-and-copy-filerefs"
@@ -20,7 +22,9 @@
       <h3>Input port: <code>source</code></h3>
       <p>The primary input port expects a Hub document.</p>
     </p:documentation>
+    <p:empty/>
   </p:input>
+  
   <p:input port="paths" primary="false">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <h3>Input port: <code>paths</code></h3>
@@ -50,8 +54,9 @@
   <p:import href="http://transpect.le-tex.de/xproc-util/file-uri/file-uri.xpl"/>
   <p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/simple-progress-msg.xpl"/>
+  <p:import href="http://xproc.org/library/recursive-directory-list.xpl"/>
   
-  <letex:simple-progress-msg name="success-msg" file="patch-filerefs.txt">
+  <letex:simple-progress-msg name="start-msg" file="patch-filerefs.txt">
     <p:input port="msgs">
       <p:inline>
         <c:messages>
@@ -63,26 +68,115 @@
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
   </letex:simple-progress-msg>
   
+  <p:sink/>
+  
+  <!--  * 
+        * perform a directory listing recursively
+        * -->
+  <l:recursive-directory-list name="directory-list">
+    <p:with-option name="path" select="replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+)/.+?$', '$1')">
+      <p:pipe port="paths" step="trdemo-patch-and-copy-filerefs"/>
+    </p:with-option>
+  </l:recursive-directory-list>  
+
+  <letex:store-debug pipeline-step="trdemo/directory-list">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </letex:store-debug>
+  
+  <p:for-each>
+    <!--  *
+          * iterate over directories and subdirectories
+          * -->
+    <p:iteration-source select="//c:directory"/>
+    <p:variable name="xmlbase" select="c:directory/@xml:base"/>
+    <!--  *
+          * iterate over all image files
+          * -->
+    <p:for-each name="file-iteration">
+      <p:iteration-source select="c:directory/c:file[matches(@name, '^.+\.(ai|eps|pdf|png|jpeg|jpg|png|svg|tif|tiff)$', 'i')]"/>
+      <!--  *
+            * evaluate target directory from file URI of the input file. 
+            * -->
+      <p:variable name="target-dir" select="concat(replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+)/.+$', '$1'), '/', $assets-dirname, '/')">
+        <p:pipe step="trdemo-patch-and-copy-filerefs" port="paths"/>
+      </p:variable>
+      <!--  *
+          * strip filename from file path  
+          * -->
+      <p:variable name="href" select="concat($xmlbase, c:file/@name)"/>
+      <p:variable name="filename" select="replace(c:file/@name, '^.+/(.+)$', '$1')"/>
+      
+      <cx:message xmlns:cx="http://xmlcalabash.com/ns/extensions">
+        <p:with-option name="message" select="concat('copy ', c:file/@name, ' &gt;&gt;&gt; ', $target-dir )"/>
+      </cx:message>
+      
+      <cxf:copy fail-on-error="true">
+        <p:with-option name="href" select="$href">
+          <p:pipe port="current" step="file-iteration"/>
+        </p:with-option> 
+        <p:with-option name="target" select="concat($target-dir, $filename)"/>
+      </cxf:copy>
+      
+    </p:for-each>    
+    
+  </p:for-each>
+  
+  <p:xslt name="normalize-filerefs">
+    <p:input port="source">
+      <p:pipe step="trdemo-patch-and-copy-filerefs" port="source"/>
+      <p:pipe step="directory-list" port="result"/>
+    </p:input>
+    <p:input port="parameters">
+      <p:pipe step="trdemo-patch-and-copy-filerefs" port="paths"/>
+    </p:input>
+    <p:input port="stylesheet">
+      <p:document href="../xsl/trdemo-patch-and-copy-filerefs.xsl"/>
+    </p:input>
+    <p:with-param name="assets-dirname" select="$assets-dirname"/>
+  </p:xslt>
+  
+  <!--  *
+        * patch file references according to the file paths above
+        * -->
+  <!--<p:xslt name="normalize-filerefs">
+    <p:input port="source">
+      <p:pipe step="trdemo-patch-and-copy-filerefs" port="source"/>
+    </p:input>
+    <p:input port="parameters">
+      <p:pipe step="trdemo-patch-and-copy-filerefs" port="paths"/>
+    </p:input>
+    <p:input port="stylesheet">
+      <p:document href="../xsl/trdemo-patch-and-copy-filerefs.xsl"/>
+    </p:input>
+    <p:with-param name="assets-dirname" select="$assets-dirname"/>
+  </p:xslt>
+  
+  <letex:store-debug pipeline-step="trdemo/patch-and-copy-filerefs">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </letex:store-debug>
+-->  
   <!--  *
         * iterate over each imagedata element  
         * -->
-  <p:for-each name="file-iteration">
+  <!--<p:for-each name="file-iteration">
     <p:iteration-source select="//*:imageobject/*:imagedata"/>
-    <!--  *
+    <!-\-  *
           * get source-dir-uri of input file from hub document.  
-          * -->
+          * -\->
     <p:variable name="source-dir-uri" select="/*/*:info/*:keywordset[@role eq 'hub']/*:keyword[@role eq 'source-dir-uri']">
       <p:pipe step="trdemo-patch-and-copy-filerefs" port="source"/>
     </p:variable>
-    <!--  *
+    <!-\-  *
           * evaluate target directory from file URI of the input file. 
-          * -->
+          * -\->
     <p:variable name="target-dir" select="concat(replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+)/.+$', '$1'), '/', $assets-dirname, '/')">
       <p:pipe step="trdemo-patch-and-copy-filerefs" port="paths"/>
     </p:variable>
-    <!--  *
+    <!-\-  *
           * strip filename from file path  
-          * -->
+          * -\->
     <p:variable name="filename" select="replace(*:imagedata/@fileref, '^.+/(.+)$', '$1')"/>
     
     <cx:message xmlns:cx="http://xmlcalabash.com/ns/extensions">
@@ -96,24 +190,6 @@
       <p:with-option name="target" select="concat($target-dir, $filename)"/>
     </cxf:copy>
     
-  </p:for-each>
-  
-  <!--  *
-        * patch file references according to the file paths above
-        * -->
-  <p:xslt name="normalize-filerefs">
-    <p:input port="source">
-      <p:pipe step="trdemo-patch-and-copy-filerefs" port="source"/>
-    </p:input>
-    <p:input port="stylesheet">
-      <p:document href="../xsl/trdemo-patch-and-copy-filerefs.xsl"/>
-    </p:input>
-    <p:with-param name="assets-dirname" select="$assets-dirname"/>
-  </p:xslt>
-  
-  <letex:store-debug pipeline-step="trdemo/patch-and-copy-filerefs">
-    <p:with-option name="active" select="$debug"/>
-    <p:with-option name="base-uri" select="$debug-dir-uri"/>
-  </letex:store-debug>
-  
+  </p:for-each>-->
+    
 </p:declare-step>
