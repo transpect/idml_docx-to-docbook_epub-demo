@@ -2,6 +2,8 @@
 <p:declare-step
   xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:c="http://www.w3.org/ns/xproc-step"  
+  xmlns:cx="http://xmlcalabash.com/ns/extensions"
+  xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
   xmlns:transpect="http://www.le-tex.de/namespace/transpect"
   xmlns:letex="http://www.le-tex.de/namespace"
   xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
@@ -39,7 +41,7 @@
   
   <p:option name="interface-language" select="'en'"/>
   <p:option name="clades" select="''"/>
-  
+  <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/paths.xpl"/>
 	<p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/simple-progress-msg.xpl"/>
   <p:import href="http://transpect.le-tex.de/calabash-extensions/ltx-lib.xpl"/>
@@ -51,6 +53,11 @@
   <transpect:file-uri name="file-uri">
     <p:with-option name="filename" select="$file"/>
   </transpect:file-uri>
+  
+  <letex:store-debug pipeline-step="trdemo/file-uri">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </letex:store-debug>
 
   <p:choose>
     <!--  *
@@ -65,14 +72,37 @@
         <p:with-option name="dest-dir" select="concat(/c:result/@os-path, '.tmp')"/>
         <p:with-option name="overwrite" select="'yes'" />
       </letex:unzip>
-      <!--  *
-            * normalize the URI of the first IDML or DOCX file found in the 
-            * uncompressed archive
-            * -->
-      <transpect:file-uri>
-        <p:with-option name="filename" select="concat(/c:files/@xml:base,
-          //c:file[matches(@name, '^.+\.(idml|docx)$', 'i')][1]/@name)"/>
-      </transpect:file-uri>
+      
+      <letex:store-debug pipeline-step="trdemo/unzip">
+        <p:with-option name="active" select="$debug"/>
+        <p:with-option name="base-uri" select="$debug-dir-uri"/>
+      </letex:store-debug>
+      
+      <p:group>
+        <!--  *
+              * use first docx or idml file in the directory
+              * -->
+        <p:variable name="filename" select="replace(//c:file[matches(@name, '^.+\.(idml|docx)$', 'i')][1]/@name, '^.+/(.+)$', '$1')"/>
+        <p:variable name="target" select="concat(/c:files/@xml:base, '/../', $filename)"/>
+        <!--  *
+              * copy IDML file in main output directory
+              * -->
+        <cxf:copy name="copy" fail-on-error="true" cx:depends-on="unzip">
+          <p:with-option name="href" select="concat(/c:files/@xml:base,
+            //c:file[matches(@name, '^.+\.(idml|docx)$', 'i')][1]/@name)"/>
+          <p:with-option name="target" select="$target"/>
+        </cxf:copy>
+        
+        <!--  *
+              * normalize the URI of the first IDML or DOCX file found in the 
+              * uncompressed archive
+              * -->
+        <transpect:file-uri cx:depends-on="copy">
+          <p:with-option name="filename" select="$target">
+            <p:pipe port="result" step="unzip"/>
+          </p:with-option>
+        </transpect:file-uri>
+      </p:group>
       
     </p:when>
     <p:otherwise>
