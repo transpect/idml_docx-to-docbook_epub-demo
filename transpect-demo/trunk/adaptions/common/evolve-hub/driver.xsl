@@ -5,6 +5,7 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:css="http://www.w3.org/1996/css"
   xmlns:hub="http://www.le-tex.de/namespace/hub"
+  xmlns:letex		= "http://www.le-tex.de/namespace"
   xmlns:docx2hub="http://www.le-tex.de/namespace/docx2hub"
   xpath-default-namespace="http://docbook.org/ns/docbook"
   xmlns="http://docbook.org/ns/docbook"
@@ -77,6 +78,11 @@
     | Beschriftung
     | caption
     )$'" />
+  
+  <xsl:function name="letex:is-variable-list" as="xs:boolean">
+    <xsl:param name="list" as="element(*)"/>
+    <xsl:value-of select="false()"/>
+  </xsl:function>
   
   <xsl:function name="hub:is-empty-para" as="xs:boolean">
     <xsl:param name="elt" as="element(*)"/>
