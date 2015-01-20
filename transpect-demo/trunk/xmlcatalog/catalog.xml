@@ -1,5 +1,5 @@
 <?xml version="1.0"?> 
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"> 
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
   
   <!-- mandatory entry --> 
   <rewriteURI uriStartString="http://customers.le-tex.de/generic/book-conversion/" rewritePrefix="../"/> 
@@ -37,6 +37,7 @@
   <nextCatalog catalog="../xproc-util/xml-model/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/xslt-mode/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/copy-files/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../xproc-util/xproc.org/library/xmlcatalog/catalog.xml"/>
   
   <!-- content-repo.catalog.xml is unversioned. 
     Use this single-entry catalog for local configuration, like this: 
