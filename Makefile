@@ -84,16 +84,15 @@ postprocess:
 	@echo ""
 	@echo "Makefile target: postprocess"
 	@echo ""
-ifneq ($(DEBUG),yes)
--rm -rf $(DEBUG_DIR)
--rm -rf $(STATUS_DIR)
+ifneq ($(DEBUG), yes)
+	-rm -rf $(DEBUG_DIR)
+	-rm -rf $(STATUS_DIR)
 endif
 
 archive:
 	@echo ""
 	@echo "Makefile target: archive"
 	@echo ""
-#	zip -j  $(OUT_DIR_PATH)/$(IN_FILE_BASE).zip $(OUT_DIR_PATH)/*
 	cd $(OUT_DIR_PATH) && zip -r $(OUT_DIR_PATH)/$(IN_FILE_BASE).zip ./*
 
 conversion: messages checkinput preprocess transpectdemo postprocess archive
