@@ -43,13 +43,13 @@
 	<p:import href="http://transpect.le-tex.de/idml2xml/xpl/idml2hub.xpl"/>
 	<p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/evolve-hub.xpl"/>
   
-  <p:import href="trdemo-patch-and-copy-filerefs.xpl"/>
+  <p:import href="trdemo-patch-and-copy-filerefs.xpl"/>	
 	
 	<!-- load either docx2hub or idml2xml -->
 	
 	<p:choose>
 		<p:variable name="file" select="/c:param-set/c:param[@name eq 'file']/@value"/>
-		<p:when test="matches($file, '^.+\.idml$')">
+		<p:when test="matches($file, '^.+\.idml$', 'i')">
 			<idml2xml:hub name="idml2hub">
 				<p:with-option name="idmlfile" select="$file"/>
 				<p:with-option name="all-styles" select="'no'"/>
@@ -59,7 +59,7 @@
 			  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 			</idml2xml:hub>		
 		</p:when>
-		<p:when test="matches($file, '^.+\.docx$')">
+		<p:when test="matches($file, '^.+\.docx$', 'i')">
 			<docx2hub:convert name="docx2hub">
 				<p:with-option name="docx" select="$file"/>
 				<p:with-option name="srcpaths" select="'yes'"/>
