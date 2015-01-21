@@ -63,7 +63,7 @@
 	<!-- output port serialization -->
 	
   <p:serialization port="result" method="xhtml" media-type="application/xhtml+xml"/>
-  <p:serialization port="html" method="xhtml" media-type="application/xhtml+xml" indent="true"/>
+  <p:serialization port="html" method="xhtml" media-type="application/xhtml+xml"/>
   <p:serialization port="docbook" omit-xml-declaration="false"/>
 	
 	<!-- options -->
