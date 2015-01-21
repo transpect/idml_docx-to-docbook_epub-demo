@@ -25,9 +25,9 @@
   
   <xsl:import href="http://transpect.le-tex.de/hub2html/xsl/hub2html.xsl"/>
   
-  <xsl:template match="/book/title" priority="100">
-    <xsl:message terminate="yes"/>
-    <h1><xsl:apply-templates mode="hub2htm-default"/></h1>
-  </xsl:template>
-    
+  <xsl:param name="use-css-rules" select="'yes'"/>
+  <xsl:param name="generate-toc" select="'yes'"/>
+  <xsl:param name="generate-index" select="'yes'"/>
+  <xsl:param name="overwrite-image-paths" select="'no'"/>
+  
 </xsl:stylesheet>
