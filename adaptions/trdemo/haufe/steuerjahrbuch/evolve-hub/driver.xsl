@@ -15,39 +15,42 @@
 <xsl:template match="/" priority="100">
   <xsl:message terminate="yes"></xsl:message>
 </xsl:template>
-  <!-- variable overrides -->
+  
+  <!--  *
+        * headline hierarchy by style name
+        * -->
 
-  <xsl:variable name="hub:hierarchy-role-regexes-x" as="xs:string+"
-    select="( '^ttl_alt1$',
+  <xsl:variable name="hub:hierarchy-role-regexes-x" select="( 
+    '^ttl_alt1$',
     '^ttl$',
     '^U1$',
-              '^U2$',
-              '^U3$',
-              '^U4$',
-              '^U5$',
-              '^U6$',
-              '^U7$'
-    )" />
+    '^U2$',
+    '^U3$',
+    '^U4$',
+    '^U5$',
+    '^U6$',
+    '^U7$'
+    )" as="xs:string+"/>
     
-  <xsl:variable name="hub:hierarchy-title-roles" as="xs:boolean" select="true()"/>  
-
-  <xsl:variable name="hub:figure-title-role-regex-x"  as="xs:string"
-    select="'^grfbschr$'" />
+  <xsl:variable name="hub:hierarchy-title-roles" select="true()" as="xs:boolean"/>  
   
-  <xsl:variable name="hub:table-title-role-regex-x"  as="xs:string"
-    select="'^hnwU1$'" />
+  <!--  *
+        * figure and table titles by style name
+        * -->
 
-  <xsl:variable name="hub:figure-caption-must-begin-with-figure-caption-start-regex"  as="xs:boolean"
-    select="false()" />
+  <xsl:variable name="hub:figure-title-role-regex-x" select="'^grfbschr$'" as="xs:string"/>
+  
+  <xsl:variable name="hub:table-title-role-regex-x" select="'^hnwU1$'" as="xs:string"/>
+
+  <xsl:variable name="hub:figure-caption-must-begin-with-figure-caption-start-regex" select="false()" as="xs:boolean"/>
 
   <xsl:variable name="hub:figure-note-role-regex"  as="xs:string" select="'^cAbbLegende$'" />
   
-
-  <!-- template overrides/additions -->
-
-  <!-- remove unecessary markup and output rng/schematron messages only once for this foreign markup -->
-  <!--<xsl:template match="phrase[@role eq 'hub:foreign']/*" mode="hub:preprocess-hierarchy">
-    <xsl:copy/>
-  </xsl:template>-->
+  <!--  *
+        * don't generate lists if these style names exist
+        *  -->
+  
+  <xsl:variable name="hub:list-by-indent-exception-role-regex" select="'^Verzeichnis\d$'"/>
+  
 
 </xsl:stylesheet>
