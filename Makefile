@@ -9,9 +9,9 @@ endif
 
 # default values
 
-OUT_DIR		= output
 IN_FILE_BASE	= $(basename $(notdir $(IN_FILE)))
-OUT_DIR_PATH	= $(call get-fullpath,$(OUT_DIR))/$(IN_FILE_BASE)
+OUT_DIR		= output/$(IN_FILE_BASE)
+OUT_DIR_PATH	= $(call get-fullpath,$(OUT_DIR))
 IN_FILE_COPY	= $(OUT_DIR_PATH)/$(notdir $(IN_FILE))
 MAKEFILE_DIR	= $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 CALABASH	= $(MAKEFILE_DIR)/calabash/calabash.sh

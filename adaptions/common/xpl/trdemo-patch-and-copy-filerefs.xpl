@@ -102,8 +102,8 @@
         <p:pipe step="trdemo-patch-and-copy-filerefs" port="paths"/>
       </p:variable>
       <!--  *
-          * strip filename from file path  
-          * -->
+            * strip filename from file path  
+            * -->
       <p:variable name="href" select="concat($xmlbase, c:file/@name)"/>
       <p:variable name="filename" select="replace(c:file/@name, '^.+/(.+)$', '$1')"/>
       
@@ -121,7 +121,9 @@
     </p:for-each>    
     
   </p:for-each>
-  
+  <!--  * 
+        * this pipeline is used to normalize filerefs 
+        * -->
   <p:xslt name="normalize-filerefs">
     <p:input port="source">
       <p:pipe step="trdemo-patch-and-copy-filerefs" port="source"/>
