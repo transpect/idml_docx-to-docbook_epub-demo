@@ -19,7 +19,7 @@ DEBUG		= no
 DEBUG_DIR	= $(OUT_DIR_PATH)/debug
 DEBUG_DIR_URI	= $(call get-uri,$(DEBUG_DIR))
 STATUS_DIR	= $(OUT_DIR_PATH)/status
-STATUS_DIR_URI= $(call get-uri,$(STATUS_DIR))
+STATUS_DIR_URI	= $(call get-uri,$(STATUS_DIR))
 HEAP		= 1024m
 DEVNULL		= $(call get-fullpath,/dev/null)
 
@@ -101,7 +101,7 @@ conversion: messages checkinput preprocess transpectdemo postprocess archive
 	@echo ""
 
 progress:
-	@ls -1rt $(PROGRESS_DIR)/*.txt | xargs -d'\n' -I § sh -c 'date "+%H:%M:%S " -r § | tr -d [:cntrl:]; cat §'
+	@ls -1rt $(STATUS_DIR)/*.txt | xargs -d'\n' -I § sh -c 'date "+%H:%M:%S " -r § | tr -d [:cntrl:]; cat §'
 
 transpectdoc: $(addprefix $(MAKEFILE_DIR)/,$(FRONTEND_PIPELINES))
 	$(CALABASH) $(foreach pipe,$^,$(addprefix -i source=,$(call uri,$(pipe)))) \
