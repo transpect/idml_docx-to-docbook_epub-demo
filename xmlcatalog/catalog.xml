@@ -2,6 +2,7 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
   
   <!-- mandatory entry --> 
+  
   <rewriteURI uriStartString="http://customers.le-tex.de/generic/book-conversion/" rewritePrefix="../"/> 
   <rewriteURI uriStartString="http://www.le-tex.de/resource/schema/" rewritePrefix="../schema/"/>
   

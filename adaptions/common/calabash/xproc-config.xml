@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cc:xproc-config xmlns:cc="http://xmlcalabash.com/ns/configuration" xmlns:letex="http://www.le-tex.de/namespace">
+
+	<cc:implementation type="letex:unzip" class-name="UnZip"/>
+	<cc:implementation type="letex:validate-with-rng" class-name="LtxValidateWithRNG"/>
+	<cc:implementation type="letex:image-identify" class-name="ImageIdentify"/>
+
+	<cc:html-parser value="tagsoup"/>
+  
+	<cc:fo-processor class-name="com.xmlcalabash.util.FoFOP"/>
+
+</cc:xproc-config>
