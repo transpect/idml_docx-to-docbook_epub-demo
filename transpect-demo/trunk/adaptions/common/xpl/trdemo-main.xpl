@@ -31,7 +31,7 @@
 		  <h3>Input port: <code>schema</code></h3>
 		  <p>Expects a RelaxNG schema for Docbook 5.0.</p>
 		</p:documentation>
-		<p:document href="http://www.le-tex.de/resource/schema/docbook/5.0/docbook.rng"/>
+		<p:document href="http://www.le-tex.de/resource/schema/docbook/docbook.rng"/>
 	</p:input>
 	
 	<!-- output port declarations -->
@@ -128,7 +128,7 @@
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:convert-input>
 	
-	<trdemo:hub2dbk name="hub2dbk">
+	<trdemo:hub2dbk name="trdemo-hub2dbk">
 	  <p:input port="paths">
 	    <p:pipe port="result" step="trdemo-paths"/> 
 	  </p:input>
@@ -148,7 +148,7 @@
 	
 	<trdemo:validate name="trdemo-validate">
 		<p:input port="source">
-			<p:pipe port="result" step="hub2dbk"/>
+		  <p:pipe port="result" step="trdemo-hub2dbk"/>
 		</p:input>
 		<p:input port="paths">
 			<p:pipe port="result" step="trdemo-paths"/> 
@@ -165,7 +165,7 @@
 	
 	<trdemo:hub2html name="trdemo-hub2html">
 		<p:input port="source">
-		  <p:pipe port="result" step="trdemo-convert-input"/>
+		  <p:pipe port="result" step="trdemo-hub2dbk"/>
 		</p:input>
 		<p:input port="paths">
 			<p:pipe port="result" step="trdemo-paths"/>

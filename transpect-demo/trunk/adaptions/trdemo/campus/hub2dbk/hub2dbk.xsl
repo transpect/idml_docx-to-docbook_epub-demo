@@ -16,6 +16,14 @@
   <xsl:template match="/hub">
     <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
     <book version="5.0">
+      <xsl:choose>
+        <xsl:when test="section[1]/title">
+          <xsl:apply-templates select="section[1]/title"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <title></title>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:apply-templates/>
     </book>
   </xsl:template>
