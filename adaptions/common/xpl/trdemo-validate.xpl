@@ -21,7 +21,7 @@
 	
 	<p:input port="schema" primary="false">
 		<p:documentation>Excepts the Docbook 5.0 RNG schema</p:documentation>
-		<p:document href="http://www.le-tex.de/resource/schema/docbook/5.0/docbook.rng"/>
+		<p:document href="http://www.le-tex.de/resource/schema/docbook/docbook.rng"/>
 	</p:input>
 	
 	<p:output port="result" primary="true"/>
