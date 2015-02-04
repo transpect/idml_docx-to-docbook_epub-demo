@@ -11,8 +11,8 @@
   xpath-default-namespace="http://docbook.org/ns/docbook"
   version="2.0">
   
-  <!--<xsl:import href="http://transpect.le-tex.de/hub2dbk/xsl/hub2dbk.xsl"/>-->
-  <xsl:import href="../../../../hub2dbk/xsl/hub2dbk.xsl"/>
+  <xsl:import href="http://transpect.le-tex.de/hub2dbk/xsl/hub2dbk.xsl"/>
+  
   <xsl:template match="hub">
     <xsl:apply-templates/>
   </xsl:template>
