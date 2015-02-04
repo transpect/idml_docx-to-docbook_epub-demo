@@ -57,6 +57,7 @@
 		<p:input port="parameters">
 			<p:pipe port="paths" step="trdemo-validate"/>
 		</p:input>
+	  <p:with-option name="cssa" select="'styles/cssa.xml'"/>
 		<p:with-option name="active" select="$check"/>
 	  <p:with-option name="debug" select="$debug"/>
 	  <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
