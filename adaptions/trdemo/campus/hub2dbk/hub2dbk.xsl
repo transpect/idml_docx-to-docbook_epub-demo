@@ -32,7 +32,7 @@
   
   <xsl:template match="hub/section">
     <chapter>
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="@*, node()"/>
     </chapter>
   </xsl:template>
   
