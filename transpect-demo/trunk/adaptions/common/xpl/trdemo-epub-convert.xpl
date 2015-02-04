@@ -11,8 +11,8 @@
   type="trdemo:epub-convert"
   name="trdemo-epub-convert"> 
 
-  <p:input port="source" primary="false"/>
-  <p:input port="paths" primary="true"/>
+  <p:input port="source" primary="true"/>
+  <p:input port="paths" primary="false"/>
   
   <p:output port="result" primary="true">
     <p:pipe port="result" step="epub-convert"/>

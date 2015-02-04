@@ -178,17 +178,11 @@
 	<p:delete match="@srcpath" name="strip-srcpath-from-html"/>
   
   <trdemo:epub-convert name="trdemo-epub-convert">
-    <p:input port="source">
-      <p:pipe port="result" step="strip-srcpath-from-html"/>
-    </p:input>
     <p:input port="paths">
       <p:pipe port="result" step="trdemo-paths"/>
     </p:input>
     <!-- construct default srcpath from 1st element containing a scrpath attribute -->
-    <p:with-option name="svrl-srcpath" select="concat(
-      /*:hub/*:info/*:keywordset[@role eq 'hub']/*:keyword[@role eq 'source-dir-uri'],
-      (/*:hub//*[@srcpath])[1]/@srcpath
-      )">
+    <p:with-option name="svrl-srcpath" select="(/*:hub//*[@srcpath])[1]/@srcpath">
       <p:pipe port="result" step="trdemo-convert-input"/>
     </p:with-option>
     <p:with-option name="debug" select="$debug"/>
