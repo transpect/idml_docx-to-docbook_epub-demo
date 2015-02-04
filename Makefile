@@ -85,6 +85,8 @@ postprocess:
 	@echo "Makefile target: postprocess"
 	@echo ""
 ifneq ($(DEBUG), yes)
+	-rm -rf $(IN_FILE_COPY).tmp
+	-rm -rf $(OUT_DIR_PATH)/epub
 	-rm -rf $(DEBUG_DIR)
 	-rm -rf $(STATUS_DIR)
 endif
