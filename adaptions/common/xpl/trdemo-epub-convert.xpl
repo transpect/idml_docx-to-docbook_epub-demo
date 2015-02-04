@@ -110,7 +110,9 @@
     <p:with-option name="epubfile-path" select="replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+\.)(docx|idml|epub)$', '$1epub', 'i')">
       <p:pipe port="paths" step="trdemo-epub-convert"/>
     </p:with-option>
-    <p:with-option name="epubcheck-path" select="concat(/c:param-set/c:param[@name eq 'common-path']/@value, '../../epubcheck/bin/epubcheck-3.0.1.jar')">
+    <p:with-option name="epubcheck-path" select="concat(
+      /c:param-set/c:param[@name eq 's9y6-path']/@value, '../../', 
+      'epubcheck/bin/epubcheck-3.0.1.jar')">
       <p:pipe port="paths" step="trdemo-epub-convert"/>
     </p:with-option>
     <p:with-option name="svrl-srcpath" select="$svrl-srcpath"/>
