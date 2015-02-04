@@ -29,5 +29,6 @@
   <xsl:param name="generate-toc" select="'yes'"/>
   <xsl:param name="generate-index" select="'yes'"/>
   <xsl:param name="overwrite-image-paths" select="'no'"/>
+  <xsl:param name="target" select="'EPUB3'"/>
   
 </xsl:stylesheet>
