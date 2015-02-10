@@ -11,7 +11,6 @@
   <nextCatalog catalog="../idml2xml/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../hub2html/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../hub2dbk/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../html-tables/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../htmltemplates/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../evolve-hub/xmlcatalog/catalog.xml"/>
@@ -24,21 +23,9 @@
   <nextCatalog catalog="../schema/hub/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../schema/xhtml1/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../schema/iso-schematron/catalog.xml"/>
-  <nextCatalog catalog="../xslt-util/colors/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xslt-util/hex/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xslt-util/lengths/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xslt-util/functx/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xslt-util/mime-type/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xslt-util/resolve-uri/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xslt-util/xslt-based-catalog-resolver/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xproc-util/file-uri/xmlcatalog/catalog.xml"/>
-	<nextCatalog catalog="../xproc-util/load-file/xmlcatalog/catalog.xml"/> 
-  <nextCatalog catalog="../xproc-util/store-debug/xmlcatalog/catalog.xml"/> 
-  <nextCatalog catalog="../xproc-util/store-zip/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xproc-util/xml-model/xmlcatalog/catalog.xml"/> 
-  <nextCatalog catalog="../xproc-util/xslt-mode/xmlcatalog/catalog.xml"/> 
-  <nextCatalog catalog="../xproc-util/copy-files/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xproc-util/xproc.org/library/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../xslt-util/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../xproc-util/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../functx/xmlcatalog/catalog.xml"/>
   
   <!-- content-repo.catalog.xml is unversioned. 
     Use this single-entry catalog for local configuration, like this: 
