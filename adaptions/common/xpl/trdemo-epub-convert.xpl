@@ -106,7 +106,7 @@
         * The following step implements epubcheck and generates an SVRL report.
         * -->
   
-  <letex:epubcheck name="epubcheck">
+  <letex:epubcheck name="epubcheck" cx:depends-on="epub-convert">
     <p:with-option name="epubfile-path" select="replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+\.)(docx|idml|epub)$', '$1epub', 'i')">
       <p:pipe port="paths" step="trdemo-epub-convert"/>
     </p:with-option>
