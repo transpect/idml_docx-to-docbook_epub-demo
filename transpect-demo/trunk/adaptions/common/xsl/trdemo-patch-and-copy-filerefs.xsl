@@ -19,7 +19,9 @@
       <xsl:matching-substring>
         <xsl:variable name="filebasename" select="regex-group(1)" as="xs:string"/>
         <xsl:variable name="fileextension" select="regex-group(2)" as="xs:string"/>
-        <xsl:attribute name="fileref" select="concat($assets-dirname, '/', $filebasename, '.', $fileextension)"/>
+        <xsl:variable name="assets-path" select="if(string-length($assets-dirname) gt 0) then concat($assets-dirname, '/') else ''" as="xs:string"/>
+        <xsl:variable name="fileref" select="concat($assets-path, $filebasename, '.', $fileextension)" as="xs:string"/>
+        <xsl:attribute name="fileref" select="$fileref"/>
       </xsl:matching-substring>
     </xsl:analyze-string>
     

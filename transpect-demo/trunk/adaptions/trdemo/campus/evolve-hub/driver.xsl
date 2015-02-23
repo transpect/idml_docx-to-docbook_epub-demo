@@ -27,6 +27,8 @@
     
   <xsl:variable name="hub:hierarchy-title-roles" as="xs:boolean" select="true()"/>  
 
+  <xsl:variable name="hub:list-by-indent-exception-role-regex" select="'^(cUeberschrift|Verzeichnis)\d$'"/>
+
   <xsl:variable name="hub:figure-title-role-regex-x"  as="xs:string"
     select="'^cAbbBeschriftung$'" />
 
@@ -40,10 +42,15 @@
   
 
   <!-- template overrides/additions -->
+  
+  <xsl:template match="/hub/info/keywordset[@role eq 'hub']" mode="hub:postprocess-hierarchy">
+    <xsl:copy>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <xsl:element name="keyword">
+        <xsl:attribute name="role" select="'assets-dirname'"/>
+      </xsl:element>
+    </xsl:copy>
+  </xsl:template>
 
-  <!-- remove unecessary markup and output rng/schematron messages only once for this foreign markup -->
-  <!--<xsl:template match="phrase[@role eq 'hub:foreign']/*" mode="hub:preprocess-hierarchy">
-    <xsl:copy/>
-  </xsl:template>-->
 
 </xsl:stylesheet>

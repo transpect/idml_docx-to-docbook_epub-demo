@@ -5,6 +5,7 @@
   xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
   xmlns:docx2hub="http://www.le-tex.de/namespace/docx2hub"
   xmlns:idml2xml="http://www.le-tex.de/namespace/idml2xml"
+  xmlns:dbk="http://docbook.org/ns/docbook"
   version="1.0"
   name="trdemo-convert-input"
   type="trdemo:convert-input">
@@ -88,7 +89,8 @@
     </p:input>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-    <p:with-option name="status-dir-uri" select="$status-dir-uri"/>    
+    <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
+    <p:with-option name="assets-dirname" select="(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'hub']/dbk:keyword[@role eq 'assets-dirname'], 'assets')[1]"/>
   </trdemo:patch-and-copy-filerefs>
 
 </p:declare-step>
