@@ -59,6 +59,8 @@
     
   <xsl:variable name="hub:hierarchy-title-roles" as="xs:boolean" select="true()"/>  
   
+  <xsl:variable name="hub:list-by-indent-exception-role-regex" select="'^(cUeberschrift|Verzeichnis)\d$'"/>
+  
   <!-- figure-legends -->
 
   <xsl:variable name="hub:figure-title-role-regex-x"  as="xs:string"
@@ -97,10 +99,6 @@
   
   <xsl:template match="@css:text-indent | @css:margin-left" mode="hub:twipsify-lengths">
     <xsl:attribute name="{local-name()}" select="hub:to-twips(.)" />
-  </xsl:template>
-  
-  <xsl:template match="/*/info" mode="hub:twipsify-lengths">
-    <xsl:copy-of select="."/>
   </xsl:template>  
   
   <!--  *
