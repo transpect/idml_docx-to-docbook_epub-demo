@@ -28,6 +28,14 @@
 	  <p:documentation>
 	    The output port provides a Docbook 5.0 XML document.
 	  </p:documentation>
+		<p:pipe port="result" step="hub2dbk"/>
+	</p:output>
+	
+	<p:output port="dbk-htmltables">
+	  <p:documentation>
+	    The output port provides a Docbook 5.0 XML document with the HTML table model instead of CALS.
+	  </p:documentation>
+		<p:pipe port="result" step="cals2html-table"/>
 	</p:output>
 	
 	<!-- options -->
@@ -49,7 +57,7 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </transpect:load-cascaded>
 	
-	<hub2dbk:convert>
+	<hub2dbk:convert name="hub2dbk">
 	  <p:input port="source">
 	    <p:pipe port="source" step="trdemo-hub2dbk"/>
 	  </p:input>
@@ -60,5 +68,14 @@
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</hub2dbk:convert>
+	
+	<p:xslt initial-mode="cals2html-table" name="cals2html-table">
+		<p:input port="parameters"><p:empty/></p:input>
+		<p:input port="stylesheet">
+			<p:pipe port="result" step="load-hub2dbk-stylesheet"/>
+		</p:input>
+	</p:xslt>
+	
+	<p:sink/>
 	
 </p:declare-step>

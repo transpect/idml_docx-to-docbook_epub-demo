@@ -52,6 +52,14 @@
 		<p:pipe port="result" step="strip-srcpath-from-dbk"/>
 	</p:output>
 	
+	<p:output port="docbook-htmltables" primary="false">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+		  <h3>Output port: <code>docbook</code></h3>
+      <p>The output port provides a Docbook 5.0 XML document.</p>
+		</p:documentation>
+		<p:pipe port="result" step="strip-srcpath-from-dbk-htmltables"/>
+	</p:output>
+	
 	<p:output port="html" primary="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		  <h3>Output port: <code>html</code></h3>
@@ -102,6 +110,7 @@
 	<p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
 	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
 	<p:import href="http://transpect.le-tex.de/htmlreports/xpl/patch-svrl.xpl"/>
+	<p:import href="http://transpect.le-tex.de/xproc-util/file-uri/file-uri.xpl"/>
 	
 	<!-- import local modules -->
 	
@@ -112,11 +121,15 @@
   <p:import href="trdemo-hub2html.xpl"/>
 	<p:import href="trdemo-epub-convert.xpl"/>
 
+	<transpect:file-uri name="file-uri">
+    <p:with-option name="filename" select="$file"/>
+  </transpect:file-uri>
+
 	<trdemo:paths name="trdemo-paths">
 		<p:input port="conf">
 			<p:pipe port="conf" step="trdemo-main"/> 
 		</p:input>
-		<p:with-option name="file" select="$file"/> 
+		<p:with-option name="file" select="/*/@local-href"/> 
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
@@ -145,7 +158,20 @@
 	</letex:store-debug>
 	
 	<p:sink/>
+
+	<p:delete match="@srcpath" name="strip-srcpath-from-dbk-htmltables">
+		<p:input port="source">
+			<p:pipe port="dbk-htmltables" step="trdemo-hub2dbk"/>
+		</p:input>
+	</p:delete>
 	
+	<letex:store-debug pipeline-step="trdemo/trdemo-hub2dbk-htmltables">
+		<p:with-option name="active" select="$debug"/>
+		<p:with-option name="base-uri" select="$debug-dir-uri"/>
+	</letex:store-debug>
+	
+	<p:sink/>
+
 	<trdemo:validate name="trdemo-validate">
 		<p:input port="source">
 		  <p:pipe port="result" step="trdemo-hub2dbk"/>
