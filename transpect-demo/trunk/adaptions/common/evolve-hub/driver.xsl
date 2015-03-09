@@ -95,10 +95,6 @@
   <xsl:template match="@role" mode="hub:twipsify-lengths">
     <xsl:copy />
     <xsl:apply-templates select="key('hub:style-by-role', .)/@*[name() = ('css:margin-left', 'css:text-indent')]" mode="#current"/>
-  </xsl:template>
-  
-  <xsl:template match="@css:text-indent | @css:margin-left" mode="hub:twipsify-lengths">
-    <xsl:attribute name="{local-name()}" select="hub:to-twips(.)" />
   </xsl:template>  
   
   <!--  *
