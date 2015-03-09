@@ -33,7 +33,7 @@
       The types attribute is optional. You may use it to restrict the landmarks to certain 
       types. By default, all types defined as landmark-types in the associated RNG schema
       will be considered when generating the landmarks. --> 
-    <type name="landmarks" heading="Übersicht" hidden="true" types="bodymatter toc"/>
+	  <type name="landmarks" heading="Übersicht" hidden="true" types="bodymatter toc toc-level-h1"/>
     <!-- A toc will be generated unless there is already a nav[@epub:type='toc'].
     You can control its appearance in the spine content with the hidden attribute.
     If there is already a toc in the content, hidden is always interpreted as 'false'.
