@@ -14,16 +14,10 @@
   <xsl:import href="http://transpect.le-tex.de/hub2dbk/xsl/hub2dbk.xsl"/>
   
   <xsl:template match="/hub">
+    <xsl:variable name="basename" select="replace(base-uri(), '^.+/(.+)\.[a-z0-9]$', '$1', 'i')" as="xs:string"/>
     <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
     <book version="5.0">
-      <xsl:choose>
-        <xsl:when test="section[1]/title">
-          <xsl:apply-templates select="section[1]/title"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <title></title>
-        </xsl:otherwise>
-      </xsl:choose>
+      <title><xsl:value-of select="$basename"/></title>
       <xsl:apply-templates/>
     </book>
   </xsl:template>
