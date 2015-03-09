@@ -96,7 +96,9 @@ archive:
 	@echo ""
 	@echo "Makefile target: archive"
 	@echo ""
-	cd $(OUT_DIR_PATH) && zip -r $(OUT_DIR_PATH)/$(IN_FILE_BASE).archive.zip ./*
+	# delete temporary zip files
+	-rm $(OUT_DIR_PATH)/$(IN_FILE_BASE).zip
+	cd $(OUT_DIR_PATH) && zip -r $(OUT_DIR_PATH)/$(IN_FILE_BASE).zip ./*
 
 conversion: messages checkinput preprocess transpectdemo postprocess archive
 	@echo ""
