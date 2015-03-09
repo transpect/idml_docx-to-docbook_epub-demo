@@ -27,7 +27,7 @@
     
   <xsl:variable name="hub:hierarchy-title-roles" as="xs:boolean" select="true()"/>  
 
-  <xsl:variable name="hub:list-by-indent-exception-role-regex" select="'^(cUeberschrift|cGRUNDSCHRIFT|Verzeichnis)\d$'"/>
+  <xsl:variable name="hub:list-by-indent-exception-role-regex" select="'^(cUeberschrift|Verzeichnis|GRUNDSCHRIFT)\d$'"/>
 
   <xsl:variable name="hub:figure-title-role-regex-x"  as="xs:string"
     select="'^cAbbBeschriftung$'" />

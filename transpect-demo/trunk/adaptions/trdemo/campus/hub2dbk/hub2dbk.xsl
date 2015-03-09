@@ -30,4 +30,8 @@
     </chapter>
   </xsl:template>
   
+  <xsl:template match="blockquote[@role eq 'hub:lists']">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
 </xsl:stylesheet>
