@@ -32,10 +32,6 @@
         <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
         <span>The file extension '</span><value-of select="$file-extension"/><span>' indicate an image format that is not compatible to EPUB.</span>
       </assert>
-      <report test="$source-type eq 'idml'" id="image-in-idml">
-        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
-        <span>Images referenced externally or included in IDML file are not supported in the demo.</span>
-      </report>
     </rule>
     <!-- check for office open drawingml -->
     <rule context="dbk:phrase[@role eq 'hub:foreign' and .//*[namespace-uri() eq 'http://schemas.openxmlformats.org/drawingml/2006/main']]">
