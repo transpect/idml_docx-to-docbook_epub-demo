@@ -26,6 +26,7 @@
   <nextCatalog catalog="../xslt-util/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../functx/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../xproc-util/xproc.org/library/xmlcatalog/catalog.xml"/>
   
   <!-- content-repo.catalog.xml is unversioned. 
     Use this single-entry catalog for local configuration, like this: 
