@@ -22,8 +22,10 @@ b, .bold{font-weight:bold}
 u, .underline{text-decoration:underline}
 
 /* scale to max screen width */
-table, img {max-width:100%}
-
+#epub-cover-image-container {text-align:center; height:100%;}
+#epub-cover-image-container img {text-align:center; max-height:100%;}
+img { max-width:100%; }
+img + img { margin-top:1em; }
 
 /* toc */
 .toc-entry {margin-top:0.5em; margin-bottom:0.5em;}
