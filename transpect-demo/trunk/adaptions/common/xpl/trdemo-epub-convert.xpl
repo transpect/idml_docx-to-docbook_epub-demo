@@ -116,12 +116,13 @@
   
   <p:sink/>
   
-  <letex:epubcheck name="epubcheck" cx:depends-on="epub-convert">
+  <letex:epubcheck name="epubcheck" cx:depends-on="kindlegen">
     <p:with-option name="epubfile-path" select="/c:result/@os-path">
       <p:pipe port="result" step="epub-convert"/>
     </p:with-option>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
   </letex:epubcheck>
   
 </p:declare-step>
