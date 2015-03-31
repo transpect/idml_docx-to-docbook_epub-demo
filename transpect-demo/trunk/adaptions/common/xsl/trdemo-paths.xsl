@@ -14,7 +14,7 @@
         * The regex below is used to parse the file basename with the function "transpect:parse-file-name". 
         * According to this regex, the following example basenames are permitted:
         * 
-        * letex_brochure_word_2929223
+        * le-tex_brochure_word_2929223
         * campus_blabla_word_22222
         * as_99911122233
         *

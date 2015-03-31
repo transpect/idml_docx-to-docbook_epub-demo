@@ -46,6 +46,7 @@
 	<p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/simple-progress-msg.xpl"/>
   <p:import href="http://transpect.le-tex.de/calabash-extensions/ltx-lib.xpl"/>
   <p:import href="http://transpect.le-tex.de/xproc-util/file-uri/file-uri.xpl"/>
+  <p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
   
   <!--  *
         * normalize the file URI. The unzip step takes the output of this step.
