@@ -18,7 +18,8 @@
     <p:pipe port="result" step="epub-convert"/>
   </p:output>
   
-  <p:output port="report" primary="false">
+  <p:output port="report" primary="false" sequence="true">
+    <p:pipe port="report" step="kindlegen"/>
     <p:pipe port="result" step="epubcheck"/>
   </p:output>
 
@@ -31,6 +32,7 @@
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   <p:import href="http://transpect.le-tex.de/epubtools/epub-convert.xpl"/>
   <p:import href="http://transpect.le-tex.de/epubcheck/xpl/epubcheck.xpl"/>
+  <p:import href="http://transpect.le-tex.de/kindlegen/xpl/kindlegen.xpl"/>
   <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/load-cascaded.xpl"/>
 	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
   
@@ -106,10 +108,22 @@
         * The following step implements epubcheck and generates an SVRL report.
         * -->
   
+  <transpect:kindlegen name="kindlegen" cx:depends-on="epub-convert">
+    <p:with-option name="epub" select="/c:result/@os-path"/>
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
+  </transpect:kindlegen>
+  
+  <p:sink/>
+  
   <letex:epubcheck name="epubcheck" cx:depends-on="epub-convert">
-    <p:with-option name="epubfile-path" select="replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+\.)(docx|idml|epub)$', '$1epub', 'i')">
-      <p:pipe port="paths" step="trdemo-epub-convert"/>
+    <p:with-option name="epubfile-path" select="/c:result/@os-path">
+      <p:pipe port="result" step="epub-convert"/>
     </p:with-option>
+    <!--<p:with-option name="epubfile-path" select="replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+\.)(docx|idml|epub)$', '$1epub', 'i')">
+      <p:pipe port="paths" step="trdemo-epub-convert"/>
+    </p:with-option>-->
     <p:with-option name="svrl-srcpath" select="$svrl-srcpath"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
