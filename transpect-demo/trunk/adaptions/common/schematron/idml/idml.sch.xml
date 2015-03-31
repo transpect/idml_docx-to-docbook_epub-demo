@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://purl.oclc.org/dsdl/schematron" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  queryBinding="xslt2">
+
+  <ns prefix="aid" uri="http://ns.adobe.com/AdobeInDesign/4.0/" />
+  <ns prefix="aid5" uri="http://ns.adobe.com/AdobeInDesign/5.0/" />
+  <ns prefix="idPkg" uri="http://ns.adobe.com/AdobeInDesign/idml/1.0/packaging" />
+  <ns prefix="idml2xml" uri="http://www.le-tex.de/namespace/idml2xml" />
+
+  <let name="content-element-names" value="('Content', 'TextVariableInstance')"/>
+  
+  <let name="top-level-frames" value="/Document/TextFrame/Story[
+      not(
+        (every $p in .//ParagraphStyleRange satisfies (matches($p/@AppliedParagraphStyle, 'master_page_objects|title_continued')))
+        or
+        (every $c in .//Content satisfies ($c/processing-instruction(ACE) = '18')) (: page number :)
+        or 
+        (every $c in .//*[name() = $content-element-names] satisfies (matches($c, '^\s*$'))) 
+      )   
+    ]/@Self"/>
+  
+  <let name="multiple-top-level-frames" 
+    value="string(
+      if (string-join(/Document/XmlStory//Content, '') eq '&#xfeff;') (: default XmlStory without actual content :)
+      then count($top-level-frames) gt 1
+      else count($top-level-frames) gt 2
+    )"/>
+
+  <pattern id="idml_unanchored">
+    <rule context="/Document">
+      <report test="$multiple-top-level-frames eq 'true'" id="multiple_top_level_frames" role="Info"
+        diagnostics="multiple_top_level_frames_de">
+        <span class="srcpath"><xsl:value-of select="replace(/*/@xml:base, '[^/]+$', '')"/></span>
+        The document contains <value-of select="count(TextFrame)"/> top-level TextFrames. Please check anchoring.</report>
+    </rule>
+    <rule context="*[@AppliedConditions eq 'Condition/StoryID']">
+      <report test="true()" id="unreferenced_StoryID" role="warning" diagnostics="unreferenced_StoryID_de">
+        <span class="srcpath"><xsl:value-of select="ancestor::*[@srcpath][1]/@srcpath"/></span>
+        There is a StoryID but apparently this story couldn’t be anchored by its StoryID.
+        Is there another StoryID in the same story so that the concatenated ID doesn’t match a StoryRef any more?
+      </report>
+    </rule>
+    <rule context="*[@AppliedConditions eq 'Condition/StoryRef']">
+      <report test="true()" id="unresolved_StoryRef" role="warning"  diagnostics="unresolved_StoryRef_de">
+        <span class="srcpath"><xsl:value-of select="ancestor::*[@srcpath][1]/@srcpath"/></span>
+        There is a StoryRef but apparently no story could be found with a matching StoryID.
+        Are there no or multiple StoryIDs in the story that should be referenced?
+      </report>
+    </rule>
+    <rule context="*[@AppliedConditions eq 'Condition/StoryRef'][@idml2xml:reason = 'MULT_StoryID']">
+      <report test="true()" id="multiple_Stories_for_StoryRef" role="error" diagnostics="multiple_Stories_for_StoryRef_de">
+        <span class="srcpath"><xsl:value-of select="(@srcpath, ancestor::*[@srcpath][1]/@srcpath)[1]"/></span>
+        Multiple StoryIDs match.
+      </report>
+    </rule>
+    <rule context="HiddenText[@idml2xml:reason = 'MULT_StoryID']">
+      <report test="true()" id="multiple_StoryIDs" role="error" diagnostics="multiple_StoryIDs_de">
+        <span class="srcpath"><xsl:value-of select=".//*[@srcpath][1]/@srcpath"/></span>
+        This StoryID is used in other stories, too.
+      </report>
+    </rule>
+    <rule context="TextFrame[Story/@Self = $top-level-frames][.//*[name() = $content-element-names]][not(string-join(.//Content, '') = '&#xfeff;')]">
+<!--      <let name="srcpath" value=".//*[@srcpath][.//CharacterStyleRange[matches(., '\S')]][1]"/>-->
+      <report test="$multiple-top-level-frames eq 'true' and ./Story[@AppliedTOCStyle = 'n']" 
+        id="unanchored_frame" role="warning" diagnostics="unanchored_frame_de">
+        <span class="srcpath"><xsl:value-of select="(.//*[matches(., '\S')]/@srcpath)[1]"/>
+<!--          <xsl:value-of select="string-join(($srcpath/preceding-sibling::*([@srcpath][matches(., '\S')])[1]/@srcpath, $srcpath/@srcpath), ' ')"/>-->
+        </span>
+        This frame is not anchored. You can ignore this message if it contains the main story.</report>
+      <report test="$multiple-top-level-frames eq 'true' and ./Story[@AppliedTOCStyle ne 'n']" 
+        id="unanchored_toc" role="warning" diagnostics="unanchored_toc_de">
+        <span class="srcpath"><xsl:value-of select="(.//*[matches(., '\S')]/@srcpath)[1]"/></span>
+        The ToC needs to be anchored using conditional text: In the ToC, there needs to be StoryID conditional 
+        text with an ID (e.g., “ToC”). In the story where the ToC should be inserted, there needs to
+        be StoryRef conditional text with the same ID. If the ToC already happens to be exported
+        at the right position, you may ignore this message.</report>
+    </rule>
+    <rule context="/Document/Group[@Self = $top-level-frames]">
+      <report test="$multiple-top-level-frames eq 'true'" id="unanchored_group" role="warning" diagnostics="unanchored_group_de">
+        <span class="srcpath"><xsl:value-of select="(.//*[matches(., '\S')]/@srcpath)[1]"/></span>
+        This group is not anchored. And will likely be discarded later</report>
+    </rule>
+  </pattern>
+  
+  <pattern id="idml_hyperlink_without_destination">
+    <rule context="HyperlinkTextSource">
+      <let name="hyperlink" value="/Document/idml2xml:hyper/Hyperlink[@Source = current()/@Self]"/>
+      <assert test="$hyperlink/Properties/Destination/@type = 'object'" 
+        id="hyperlink_destination_not_object" role="warning" diagnostics="hyperlink_destination_not_object_de">
+        <span class="srcpath"><xsl:value-of select="(if ($hyperlink) then ((ancestor-or-self::*[@srcpath][1]/@srcpath)[1]) else ((ancestor::*[@srcpath][1]/@srcpath)[1]))"/></span>
+          This hyperlink’s destination cannot be determnined. Source text: '<value-of
+          select="."/>'. Destination type: '<value-of select="$hyperlink/Properties/Destination/@type"/>'. Destination content: '<value-of 
+            select="$hyperlink/Properties/Destination"/>'.</assert>
+      <assert test="exists($hyperlink)" id="hyperlink_non_existent" role="warning" diagnostics="hyperlink_non_existent_de">
+        <span class="srcpath"><xsl:value-of select="(ancestor::*[@srcpath][1]/@srcpath)[1]"/></span>
+        There is no hyperlink for source '<value-of select="."/>'.</assert>
+    </rule>
+  </pattern>
+
+  <pattern id="idml_conditional_text">
+    <rule context="HiddenText">
+      <assert test=".//*[@AppliedConditions][1]/@AppliedConditions
+        [. = ('Condition/StoryRef', 'Condition/StoryID', 'Condition/FigureRef', 'Condition/PageStart', 'Condition/PageEnd')]"
+        id="conditional_text_hidden" role="warning" diagnostics="conditional_text_hidden_de">
+        <span class="srcpath"><xsl:value-of select="*[@srcpath][1]/@srcpath"/></span>
+        On this element conditional text was hidden, that doesn't belong to the conditions that have to be hidden. The condition is '<value-of
+          select="replace(@AppliedConditions, '^Condition/', '')"/>'. Allowed hidden conditions are: StoryRef, StoryID, FigureRef, PageStart, PageEnd.</assert>
+    </rule>
+    <rule context="*[@AppliedConditions]">
+      <assert test="@AppliedConditions = ('Condition/StoryRef', 'Condition/StoryID', 'Condition/FigureRef', 'Condition/PageStart', 'Condition/PageEnd', 'Condition/EpubAlternative', 'Condition/PrintOnly', 'Condition/EOnly', 'Condition/EPDFOnly')"
+        id="unknown_conditional_text" role="warning" diagnostics="unknown_conditional_text_de">
+        <span class="srcpath"><xsl:value-of select="*[@srcpath][1]/@srcpath"/></span>
+        An undefined conditional text item was used. The name of the condition is: '<value-of
+          select="replace(.//*[@AppliedConditions][1]/@AppliedConditions, '^Condition/', '')"/>'. If it has a special meaning please contact the technical project managers to implement those. 
+        To avoid problems these passages are discarded.<br xmlns="http://www.w3.org/1999/xhtml"/>Allowed Conditions are: StoryRef, StoryID, FigureRef, PageStart, PageEnd, EpubAlternative, PrintOnly, EOnly, EPDFOnly.</assert>
+    </rule>
+    <rule context="*[@AppliedConditions][matches(@AppliedConditions, 'Condition/.+?Condition/')]">
+      <report test="true()"
+        id="several_conditional_texts" role="warning" diagnostics="several_conditional_texts_de">
+        <span class="srcpath"><xsl:value-of select="(@srcpath, *[@srcpath][1]/@srcpath)[1]"/></span>
+        More than one condition (conditional text) are applied to this <xsl:value-of select="local-name(.)"/>. This will most probably lead to conversion problems.
+        <br xmlns="http://www.w3.org/1999/xhtml"/>Following conditions are applied to the text '<xsl:value-of select="."/>': <br xmlns="http://www.w3.org/1999/xhtml"/>
+        '<xsl:value-of select="replace(string-join(tokenize(@AppliedConditions, ' Condition/'), ', '), '^Condition/', '')"/>'</report>
+    </rule>
+  </pattern>
+  
+  <pattern id="idml_open_type_features">
+    <rule context="OpenTypeFeatures[ListItem]">
+      <report test="true()" id="open_type_list" role="warning" diagnostics="open_type_list_de">
+        <span class="srcpath"><xsl:value-of select="(ancestor::*[self::ParagraphStyleRange][@srcpath][1], ancestor::*[@srcpath][1])[1]/@srcpath"/></span>
+        This element contains characters in OpenType. This OpenType feature cannot be converted correctly.  
+      </report>
+    </rule>
+  </pattern>
+
+  <pattern id="idml_not_supported_object">
+    <rule context="MultiStateObject">
+      <report test="true()"
+        id="not_supported_multistateobject" role="warning" diagnostics="not_supported_multistateobject_de">
+        <span class="srcpath"><xsl:value-of select="replace(/*/@xml:base, '[^/]+$', '')"/></span>
+        A multi state object was used in InDesign. We do not support this interactivity feature.
+        <br xmlns="http://www.w3.org/1999/xhtml"/>Following links are defined as states inside: '<xsl:value-of select="string-join(.//Link/@LinkResourceURI, ', ')"/>'</report>
+    </rule>
+  </pattern>
+  
+  <diagnostics>
+    <diagnostic id="not_supported_multistateobject_de" xml:lang="de">
+      In InDesign wurde ein Multi-State-Objekt verwendet (siehe Fenster → Interaktivität → Objektstatus). Interaktivitätsfeatures werden zur Zeit nicht unterstützt. <br xmlns="http://www.w3.org/1999/xhtml"/>
+      Folgende Verknüpfungen sind darin als Zustände definiert: '<xsl:value-of select="string-join(.//Links/@LinkResourceURI, ', ')"/>'.
+    </diagnostic>
+    <diagnostic id="several_conditional_texts_de" xml:lang="de">
+      Diesem <xsl:value-of select="local-name(.)"/> wurden mehr als eine Bedingung (von bedingtem Text) zugewiesen. Dies wird höchstwahrscheinlich zu Konvertierungsproblemen führen.
+      <br xmlns="http://www.w3.org/1999/xhtml"/>Folgende Bedingungen wurden dem Text '<xsl:value-of select="."/>' zugewiesen: <br xmlns="http://www.w3.org/1999/xhtml"/>
+      '<xsl:value-of select="replace(string-join(tokenize(@AppliedConditions, ' Condition/'), ', '), '^Condition/', '')"/>'.
+    </diagnostic>
+    <diagnostic id="unanchored_group_de" xml:lang="de">
+      Diese Gruppe/Gruppierung ist unverankert und wird wahrscheinlich im weiteren Verlauf der Konvertierungen entfernt werden.
+    </diagnostic>
+    <diagnostic id="conditional_text_hidden_de" xml:lang="de">
+      An diesem ausgeblendeten Element wurde bedingter Text benutzt, der nicht ausgeblendet werden darf. Die Bedingung ist '<value-of
+        select="replace(@AppliedConditions, '^Condition/', '')"/>'. Bedingungen, die ausgeblendet sein dürfen, sind: StoryRef, StoryID, FigureRef, PageStart, PageEnd. Andere ausgeblendete Elemente können bei der Konvertierung Probleme verursachen.
+    </diagnostic>
+    <diagnostic id="unknown_conditional_text_de" xml:lang="de">
+      Bedingter Text, der nicht den Namenskonventionen entspricht wurde hier verwendet. Der Name der Bedingung ist: '<value-of
+        select=".//*[@AppliedConditions][1]/@AppliedConditions"/>'. Falls dieser Text eine bestimmte Funktion erfüllt oder erfüllen soll, kontaktieren Sie bitte den technischen Projektmanager, 
+      damit er diese implementieren kann. Da aus unbekanntem, wie auch aus eingeblendetem bedingtem Text teilweise Probleme entstehen können, wurde diese Passage aufgelöst.<br xmlns="http://www.w3.org/1999/xhtml"/>
+      Erlaubte Bedingungen sind: StoryRef, StoryID, FigureRef, PageStart, PageEnd, EpubAlternative, PrintOnly, EOnly, EPDFOnly.
+    </diagnostic>
+    <diagnostic id="multiple_Stories_for_StoryRef_de" xml:lang="de">
+      Mehrere identische StoryIDs wurden gefunden.
+    </diagnostic> 
+    <diagnostic id="multiple_StoryIDs_de" xml:lang="de">
+      Diese StoryID kommt noch in weiteren Textrahmen vor.
+    </diagnostic> 
+    <diagnostic id="unreferenced_StoryID_de" xml:lang="de">
+      Es existiert eine StoryID (bedingter Text), aber der Textrahmen konnte nicht anhand seiner StoryID verankert werden. Möglicherweise existiert eine weitere StoryID 
+      im selben Textrahmen? Durch ein Aneinanderhängen der IDs kann dann die entsprechende StoryRef nicht mehr gefunden werden.</diagnostic>
+    <diagnostic id="unresolved_StoryRef_de" xml:lang="de">
+        Es existiert eine StoryRef (bedingter Text), aber es konnte keine zugehöriger Textrahmen gefunden werden mit einer entsprechenden StoryID. 
+        Möglicherweise fehlt die entsprechende StoryID oder es existieren mehrere StoryIDs in dem Textrahmen, der referenziert werden soll. (Dann würden diese aneinandergehängt.)
+    </diagnostic>
+    <diagnostic id="multiple_top_level_frames_de" xml:lang="de">
+      Dieses Dokument enthält '<value-of select="count(TextFrame)"/>' Textrahmen auf oberster Ebene. Bitte überprüfen Sie, ob die Rahmen nicht verankert werden
+      sollten. 
+    </diagnostic>
+    <diagnostic id="unanchored_frame_de" xml:lang="de">
+      Dieser Textrahmen ist unverankert. Sie können diese Meldung ignorieren, wenn es sich um den Haupt-Textabschnitt handelt.
+    </diagnostic>
+    <diagnostic id="unanchored_toc_de" xml:lang="de">
+      Das IHV sollte mit bedingtem Text verankert werden: Im IHV muss sich dabei ein Text mit der Bedingung StoryID befinden,
+      der die ID dieses Textabschnitts enthält (z.B. „ToC“). Im Textabschnitt, in dem das IHV pseudo-verankert sein soll,
+      muss dan bedingter Text mit der Bedingung StoryRef sein, mit derselben ID als Inhalt. Sollte das IHV bereits an die
+      richtige Position exportiert werden, könnnen Sie diese Meldung ignorieren. 
+    </diagnostic>
+    <diagnostic id="hyperlink_destination_not_object_de" xml:lang="de">
+      Das Ziel des Hyperlinks um den Text '<value-of select="."/>' kann nicht bestimmt werden. Zieltyp (Destination/@type): '<value-of 
+        select="$hyperlink/Properties/Destination/@type"/>'. Zielinhalt: '<value-of 
+        select="$hyperlink/Properties/Destination"/>'.
+    </diagnostic>
+    <diagnostic id="hyperlink_non_existent_de" xml:lang="de">
+      Es gibt in der Indesign-Datei keinen Hyperlink (kein Linkziel) zum Text '<value-of select="."/>', der
+      angeblich verlinkt sein soll.
+    </diagnostic>
+    <diagnostic id="open_type_list_de" xml:lang="de">
+      Dieses Element enthält mind. eine OpenType-Auszeichnung. Da diese OpenType-Eigenschaft nicht verarbeitet werden kann, wird es nicht korrekt dargestellt.
+      Beispiel: Kontext-bedingte OpenType-Varianten wie Ornamente, die die gleiche Unicode-Codierung wie andere Zeichen, z.B. Ziffern, haben.
+    </diagnostic>
+  </diagnostics>
+
+</schema>

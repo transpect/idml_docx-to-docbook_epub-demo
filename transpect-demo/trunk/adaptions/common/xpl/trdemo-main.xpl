@@ -218,6 +218,7 @@
 			<p:pipe port="result" step="trdemo-hub2html"/>
 		</p:input>
 		<p:input port="reports">
+		  <p:pipe port="report" step="trdemo-convert-input"/>
 			<p:pipe port="report" step="trdemo-validate"/>
 		  <p:pipe port="report" step="trdemo-epub-convert"/>
 		</p:input>
