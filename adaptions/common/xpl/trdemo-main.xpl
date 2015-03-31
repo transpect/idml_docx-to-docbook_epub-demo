@@ -208,9 +208,6 @@
       <p:pipe port="result" step="trdemo-paths"/>
     </p:input>
     <!-- construct default srcpath from 1st element containing a scrpath attribute -->
-    <p:with-option name="svrl-srcpath" select="(/*:hub//*[@srcpath])[1]/@srcpath">
-      <p:pipe port="result" step="trdemo-convert-input"/>
-    </p:with-option>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
