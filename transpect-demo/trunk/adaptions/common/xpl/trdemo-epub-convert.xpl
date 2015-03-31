@@ -27,7 +27,6 @@
   <p:option name="debug-dir-uri" select="'debug'"/>
   <p:option name="status-dir-uri" select="'status'"/>
   <p:option name="local-css" select="'false'"/>
-  <p:option name="svrl-srcpath" select="'/'"/>
 
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   <p:import href="http://transpect.le-tex.de/epubtools/epub-convert.xpl"/>
@@ -121,10 +120,6 @@
     <p:with-option name="epubfile-path" select="/c:result/@os-path">
       <p:pipe port="result" step="epub-convert"/>
     </p:with-option>
-    <!--<p:with-option name="epubfile-path" select="replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+\.)(docx|idml|epub)$', '$1epub', 'i')">
-      <p:pipe port="paths" step="trdemo-epub-convert"/>
-    </p:with-option>-->
-    <p:with-option name="svrl-srcpath" select="$svrl-srcpath"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
   </letex:epubcheck>
