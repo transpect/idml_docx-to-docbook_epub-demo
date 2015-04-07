@@ -31,7 +31,7 @@
 		  <h3>Input port: <code>schema</code></h3>
 		  <p>Expects a RelaxNG schema for Docbook 5.0.</p>
 		</p:documentation>
-		<p:document href="http://www.le-tex.de/resource/schema/docbook/docbook.rng"/>
+	  <p:document href="http://customers.le-tex.de/generic/book-conversion/schema/docbook/docbook.rng"/>
 	</p:input>
 	
 	<!-- output port declarations -->
