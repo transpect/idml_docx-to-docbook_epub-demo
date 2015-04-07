@@ -100,6 +100,6 @@
   <!--  *
         * remove preserved application-specific attributes 
         *  -->
-  <xsl:template match="@docx2hub:*" mode="hub:clean-hub"/>  
+  <xsl:template match="@docx2hub:*" mode="hub:clean-hub"/>
 
 </xsl:stylesheet>
