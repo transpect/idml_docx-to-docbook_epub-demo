@@ -4,7 +4,7 @@
   <!-- mandatory entry --> 
   
   <rewriteURI uriStartString="http://customers.le-tex.de/generic/book-conversion/" rewritePrefix="../"/> 
-  <rewriteURI uriStartString="http://www.le-tex.de/resource/schema/" rewritePrefix="../schema/"/>
+  <rewriteURI uriStartString="http://www.le-tex.de/resource/schema/docbook/" rewritePrefix="../schema/docbook/"/>
   
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../docx2hub/xmlcatalog/catalog.xml"/>
@@ -28,6 +28,8 @@
   <nextCatalog catalog="../xproc-util/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../functx/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xproc-util/xproc.org/library/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../schema/Hub/xmlcatalog/catalog.xml"/>
+  
   
   <!-- content-repo.catalog.xml is unversioned. 
     Use this single-entry catalog for local configuration, like this: 
