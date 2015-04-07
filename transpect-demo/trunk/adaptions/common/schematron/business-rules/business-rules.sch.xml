@@ -20,8 +20,19 @@
   <let name="source-type" value="/*/dbk:info/dbk:keywordset/dbk:keyword[@role eq 'source-type']"/>
 
   <phase id="strict">
+    <active pattern="headlines"/>
     <active pattern="images"/>
+    <active pattern="equations"/>
   </phase>
+  
+  <pattern id="headlines">
+    <rule context="dbk:title">
+      <assert test="following-sibling::*[1]" id="no-content-after-headline" diagnostics="no-content-after-headline_de">
+        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
+        <span class="hl">No content after </span><value-of select="parent::*/local-name()"/><span class="hl"> title found. DocBook expects that a headline is followed by regular content.</span>
+      </assert>
+    </rule>
+  </pattern>
   
   <pattern id="images">
     <rule context="dbk:mediaobject|dbk:inlinemediaobject">
@@ -54,5 +65,11 @@
       </assert>
     </rule>
   </pattern>
+  
+  <diagnostics>
+    <diagnostic id="no-content-after-headline_de" xml:lang="de">
+      <span class="hl">Nach einer Überschrift oder einem Abbildungs- bzw. Tabellentitel müssen die zugehörigen Inhalte folgen.</span>
+    </diagnostic>
+  </diagnostics>
 
 </schema>
