@@ -28,7 +28,7 @@
   <pattern id="headlines">
     <rule context="dbk:title">
       <assert test="following-sibling::*[1]" id="no-content-after-headline" diagnostics="no-content-after-headline_de">
-        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
+        <span class="srcpath"><xsl:value-of select="@srcpath"/></span>
         <span class="hl">No content after </span><value-of select="parent::*/local-name()"/><span class="hl"> title found. DocBook expects that a headline is followed by regular content.</span>
       </assert>
     </rule>
@@ -40,14 +40,14 @@
       <let name="file-extension" value="replace($fileref, '^.+\.([a-zA-Z]+)$', '$1', 'i')"/>
 
       <assert test="matches($file-extension, '^(jpg|jpeg|png|svg)$', 'i')" id="image-format">
-        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
+        <span class="srcpath"><xsl:value-of select="@srcpath"/></span>
         <span>The file extension '</span><value-of select="$file-extension"/><span>' indicate an image format that is not compatible to EPUB.</span>
       </assert>
     </rule>
     <!-- check for office open drawingml -->
     <rule context="dbk:phrase[@role eq 'hub:foreign' and .//*[namespace-uri() eq 'http://schemas.openxmlformats.org/drawingml/2006/main']]">
       <assert test="false()" id="Unsupported_DrawingML">
-        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (ancestor::dbk:*[@srcpath][1]/@srcpath, @srcpath, .//@srcpath)[1])"/></span>
+        <span class="srcpath"><xsl:value-of select="@srcpath"/></span>
         <span>Word DrawingML graphic found. Drawing ML objects cannot be converted. Please replace your Drawing ML object with a PNG (for example a screenshot of your DrawingML graphic).</span>
       </assert>
     </rule>
@@ -56,11 +56,11 @@
   <pattern id="equations">
     <rule context="dbk:equation|dbk:inlineequation">
       <assert test="mml:math" id="old-word-equation">
-        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
+        <span class="srcpath"><xsl:value-of select="@srcpath"/></span>
         <span>Word equations from Word 2003 and earlier are not supported in the demo.</span>
       </assert>
       <assert test="not(mml:math)" id="word-equation">
-        <span class="srcpath"><xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat($base-dir, (@srcpath, ancestor::*[@srcpath][1]/@srcpath, .//@srcpath)[1])"/></span>
+        <span class="srcpath"><xsl:value-of select="@srcpath"/></span>
         <span>Word equations from Word 2007 and later are converted to MathML. Please note that the MathML equation is rendered via MathJax. Native rendering of MathML equations is not supported by most browsers and EPUB readers.</span>
       </assert>
     </rule>
