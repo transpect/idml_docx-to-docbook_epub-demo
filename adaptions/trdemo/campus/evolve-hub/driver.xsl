@@ -16,7 +16,7 @@
   <!-- variable overrides -->
 
   <xsl:variable name="hub:hierarchy-role-regexes-x" as="xs:string+"
-    select="( '^c_Ueb_Zwischentitel$',
+    select="( '^cUebZwischentitel$',
               '^cUeberschrift1$',
               '^cUeberschrift2$',
               '^cUeberschrift3$',
