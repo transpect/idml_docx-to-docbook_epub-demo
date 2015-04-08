@@ -19,6 +19,7 @@
   </p:output>
   
   <p:output port="report" primary="false" sequence="true">
+  	<p:pipe port="report" step="epub-convert"/>
     <p:pipe port="report" step="kindlegen"/>
     <p:pipe port="result" step="epubcheck"/>
   </p:output>
