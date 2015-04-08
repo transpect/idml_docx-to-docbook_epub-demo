@@ -103,17 +103,20 @@
       <assert test=".//*[@AppliedConditions][1]/@AppliedConditions
         [. = ('Condition/StoryRef', 'Condition/StoryID', 'Condition/FigureRef', 'Condition/PageStart', 'Condition/PageEnd')]"
         id="conditional_text_hidden" role="warning" diagnostics="conditional_text_hidden_de">
-        <span class="srcpath"><xsl:value-of select="*[@srcpath][1]/@srcpath"/></span>
-        On this element conditional text was hidden, that doesn't belong to the conditions that have to be hidden. The condition is '<value-of
-          select="replace(@AppliedConditions, '^Condition/', '')"/>'. Allowed hidden conditions are: StoryRef, StoryID, FigureRef, PageStart, PageEnd.</assert>
+        <span class="srcpath"><xsl:value-of select="(descendant-or-self::*[@srcpath])[1]/@srcpath"/></span>
+        On this element conditional text was hidden, that doesn't belong to the conditions that have to be hidden. The condition is '<xsl:value-of
+          select="replace(.//*[@AppliedConditions][1]/@AppliedConditions, '^Condition/', '')"/>'. Allowed hidden conditions are: StoryRef, StoryID, FigureRef, PageStart, PageEnd.</assert>
     </rule>
     <rule context="*[@AppliedConditions]">
-      <assert test="@AppliedConditions = ('Condition/StoryRef', 'Condition/StoryID', 'Condition/FigureRef', 'Condition/PageStart', 'Condition/PageEnd', 'Condition/EpubAlternative', 'Condition/PrintOnly', 'Condition/EOnly', 'Condition/EPDFOnly')"
+      <assert test="@AppliedConditions = ('Condition/StoryRef', 'Condition/StoryID', 'Condition/FigureRef', 
+      																		'Condition/PageStart', 'Condition/PageEnd', 'Condition/EpubAlternative', 
+      																		'Condition/PrintOnly', 'Condition/EOnly', 'Condition/EPDFOnly')"
         id="unknown_conditional_text" role="warning" diagnostics="unknown_conditional_text_de">
-        <span class="srcpath"><xsl:value-of select="*[@srcpath][1]/@srcpath"/></span>
-        An undefined conditional text item was used. The name of the condition is: '<value-of
-          select="replace(.//*[@AppliedConditions][1]/@AppliedConditions, '^Condition/', '')"/>'. If it has a special meaning please contact the technical project managers to implement those. 
-        To avoid problems these passages are discarded.<br xmlns="http://www.w3.org/1999/xhtml"/>Allowed Conditions are: StoryRef, StoryID, FigureRef, PageStart, PageEnd, EpubAlternative, PrintOnly, EOnly, EPDFOnly.</assert>
+        <span class="srcpath"><xsl:value-of select="(descendant-or-self::*[@srcpath])[1]/@srcpath"/></span>
+        An undefined conditional text item was used. The name of the condition is: '<xsl:value-of
+          select="replace(@AppliedConditions, '^Condition/', '')"/>'. If it has a special meaning please contact the technical project managers to implement those. 
+        To avoid problems these passages are discarded.<br 
+        	xmlns="http://www.w3.org/1999/xhtml"/>Allowed Conditions are: StoryRef, StoryID, FigureRef, PageStart, PageEnd, EpubAlternative, PrintOnly, EOnly, EPDFOnly.</assert>
     </rule>
     <rule context="*[@AppliedConditions][matches(@AppliedConditions, 'Condition/.+?Condition/')]">
       <report test="true()"
