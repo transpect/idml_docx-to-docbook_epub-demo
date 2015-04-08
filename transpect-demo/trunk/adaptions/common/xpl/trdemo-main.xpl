@@ -150,12 +150,12 @@
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:hub2dbk>
 	
-	<p:delete match="@srcpath" name="strip-srcpath-from-dbk"/>
-	
 	<letex:store-debug pipeline-step="trdemo/trdemo-hub2dbk">
 		<p:with-option name="active" select="$debug"/>
 		<p:with-option name="base-uri" select="$debug-dir-uri"/>
 	</letex:store-debug>
+	
+	<p:delete match="@srcpath" name="strip-srcpath-from-dbk"/>
 	
 	<p:sink/>
 
