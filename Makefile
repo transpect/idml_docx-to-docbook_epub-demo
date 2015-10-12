@@ -96,11 +96,11 @@ archive:
 	@echo ""
 	@echo "Makefile target: archive"
 	@echo ""
-	# delete temporary zip files
+# delete temporary zip files
 	-rm $(OUT_DIR_PATH)/$(IN_FILE_BASE).zip
 	cd $(OUT_DIR_PATH) && zip -r $(OUT_DIR_PATH)/$(IN_FILE_BASE).zip ./*
 
-conversion: messages checkinput preprocess transpectdemo postprocess archive
+conversion: messages checkinput preprocess transpectdemo postprocess #archive
 	@echo ""
 	@echo "Makefile target: conversion FINISHED"
 	@echo ""
