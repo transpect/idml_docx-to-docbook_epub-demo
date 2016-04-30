@@ -1,0 +1,7 @@
+[.]
+scm = git
+
+[fontlib/xmlcatalog]
+repository = https://subversion.le-tex.de/common/fontlib/xmlcatalog/
+scm = svn
+path = fontlib/xmlcatalog

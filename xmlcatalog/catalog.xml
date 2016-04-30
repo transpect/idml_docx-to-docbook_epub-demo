@@ -3,8 +3,8 @@
   
   <!-- mandatory entry --> 
   
-  <rewriteURI uriStartString="http://customers.le-tex.de/generic/book-conversion/" rewritePrefix="../"/> 
-  <rewriteURI uriStartString="http://www.le-tex.de/resource/schema/docbook/" rewritePrefix="../schema/docbook/"/>
+  <rewriteURI uriStartString="http://this.transpect.io/" rewritePrefix="../"/> 
+  <rewriteURI uriStartString="http://www.le-tex.de/resource/schema/docbook/" rewritePrefix="../schema/hub/dbk/"/>
   
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../docx2hub/xmlcatalog/catalog.xml"/>
@@ -14,21 +14,17 @@
   <nextCatalog catalog="../htmltemplates/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../evolve-hub/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../pubcoach/xmlcatalog/catalog.xml"/> 
-  <nextCatalog catalog="../css-expand/xmlcatalog/catalog.xml"/>  
-  <nextCatalog catalog="../css-generate/xmlcatalog/catalog.xml"/>  
+  <nextCatalog catalog="../cascade/xmlcatalog/catalog.xml"/> 
+  <nextCatalog catalog="../css-tools/xmlcatalog/catalog.xml"/>  
   <nextCatalog catalog="../epubtools/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../epubcheck/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../kindlegen/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../epubcheck-idpf/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../kindlegen-amzn/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../fontlib/xmlcatalog/catalog.xml"/>
+	<nextCatalog catalog="../schematron/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../schema/hub/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../schema/xhtml1/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../schema/iso-schematron/catalog.xml"/>
+  <nextCatalog catalog="../schema/html/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xslt-util/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../xproc-util/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../functx/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xproc-util/xproc.org/library/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../schema/Hub/xmlcatalog/catalog.xml"/>
   
   
   <!-- content-repo.catalog.xml is unversioned. 
@@ -37,5 +33,6 @@
     where http://cms.publisher.com/Books/ is a placeholder for what is actually in /publisher-conf/@content-base-uri 
   --> 
   <nextCatalog catalog="content-repo.catalog.xml"/> 
-  
+	<nextCatalog catalog="content-repo.default.catalog.xml"/>
+
 </catalog>
