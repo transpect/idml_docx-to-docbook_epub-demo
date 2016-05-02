@@ -2,9 +2,8 @@
 <p:declare-step 
 	xmlns:p="http://www.w3.org/ns/xproc"
 	xmlns:c="http://www.w3.org/ns/xproc-step"
-	xmlns:letex="http://www.le-tex.de/namespace"
-	xmlns:transpect="http://www.le-tex.de/namespace/transpect"
-	xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
+	xmlns:tr="http://transpect.io"
+	xmlns:trdemo="http://transpect.io/demo"
 	version="1.0"
 	name="trdemo-validate"
 	type="trdemo:validate">
@@ -21,7 +20,7 @@
 	
 	<p:input port="schema" primary="false">
 		<p:documentation>Excepts the Docbook 5.0 RNG schema</p:documentation>
-		<p:document href="http://www.le-tex.de/resource/schema/docbook/docbook.rng"/>
+		<p:document href="http://www.docbook.org/xml/5.0/rng/docbook.rng"/>
 	</p:input>
 	
 	<p:output port="result" primary="true"/>
@@ -46,11 +45,11 @@
   
 	<!-- imports -->
 	
-	<p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/check-styles.xpl"/>
-	<p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/validate-with-schematron.xpl"/>
-	<p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/validate-with-rng.xpl"/>
+	<p:import href="http://transpect.io/htmlreports/xpl/check-styles.xpl"/>
+	<p:import href="http://transpect.io/htmlreports/xpl/validate-with-schematron.xpl"/>
+	<p:import href="http://transpect.io/htmlreports/xpl/validate-with-rng.xpl"/>
 	
-	<transpect:check-styles name="check-styles">
+	<tr:check-styles name="check-styles">
 		<p:input port="html-in">
 			<p:empty/>
 		</p:input>
@@ -62,9 +61,9 @@
 	  <p:with-option name="debug" select="$debug"/>
 	  <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-	</transpect:check-styles>
+	</tr:check-styles>
 	
-	<transpect:validate-with-schematron name="validate-business-rules">
+	<tr:validate-with-schematron name="validate-business-rules">
 		<p:input port="html-in">
 			<p:empty/>
 		</p:input>
@@ -77,15 +76,15 @@
 	  <p:with-option name="debug" select="$debug"/>
 	  <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-	</transpect:validate-with-schematron>
+	</tr:validate-with-schematron>
 	
-	<transpect:validate-with-rng name="validate-with-rng">
+	<tr:validate-with-rng-svrl name="validate-with-rng">
 		<p:input port="schema">
 			<p:pipe port="schema" step="trdemo-validate"/>
 		</p:input>
 	  <p:with-option name="debug" select="$debug"/>
 	  <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-	</transpect:validate-with-rng>
+	</tr:validate-with-rng-svrl>
 	
 </p:declare-step>

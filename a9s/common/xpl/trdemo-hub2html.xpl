@@ -2,8 +2,8 @@
 <p:declare-step 
   xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:c="http://www.w3.org/ns/xproc-step" 
-  xmlns:hub2htm="http://www.le-tex.de/namespace/hub2htm"
-  xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
+  xmlns:hub2htm="http://transpect.io/hub2htm"
+  xmlns:trdemo="http://transpect.io/demo"
   name="trdemo-hub2html"
   type="trdemo:hub2html"
   version="1.0">
@@ -18,7 +18,7 @@
   <p:option name="debug-dir-uri" select="'debug'"/>
   <p:option name="status-dir-uri" select="'status'"/>
   
-  <p:import href="http://transpect.le-tex.de/hub2html/xpl/hub2html.xpl"/>
+  <p:import href="http://transpect.io/hub2html/xpl/hub2html.xpl"/>
   
   <hub2htm:convert name="hub2htm-convert">
     <p:input port="source">

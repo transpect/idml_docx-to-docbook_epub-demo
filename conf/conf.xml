@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="http://transpect.le-tex.de/book-conversion/converter/schema/transpect-conf.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<?xml-model href="../pubcoach/schema/transpect-conf.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<conf xmlns="http://www.le-tex.de/namespace/transpect"
+<?xml-model href="http://transpect.io/cascade/schema/cascade.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="http://transpect.io/cascade/schema/cascade.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<conf xmlns="http://transpect.io"
   content-base-uri="http://www.le-tex.de/transpect-demo/content/" 
-  paths-xsl-uri="http://customers.le-tex.de/generic/book-conversion/adaptions/common/xsl/trdemo-paths.xsl">
+  paths-xsl-uri="http://this.transpect.io/a9s/common/xsl/trdemo-paths.xsl">
   <cascade>
     <!-- the following names are reserved in order to prevent obstacles with existing libraries -->
     <reserved name="css"/>
@@ -53,7 +53,12 @@
           </clade>
         </clade>
       </clade>
+    	<clade role="publisher" name="morgana" content-base-uri="http://www.le-tex.de/transpect-demo/content/morgana">  
+        <clade role="series" name="paper">
+        	<param name="dbk-top-level-element-name" value="article"/>
+        	<content role="work"/>
+        </clade>
+      </clade>
     </clade>
-
   </cascade>
 </conf>

@@ -4,7 +4,8 @@
   <!-- mandatory entry --> 
   
   <rewriteURI uriStartString="http://this.transpect.io/" rewritePrefix="../"/> 
-  <rewriteURI uriStartString="http://www.le-tex.de/resource/schema/docbook/" rewritePrefix="../schema/hub/dbk/"/>
+  <!-- This actually points to docbook publishers 5.1: -->
+	<rewriteURI uriStartString="http://www.docbook.org/xml/5.0/rng/" rewritePrefix="../schema/hub/dbk/"/>
   
   <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/> 
   <nextCatalog catalog="../docx2hub/xmlcatalog/catalog.xml"/>

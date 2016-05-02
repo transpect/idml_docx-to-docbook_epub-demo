@@ -3,9 +3,8 @@
   xmlns:c="http://www.w3.org/ns/xproc-step"
   xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
-  xmlns:l="http://xproc.org/library"
-  xmlns:letex="http://www.le-tex.de/namespace"
-  xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
+  xmlns:tr="http://transpect.io"
+  xmlns:trdemo="http://transpect.io/transpect-demo"
   name="trdemo-patch-and-copy-filerefs"
   type="trdemo:patch-and-copy-filerefs"
   version="1.0">
@@ -51,12 +50,12 @@
   <p:option name="status-dir-uri" select="'status'"/>
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
-  <p:import href="http://transpect.le-tex.de/xproc-util/file-uri/file-uri.xpl"/>
-  <p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
-  <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/simple-progress-msg.xpl"/>
-  <p:import href="http://xproc.org/library/recursive-directory-list.xpl"/>
+  <p:import href="http://transpect.io/xproc-util/file-uri/xpl/file-uri.xpl"/>
+  <p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl"/>
+  <p:import href="http://transpect.io/xproc-util/simple-progress-msg/xpl/simple-progress-msg.xpl"/>
+  <p:import href="http://transpect.io/xproc-util/recursive-directory-list/xpl/recursive-directory-list.xpl"/>
   
-  <letex:simple-progress-msg name="start-msg" file="patch-filerefs.txt">
+  <tr:simple-progress-msg name="start-msg" file="patch-filerefs.txt">
     <p:input port="msgs">
       <p:inline>
         <c:messages>
@@ -66,23 +65,23 @@
       </p:inline>
     </p:input>
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-  </letex:simple-progress-msg>
+  </tr:simple-progress-msg>
   
   <p:sink/>
   
   <!--  * 
         * perform a directory listing recursively
         * -->
-  <l:recursive-directory-list name="directory-list">
+  <tr:recursive-directory-list name="directory-list">
     <p:with-option name="path" select="replace(/c:param-set/c:param[@name eq 'file']/@value, '^(.+)/.+?$', '$1')">
       <p:pipe port="paths" step="trdemo-patch-and-copy-filerefs"/>
     </p:with-option>
-  </l:recursive-directory-list>  
+  </tr:recursive-directory-list>  
 
-  <letex:store-debug pipeline-step="trdemo/directory-list">
+  <tr:store-debug pipeline-step="trdemo/directory-list">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
-  </letex:store-debug>
+  </tr:store-debug>
   
   <p:for-each>
     <!--  *

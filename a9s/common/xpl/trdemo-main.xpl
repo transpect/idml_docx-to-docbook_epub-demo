@@ -2,9 +2,8 @@
 <p:declare-step 
 	xmlns:p="http://www.w3.org/ns/xproc"
 	xmlns:c="http://www.w3.org/ns/xproc-step" 
-	xmlns:transpect="http://www.le-tex.de/namespace/transpect"
-	xmlns:letex="http://www.le-tex.de/namespace"
-	xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
+	xmlns:tr="http://transpect.io"
+	xmlns:trdemo="http://transpect.io/demo"
 	name="trdemo-main"
 	type="trdemo:main"
 	version="1.0">
@@ -23,7 +22,7 @@
 	    <p>The 'conf' port expects the Transpect configuration file. Please see <a href="https://subversion.le-tex.de/common/transpect-demo/content/le-tex/setup-manual/en/out/xhtml/transpect-setup.xhtml#sec-cascade">here</a> 
 	      for further information.</p> 
 		</p:documentation>
-		<p:document href="http://customers.le-tex.de/generic/book-conversion/conf/conf.xml"/>
+		<p:document href="http://this.transpect.io/conf/transpect-conf.xml"/>
 	</p:input>
 	
 	<p:input port="schema" primary="false">
@@ -31,7 +30,7 @@
 		  <h3>Input port: <code>schema</code></h3>
 		  <p>Expects a RelaxNG schema for Docbook 5.0.</p>
 		</p:documentation>
-	  <p:document href="http://customers.le-tex.de/generic/book-conversion/schema/docbook/docbook.rng"/>
+	  <p:document href="http://www.docbook.org/xml/5.0/rng/docbook.rng"/>
 	</p:input>
 	
 	<!-- output port declarations -->
@@ -108,9 +107,9 @@
 	<!-- import external modules -->
 	
 	<p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
-	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
-	<p:import href="http://transpect.le-tex.de/htmlreports/xpl/patch-svrl.xpl"/>
-	<p:import href="http://transpect.le-tex.de/xproc-util/file-uri/file-uri.xpl"/>
+	<p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl"/>
+	<p:import href="http://transpect.io/htmlreports/xpl/patch-svrl.xpl"/>
+	<p:import href="http://transpect.io/xproc-util/file-uri/xpl/file-uri.xpl"/>
 	
 	<!-- import local modules -->
 	
@@ -121,9 +120,9 @@
   <p:import href="trdemo-hub2html.xpl"/>
 	<p:import href="trdemo-epub-convert.xpl"/>
 
-	<transpect:file-uri name="file-uri">
+	<tr:file-uri name="file-uri">
     <p:with-option name="filename" select="$file"/>
-  </transpect:file-uri>
+  </tr:file-uri>
 
 	<trdemo:paths name="trdemo-paths">
 		<p:input port="conf">
@@ -150,10 +149,10 @@
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:hub2dbk>
 	
-	<letex:store-debug pipeline-step="trdemo/trdemo-hub2dbk">
+	<tr:store-debug pipeline-step="trdemo/trdemo-hub2dbk">
 		<p:with-option name="active" select="$debug"/>
 		<p:with-option name="base-uri" select="$debug-dir-uri"/>
-	</letex:store-debug>
+	</tr:store-debug>
 	
 	<p:delete match="@srcpath" name="strip-srcpath-from-dbk"/>
 	
@@ -165,10 +164,10 @@
 		</p:input>
 	</p:delete>
 	
-	<letex:store-debug pipeline-step="trdemo/trdemo-hub2dbk-htmltables">
+	<tr:store-debug pipeline-step="trdemo/trdemo-hub2dbk-htmltables">
 		<p:with-option name="active" select="$debug"/>
 		<p:with-option name="base-uri" select="$debug-dir-uri"/>
-	</letex:store-debug>
+	</tr:store-debug>
 	
 	<p:sink/>
 
@@ -184,10 +183,10 @@
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</trdemo:validate>
   
-  <letex:store-debug pipeline-step="trdemo/trdemo-validate">
+  <tr:store-debug pipeline-step="trdemo/trdemo-validate">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
-  </letex:store-debug>
+  </tr:store-debug>
 	
 	<trdemo:hub2html name="trdemo-hub2html">
 		<p:input port="source">
@@ -213,7 +212,7 @@
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
   </trdemo:epub-convert>
 	
-	<transpect:patch-svrl name="htmlreport">
+	<tr:patch-svrl name="htmlreport">
 		<p:input port="source">
 			<p:pipe port="result" step="trdemo-hub2html"/>
 		</p:input>
@@ -232,6 +231,6 @@
 		<p:with-option name="debug" select="$debug"/>
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
 	  <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-	</transpect:patch-svrl>
+	</tr:patch-svrl>
 	
 </p:declare-step>

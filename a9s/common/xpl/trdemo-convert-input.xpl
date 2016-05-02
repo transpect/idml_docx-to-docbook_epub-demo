@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" 
   xmlns:c="http://www.w3.org/ns/xproc-step"
-  xmlns:transpect="http://www.le-tex.de/namespace/transpect"
-  xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
-  xmlns:docx2hub="http://www.le-tex.de/namespace/docx2hub"
-  xmlns:idml2xml="http://www.le-tex.de/namespace/idml2xml" 
+  xmlns:tr="http://transpect.io"
+  xmlns:trdemo="http://transpect.io/demo"
+  xmlns:docx2hub="http://transpect.io/docx2hub"
+  xmlns:idml2xml="http://transpect.io/idml2xml" 
   xmlns:dbk="http://docbook.org/ns/docbook"
   version="1.0" 
   name="trdemo-convert-input" 
@@ -48,10 +48,10 @@
 
   <!-- imports -->
 
-  <p:import href="http://transpect.le-tex.de/docx2hub/wml2hub.xpl"/>
-  <p:import href="http://transpect.le-tex.de/idml2xml/xpl/idml2hub.xpl"/>
-  <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/evolve-hub.xpl"/>
-  <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/validate-with-schematron.xpl"/>
+  <p:import href="http://transpect.io/docx2hub/xpl/docx2hub.xpl"/>
+  <p:import href="http://transpect.io/idml2xml/xpl/idml2hub.xpl"/>
+  <p:import href="http://transpect.io/evolve-hub/xpl/evolve-hub.xpl"/>
+  <p:import href="http://transpect.io/htmlreports/xpl/validate-with-schematron.xpl"/>
   
   <p:import href="trdemo-patch-and-copy-filerefs.xpl"/>
 
@@ -76,7 +76,7 @@
         <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
       </idml2xml:hub>
       
-      <transpect:validate-with-schematron name="sch_idml">
+      <tr:validate-with-schematron name="sch_idml">
         <p:input port="source">
           <p:pipe port="DocumentStoriesSorted" step="idml2hub"/>
         </p:input>
@@ -92,7 +92,7 @@
         <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
         <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
         <p:with-option name="active" select="'yes'"/>
-      </transpect:validate-with-schematron>
+      </tr:validate-with-schematron>
       
       <p:identity>
         <p:input port="source">
@@ -118,7 +118,7 @@
     </p:when>
   </p:choose>
 
-  <transpect:evolve-hub name="evolve-hub-dyn" srcpaths="yes">
+  <tr:evolve-hub name="evolve-hub-dyn" srcpaths="yes">
     <p:documentation> Build headline hierarchy, detect lists, figure captions etc. </p:documentation>
     <p:input port="paths">
       <p:pipe port="paths" step="trdemo-convert-input"/>
@@ -126,7 +126,7 @@
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-  </transpect:evolve-hub>
+  </tr:evolve-hub>
 
   <trdemo:patch-and-copy-filerefs>
     <p:input port="paths">

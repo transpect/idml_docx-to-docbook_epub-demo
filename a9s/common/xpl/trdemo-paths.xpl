@@ -4,9 +4,8 @@
   xmlns:c="http://www.w3.org/ns/xproc-step"  
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
-  xmlns:transpect="http://www.le-tex.de/namespace/transpect"
-  xmlns:letex="http://www.le-tex.de/namespace"
-  xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo"
+  xmlns:tr="http://transpect.io"
+  xmlns:trdemo="http://transpect.io/demo"
   version="1.0"
   name="trdemo-paths"
   type="trdemo:paths">
@@ -19,15 +18,9 @@
 
   <p:input port="conf" primary="true"/>
   
-  <p:input port="report-in">
-    <p:inline>
-    	<c:reports pipeline="trdemo-paths"/>
-    </p:inline>
-  </p:input>
-
   <p:output port="result" primary="true"/>
 	
-  <p:output port="report" primary="false">
+  <p:output port="report" sequence="true">
     <p:pipe port="report" step="paths"/>
   </p:output>
 	
@@ -42,23 +35,23 @@
   <p:option name="interface-language" select="'en'"/>
   <p:option name="clades" select="''"/>
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
-  <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/paths.xpl"/>
-	<p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/simple-progress-msg.xpl"/>
-  <p:import href="http://transpect.le-tex.de/calabash-extensions/ltx-lib.xpl"/>
-  <p:import href="http://transpect.le-tex.de/xproc-util/file-uri/file-uri.xpl"/>
-  <p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
+  <p:import href="http://transpect.io/cascade/xpl/paths.xpl"/>
+	<p:import href="http://transpect.io/xproc-util/simple-progress-msg/xpl/simple-progress-msg.xpl"/>
+  <p:import href="http://transpect.io/calabash-extensions/transpect-lib.xpl"/>
+  <p:import href="http://transpect.io/xproc-util/file-uri/xpl/file-uri.xpl"/>
+  <p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl"/>
   
   <!--  *
         * normalize the file URI. The unzip step takes the output of this step.
         * -->
-  <transpect:file-uri name="file-uri">
+  <tr:file-uri name="file-uri">
     <p:with-option name="filename" select="$file"/>
-  </transpect:file-uri>
+  </tr:file-uri>
   
-  <letex:store-debug pipeline-step="trdemo/file-uri">
+  <tr:store-debug pipeline-step="trdemo/file-uri">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
-  </letex:store-debug>
+  </tr:store-debug>
 
   <p:choose>
     <!--  *
@@ -68,16 +61,16 @@
       <!--  *
             * Unzip the file and generate URI with existing DOCX or IDML files.
             * -->
-      <letex:unzip name="unzip">
+      <tr:unzip name="unzip">
         <p:with-option name="zip" select="/c:result/@os-path" />
         <p:with-option name="dest-dir" select="concat(/c:result/@os-path, '.tmp')"/>
         <p:with-option name="overwrite" select="'yes'" />
-      </letex:unzip>
+      </tr:unzip>
       
-      <letex:store-debug pipeline-step="trdemo/unzip">
+      <tr:store-debug pipeline-step="trdemo/unzip">
         <p:with-option name="active" select="$debug"/>
         <p:with-option name="base-uri" select="$debug-dir-uri"/>
-      </letex:store-debug>
+      </tr:store-debug>
       
       <p:group>
         <!--  *
@@ -98,11 +91,11 @@
               * normalize the URI of the first IDML or DOCX file found in the 
               * uncompressed archive
               * -->
-        <transpect:file-uri cx:depends-on="copy">
+        <tr:file-uri cx:depends-on="copy">
           <p:with-option name="filename" select="$target">
             <p:pipe port="result" step="unzip"/>
           </p:with-option>
-        </transpect:file-uri>
+        </tr:file-uri>
       </p:group>
       
     </p:when>
@@ -121,7 +114,7 @@
   
   <p:identity name="identity-file-uri"/>
     
-  <letex:simple-progress-msg file="trdemo-paths.txt">
+  <tr:simple-progress-msg file="trdemo-paths.txt">
 		<p:input port="msgs">
 			<p:inline>
 				<c:messages>
@@ -131,21 +124,21 @@
 			</p:inline>
 		</p:input>
 		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-	</letex:simple-progress-msg>
+	</tr:simple-progress-msg>
   <!--  *
         * import XSLT library including various functions to calculate a set of 
         * parameters for subsequent XProc steps. The parameters are the URLs of the 
         * directories where the transpect looks for customized settings Its variables 
-        * are overwritten with the transpect:paths step below.
+        * are overwritten with the tr:paths step below.
         * -->
   <p:load name="import-paths-xsl">
     <p:with-option name="href" select="resolve-uri('../xsl/trdemo-paths.xsl')"/>
   </p:load>
   <!--  *
-        * The transpect:paths step takes the imported Stylesheet as primary and the 
+        * The tr:paths step takes the imported Stylesheet as primary and the 
         * configuration file as secondary input.
         * -->  
-  <transpect:paths name="paths" determine-transpect-project-version="yes">
+  <tr:paths name="paths" determine-transpect-project-version="yes">
     <p:with-option name="pipeline" select="$pipeline"/>
     <p:with-option name="interface-language" select="$interface-language"/>
     <p:with-option name="clades" select="$clades"/>
@@ -158,6 +151,6 @@
     <p:input port="conf">
       <p:pipe port="conf" step="trdemo-paths"/>
     </p:input>
-  </transpect:paths>
+  </tr:paths>
   
 </p:declare-step>

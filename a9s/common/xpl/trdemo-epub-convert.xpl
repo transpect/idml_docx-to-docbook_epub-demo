@@ -2,11 +2,10 @@
 <p:declare-step 
   xmlns:p="http://www.w3.org/ns/xproc" 
   xmlns:c="http://www.w3.org/ns/xproc-step"
-  xmlns:epub="http://transpect.le-tex.de/epubtools"
+  xmlns:epub="http://transpect.io/epubtools"
   xmlns:cx="http://xmlcalabash.com/ns/extensions" 
-  xmlns:letex="http://www.le-tex.de/namespace"
-  xmlns:transpect="http://www.le-tex.de/namespace/transpect"  
-  xmlns:trdemo="http://www.le-tex.de/namespace/transpect-demo" 
+  xmlns:tr="http://transpect.io"  
+  xmlns:trdemo="http://transpect.io/demo" 
   version="1.0" 
   type="trdemo:epub-convert"
   name="trdemo-epub-convert"> 
@@ -30,23 +29,23 @@
   <p:option name="local-css" select="'false'"/>
 
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
-  <p:import href="http://transpect.le-tex.de/epubtools/epub-convert.xpl"/>
-  <p:import href="http://transpect.le-tex.de/epubcheck/xpl/epubcheck.xpl"/>
-  <p:import href="http://transpect.le-tex.de/kindlegen/xpl/kindlegen.xpl"/>
-  <p:import href="http://transpect.le-tex.de/book-conversion/converter/xpl/load-cascaded.xpl"/>
-	<p:import href="http://transpect.le-tex.de/xproc-util/store-debug/store-debug.xpl"/>
+  <p:import href="http://transpect.io/epubtools/xpl/epub-convert.xpl"/>
+  <p:import href="http://transpect.io/epubcheck-idpf/xpl/epubcheck.xpl"/>
+  <p:import href="http://transpect.io/kindlegen/xpl/kindlegen.xpl"/>
+  <p:import href="http://transpect.io/cascade/xpl/load-cascaded.xpl"/>
+	<p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl"/>
   
   <!--  *
         * Load the epub-config skeleton 
         * -->
   
-  <transpect:load-cascaded name="load-epub-config" filename="epubtools/epub-config.xml">
+  <tr:load-cascaded name="load-epub-config" filename="epubtools/epub-config.xml">
     <p:input port="paths">
       <p:pipe port="paths" step="trdemo-epub-convert"/>
     </p:input>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-  </transpect:load-cascaded>
+  </tr:load-cascaded>
   
   <!--  *
         * Patch the current values from the paths document into the epub-config skeleton.  
@@ -61,10 +60,10 @@
     </p:input>
   </p:xslt>
   
-  <letex:store-debug pipeline-step="epubtools/epub-config">
+  <tr:store-debug pipeline-step="epubtools/epub-config">
     <p:with-option name="active" select="$debug" />
     <p:with-option name="base-uri" select="$debug-dir-uri" />
-  </letex:store-debug>
+  </tr:store-debug>
   
   <p:sink/>
   
@@ -108,22 +107,22 @@
         * The following step implements epubcheck and generates an SVRL report.
         * -->
   
-  <transpect:kindlegen name="kindlegen" cx:depends-on="epub-convert">
+  <tr:kindlegen name="kindlegen" cx:depends-on="epub-convert">
     <p:with-option name="epub" select="/c:result/@os-path"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-  </transpect:kindlegen>
+  </tr:kindlegen>
   
   <p:sink/>
   
-  <letex:epubcheck name="epubcheck" cx:depends-on="kindlegen">
+  <tr:epubcheck name="epubcheck" cx:depends-on="kindlegen">
     <p:with-option name="epubfile-path" select="/c:result/@os-path">
       <p:pipe port="result" step="epub-convert"/>
     </p:with-option>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-  </letex:epubcheck>
+  </tr:epubcheck>
   
 </p:declare-step>
