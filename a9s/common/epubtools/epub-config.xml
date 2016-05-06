@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>   
-<?xml-model href="http://transpect.le-tex.de/epubtools/schema/metadata-conf/metadata-conf.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="http://transpect.le-tex.de/epubtools/schema/metadata-conf/metadata-conf.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="http://transpect.io/epubtools/schema/metadata-conf/metadata-conf.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://transpect.io/epubtools/schema/metadata-conf/metadata-conf.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <epub-config format="EPUB3" layout="reflowable">
 	<!-- layout: reflowable|fixed
 	       (default: reflowable; fixed only permitted for KF8 and EPUB3 layouts)
@@ -17,7 +17,7 @@
 		It may be an http(s):, a file:, or a relative URI. Relative
 		URIs will be resolved against the HTML source location.
 	  Support for external SVG files yet to be implemented.-->
-  <cover href="http://customers.le-tex.de/generic/book-conversion/adaptions/common/epubtools/cover.png" svg="true"/>
+  <cover href="http://this.transpect.io/a9s/common/epubtools/cover.png" svg="true"/>
 	
 	<types>
     <!-- A mapping from epub:type attribute values to generated

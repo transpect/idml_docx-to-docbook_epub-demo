@@ -4,15 +4,15 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:css="http://www.w3.org/1996/css"
-  xmlns:hub="http://www.le-tex.de/namespace/hub"
-  xmlns:letex		= "http://www.le-tex.de/namespace"
-  xmlns:docx2hub="http://www.le-tex.de/namespace/docx2hub"
+  xmlns:hub="http://transpect.io/hub"
+  xmlns:tr="http://transpect.io"
+  xmlns:docx2hub="http://transpect.io/docx2hub"
   xpath-default-namespace="http://docbook.org/ns/docbook"
   xmlns="http://docbook.org/ns/docbook"
   exclude-result-prefixes="xs xlink hub"
   version="2.0">
 
-  <xsl:import href="http://transpect.le-tex.de/evolve-hub/evolve-hub.xsl"/>
+  <xsl:import href="http://transpect.io/evolve-hub/xsl/evolve-hub.xsl"/>
   
   <!-- remove model declaration -->
   
@@ -81,7 +81,7 @@
     | caption
     )$'" />
   
-  <xsl:function name="letex:is-variable-list" as="xs:boolean">
+  <xsl:function name="tr:is-variable-list" as="xs:boolean">
     <xsl:param name="list" as="element(*)"/>
     <xsl:value-of select="false()"/>
   </xsl:function>

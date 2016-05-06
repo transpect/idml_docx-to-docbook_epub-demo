@@ -2,7 +2,8 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" 
   xmlns:c="http://www.w3.org/ns/xproc-step"
   xmlns:tr="http://transpect.io"
-  xmlns:trdemo="http://transpect.io/demo"
+	xmlns:hub="http://transpect.io/hub"
+	xmlns:trdemo="http://transpect.io/demo"
   xmlns:docx2hub="http://transpect.io/docx2hub"
   xmlns:idml2xml="http://transpect.io/idml2xml" 
   xmlns:dbk="http://docbook.org/ns/docbook"
@@ -118,7 +119,7 @@
     </p:when>
   </p:choose>
 
-  <tr:evolve-hub name="evolve-hub-dyn" srcpaths="yes">
+  <hub:evolve-hub name="evolve-hub-dyn" srcpaths="yes">
     <p:documentation> Build headline hierarchy, detect lists, figure captions etc. </p:documentation>
     <p:input port="paths">
       <p:pipe port="paths" step="trdemo-convert-input"/>
@@ -126,7 +127,7 @@
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
-  </tr:evolve-hub>
+  </hub:evolve-hub>
 
   <trdemo:patch-and-copy-filerefs>
     <p:input port="paths">

@@ -4,13 +4,13 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:css="http://www.w3.org/1996/css"
-  xmlns:hub="http://www.le-tex.de/namespace/hub"
+  xmlns:hub="http://transpect.io/hub"
   xpath-default-namespace="http://docbook.org/ns/docbook"
   xmlns="http://docbook.org/ns/docbook"
   exclude-result-prefixes="xs xlink hub"
   version="2.0">
 
-  <xsl:import href="http://customers.le-tex.de/generic/book-conversion/adaptions/common/evolve-hub/driver.xsl"/>
+  <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver.xsl"/>
   
 
   <!-- variable overrides -->

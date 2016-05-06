@@ -6,13 +6,13 @@
   <ns prefix="aid" uri="http://ns.adobe.com/AdobeInDesign/4.0/" />
   <ns prefix="aid5" uri="http://ns.adobe.com/AdobeInDesign/5.0/" />
   <ns prefix="idPkg" uri="http://ns.adobe.com/AdobeInDesign/idml/1.0/packaging" />
-  <ns prefix="idml2xml" uri="http://www.le-tex.de/namespace/idml2xml" />
+  <ns prefix="idml2xml" uri="http://transpect.io/idml2xml" />
   <ns prefix="css" uri="http://www.w3.org/1996/css" />
   <ns prefix="dbk" uri="http://docbook.org/ns/docbook" />
-  <ns prefix="bc" uri="http://transpect.le-tex.de/book-conversion" />
+	<ns prefix="tr" uri="http://transpect.io"/>
   
-  <let name="base-dir" value="/bc:doc-and-template-styles/*[1]/dbk:info/dbk:keywordset/dbk:keyword[@role eq 'source-dir-uri']"/>
-  <let name="template-styles" value="/bc:doc-and-template-styles/*[2]/self::css:rules/css:rule"/>
+  <let name="base-dir" value="/tr:doc-and-template-styles/*[1]/dbk:info/dbk:keywordset/dbk:keyword[@role eq 'source-dir-uri']"/>
+  <let name="template-styles" value="/tr:doc-and-template-styles/*[2]/self::css:rules/css:rule"/>
   <let name="default-style-names" value="('NormalParagraphStyle', 'No_character_style', 'hub_page-number')"/>
   <let name="template-style-names" value="(distinct-values(for $n in $template-styles/@name return replace($n, '(_-_|[~&#x2dc;]).+$', '')),
                                            $default-style-names)"/>

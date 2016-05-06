@@ -75,7 +75,7 @@ transpectdemo:
 		-o docbook=$(OUT_DIR_PATH)/$(IN_FILE_BASE).dbk.xml \
 		-o docbook-htmltables=$(OUT_DIR_PATH)/$(IN_FILE_BASE).dbk-htmltables.xml \
 		-o html=$(OUT_DIR_PATH)/$(IN_FILE_BASE).preview.xhtml \
-		$(call get-uri,adaptions/common/xpl/trdemo-main.xpl) \
+		$(call get-uri,a9s/common/xpl/trdemo-main.xpl) \
 		file=$(IN_FILE_COPY) \
 		status-dir-uri=$(STATUS_DIR_URI) \
 		debug-dir-uri=$(DEBUG_DIR_URI) \

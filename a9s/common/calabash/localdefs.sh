@@ -1,5 +1,5 @@
 LOCALDIR="$( cd -P "$(dirname $( readlink -f "$0" ))" && pwd )"
-CFG=$ADAPTIONS_DIR/common/calabash/xproc-config.xml
+#CFG=$ADAPTIONS_DIR/common/calabash/xproc-config.xml
 
 case "`hostname`" in
   don) JAVA=/usr/lib/jvm/java-6-sun/bin/java;;

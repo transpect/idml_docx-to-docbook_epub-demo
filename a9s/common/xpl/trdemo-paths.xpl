@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <p:declare-step
   xmlns:p="http://www.w3.org/ns/xproc"
-  xmlns:c="http://www.w3.org/ns/xproc-step"  
+  xmlns:c="http://www.w3.org/ns/xproc-step"
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
   xmlns:tr="http://transpect.io"
@@ -16,7 +16,14 @@
       by the input filename. It provides a c:param-set document for subsequent steps.</p>
   </p:documentation>
 
-  <p:input port="conf" primary="true"/>
+  <p:input port="conf" primary="true">
+  	<p:document href="http://this.transpect.io/conf/transpect-conf.xml"/>
+  </p:input>
+	
+	<p:input port="params" kind="parameter">
+    <p:documentation>Overrides, they have precedence over what is read from configuration.</p:documentation>
+  </p:input>
+
   
   <p:output port="result" primary="true"/>
 	
@@ -34,6 +41,7 @@
   
   <p:option name="interface-language" select="'en'"/>
   <p:option name="clades" select="''"/>
+	
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   <p:import href="http://transpect.io/cascade/xpl/paths.xpl"/>
 	<p:import href="http://transpect.io/xproc-util/simple-progress-msg/xpl/simple-progress-msg.xpl"/>
@@ -48,7 +56,7 @@
     <p:with-option name="filename" select="$file"/>
   </tr:file-uri>
   
-  <tr:store-debug pipeline-step="trdemo/file-uri">
+  <tr:store-debug pipeline-step="trdemo/file-uri" name="n5">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
@@ -67,7 +75,7 @@
         <p:with-option name="overwrite" select="'yes'" />
       </tr:unzip>
       
-      <tr:store-debug pipeline-step="trdemo/unzip">
+      <tr:store-debug pipeline-step="trdemo/unzip" name="n4">
         <p:with-option name="active" select="$debug"/>
         <p:with-option name="base-uri" select="$debug-dir-uri"/>
       </tr:store-debug>
@@ -91,7 +99,7 @@
               * normalize the URI of the first IDML or DOCX file found in the 
               * uncompressed archive
               * -->
-        <tr:file-uri cx:depends-on="copy">
+        <tr:file-uri cx:depends-on="copy" name="n3">
           <p:with-option name="filename" select="$target">
             <p:pipe port="result" step="unzip"/>
           </p:with-option>
@@ -103,7 +111,7 @@
       <!--  * 
             * clone the input from step file-uri above 
             * -->
-      <p:identity>
+      <p:identity name="n2">
         <p:input port="source">
           <p:pipe port="result" step="file-uri"/>
         </p:input>
@@ -114,7 +122,7 @@
   
   <p:identity name="identity-file-uri"/>
     
-  <tr:simple-progress-msg file="trdemo-paths.txt">
+  <tr:simple-progress-msg file="trdemo-paths.txt" name="n1">
 		<p:input port="msgs">
 			<p:inline>
 				<c:messages>
@@ -125,6 +133,7 @@
 		</p:input>
 		<p:with-option name="status-dir-uri" select="$status-dir-uri"/>
 	</tr:simple-progress-msg>
+	<p:sink/>
   <!--  *
         * import XSLT library including various functions to calculate a set of 
         * parameters for subsequent XProc steps. The parameters are the URLs of the 
@@ -132,13 +141,15 @@
         * are overwritten with the tr:paths step below.
         * -->
   <p:load name="import-paths-xsl">
-    <p:with-option name="href" select="resolve-uri('../xsl/trdemo-paths.xsl')"/>
+    <p:with-option name="href" select="(/*/@paths-xsl-uri, 'http://transpect.io/cascade/xsl/paths.xsl')[1]">
+      <p:pipe port="conf" step="trdemo-paths"/>
+    </p:with-option>
   </p:load>
   <!--  *
         * The tr:paths step takes the imported Stylesheet as primary and the 
         * configuration file as secondary input.
         * -->  
-  <tr:paths name="paths" determine-transpect-project-version="yes">
+  <tr:paths name="paths">
     <p:with-option name="pipeline" select="$pipeline"/>
     <p:with-option name="interface-language" select="$interface-language"/>
     <p:with-option name="clades" select="$clades"/>

@@ -4,7 +4,7 @@
   xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:tr="http://transpect.io"
-  xmlns:trdemo="http://transpect.io/transpect-demo"
+  xmlns:trdemo="http://transpect.io/demo"
   name="trdemo-patch-and-copy-filerefs"
   type="trdemo:patch-and-copy-filerefs"
   version="1.0">

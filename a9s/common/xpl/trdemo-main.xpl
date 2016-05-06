@@ -128,6 +128,9 @@
 		<p:input port="conf">
 			<p:pipe port="conf" step="trdemo-main"/> 
 		</p:input>
+		<p:input port="params">
+			<p:empty/>
+		</p:input>
 		<p:with-option name="file" select="/*/@local-href"/> 
 		<p:with-option name="debug" select="$debug"/> 
 		<p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
