@@ -69,6 +69,9 @@
       </p:output>
 
       <idml2xml:hub name="idml2hub">
+        <p:input port="xslt-stylesheet">
+          <p:document href="http://transpect.io/idml2xml/xsl/idml2xml.xsl"/>
+        </p:input>
         <p:with-option name="idmlfile" select="$file"/>
         <p:with-option name="all-styles" select="'no'"/>
         <p:with-option name="srcpaths" select="'yes'"/>
